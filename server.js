@@ -1,5 +1,5 @@
-import express from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
 
 const app = express();
 app.use(cors());
@@ -47,7 +47,7 @@ app.get("/api/mmk-p2p", async (req, res) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+          "User-Agent": "Mozilla/5.0"
         },
         body: JSON.stringify({
           fiat: "MMK",
@@ -68,25 +68,10 @@ app.get("/api/mmk-p2p", async (req, res) => {
     const walletBuyPrices = await fetchAllPrices("BUY", ["KBZPay", "WavePay", "AYAPay"]);
     const walletSellPrices = await fetchAllPrices("SELL", ["KBZPay", "WavePay", "AYAPay"]);
 
-    if (bankBuyPrices.length > 0) {
-      bankBuyPrices.sort((a, b) => b - a);
-      bankBuyMax = bankBuyPrices[0];
-    }
-
-    if (bankSellPrices.length > 0) {
-      bankSellPrices.sort((a, b) => b - a);
-      bankSellMax = bankSellPrices[0];
-    }
-
-    if (walletBuyPrices.length > 0) {
-      walletBuyPrices.sort((a, b) => a - b);
-      walletBuyMid = walletBuyPrices[Math.floor(walletBuyPrices.length / 2)];
-    }
-
-    if (walletSellPrices.length > 0) {
-      walletSellPrices.sort((a, b) => a - b);
-      walletSellMid = walletSellPrices[Math.floor(walletSellPrices.length / 2)];
-    }
+    if (bankBuyPrices.length > 0) { bankBuyPrices.sort((a, b) => b - a); bankBuyMax = bankBuyPrices[0]; }
+    if (bankSellPrices.length > 0) { bankSellPrices.sort((a, b) => b - a); bankSellMax = bankSellPrices[0]; }
+    if (walletBuyPrices.length > 0) { walletBuyPrices.sort((a, b) => a - b); walletBuyMid = walletBuyPrices[Math.floor(walletBuyPrices.length / 2)]; }
+    if (walletSellPrices.length > 0) { walletSellPrices.sort((a, b) => a - b); walletSellMid = walletSellPrices[Math.floor(walletSellPrices.length / 2)]; }
 
   } catch (e) {
     console.log("P2P live fetch warning, using baseline.");
@@ -98,4 +83,7 @@ app.get("/api/mmk-p2p", async (req, res) => {
   });
 });
 
-// Render dynamic port configuration
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server listening on port ${PORT}`);
+});
