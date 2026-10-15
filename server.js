@@ -98,4 +98,4 @@ app.get("/api/mmk-p2p", async (req, res) => {
   });
 });
 
-app.listen(3001, () => console.log("MMK Proxy Server running on http://localhost:3001"));
+// Render dynamic port configuration
