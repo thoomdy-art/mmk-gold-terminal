@@ -253,7 +253,6 @@
       <div class="card p-4 border-l-4 border-l-amber-500 bg-amber-500/5">
         <div class="flex items-center justify-between mb-3">
           <h3 id="cryptoGoldTitle" class="font-bold text-amber-300 text-sm">ခရစ်တိုရွှေ (PAXG/USDT)</h3>
-          <!-- Updated button to refresh both datasets manually if needed -->
           <button onclick="refreshAllData(); refreshP2PData();" class="px-2 py-0.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold transition text-xs">↻</button>
         </div>
         <div class="space-y-2 text-xs mono">
@@ -703,12 +702,12 @@
     async function refreshP2PData() {
       try {
         const fetchAllPrices = async (tradeType, payTypes) => {
-          // Now routing seamlessly through your private Google Apps Script Proxy
-          const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbw61iK8kMqEb2JmKHJRjQq8mrTWOs2bRqO4B0ccnAfrGBGxP0hbBEr5m9UxqjvmMrjQ/exec";
+          // Connected to your Cloudflare Playground Worker proxy URL
+          const CLOUDFLARE_PROXY_URL = "https://workers-playground-wild-forest-f4dd.thoomdy.workers.dev";
           
-          const response = await fetch(GOOGLE_PROXY_URL, {
+          const response = await fetch(CLOUDFLARE_PROXY_URL, {
             method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ fiat: "MMK", page: 1, rows: 50, tradeType, asset: "USDT", payTypes, publisherType: null })
           });
           const json = await response.json();
@@ -778,7 +777,7 @@
       recalculateAll();
       
       refreshAllData(); // Initial load for OANDA
-      refreshP2PData(); // Initial load for P2P via Google Script
+      refreshP2PData(); // Initial load for P2P via Cloudflare Worker
 
       updateDateTime();
       setInterval(updateDateTime, 1000); // Clock updates every 1 sec
