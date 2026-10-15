@@ -674,7 +674,7 @@
 
     async function refreshAllData() {
       try {
-        const oandaRes = await fetch('http://localhost:3001/api/oanda-gold');
+        const oandaRes = await fetch('https://mmk-gold-terminal.onrender.com/api/oanda-gold');
         if (oandaRes.ok) {
           const oandaData = await oandaRes.json();
           if (oandaData.close) {
@@ -691,7 +691,7 @@
           document.getElementById('paxgAsk').textContent = '$' + formatNumber(state.paxgAsk, 2);
         }
 
-        const p2pRes = await fetch('http://localhost:3001/api/mmk-p2p');
+        const p2pRes = await fetch('https://mmk-gold-terminal.onrender.com/api/mmk-p2p');
         if (p2pRes.ok) {
           const p2pData = await p2pRes.json();
           if (p2pData.bankMax?.buy) {
