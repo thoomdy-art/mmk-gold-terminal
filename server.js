@@ -34,7 +34,7 @@ app.get("/api/oanda-gold", async (req, res) => {
   }
 });
 
-// 2. Fetch Binance P2P MMK with Strict Absolute Maximum Sorting
+// 2. Fetch Binance P2P MMK with Anti-Bot Bypass
 app.get("/api/mmk-p2p", async (req, res) => {
   let bankBuyMax = 4575;
   let bankSellMax = 4535;
@@ -47,16 +47,21 @@ app.get("/api/mmk-p2p", async (req, res) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "User-Agent": "Mozilla/5.0"
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          "Accept": "*/*",
+          "Origin": "https://p2p.binance.com",
+          "Referer": "https://p2p.binance.com/en/trade/all-payments/USDT?fiat=MMK",
+          "clienttype": "web",
+          "lang": "en"
         },
         body: JSON.stringify({
           fiat: "MMK",
           page: 1,
-          rows: 20,
+          rows: 50, 
           tradeType,
           asset: "USDT",
           payTypes,
-          publisherType: "merchant"
+          publisherType: null 
         })
       });
       const json = await response.json();
