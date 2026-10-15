@@ -48,7 +48,7 @@ let lastTry = 0;
 let inflight = null;
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-async function fetchGroup(tradeType, payTypes) {
+async function p2pRequest(tradeType, payTypes) {
   const r = await fetch(P2P_URL, {
     method: 'POST',
     headers: {
@@ -63,11 +63,27 @@ async function fetchGroup(tradeType, payTypes) {
     signal: AbortSignal.timeout(10000),
   });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);               // 403/451/429 = blocked or rate limited
-  const j = await r.json();
+  return r.json();
+}
+
+async function fetchGroup(tradeType, payTypes) {
+  const j = await p2pRequest(tradeType, payTypes);
   const prices = (j.data || []).map(i => parseFloat(i.adv.price)).filter(Boolean);
-  if (!prices.length) throw new Error('no ads returned (check payTypes)');
+  if (!prices.length) throw new Error(`no ads returned (Binance code=${j.code}, message=${j.message}, total=${j.total})`);
   return prices;
 }
+
+// Open /api/p2p-debug to see which payment-method names Binance really uses for MMK.
+app.get('/api/p2p-debug', async (req, res) => {
+  try {
+    const j = await p2pRequest('BUY', []);   // no payTypes filter = all MMK ads
+    const methods = {};
+    for (const a of j.data || []) for (const m of (a.adv.tradeMethods || [])) methods[m.identifier] = m.tradeMethodName;
+    res.json({ code: j.code, message: j.message, total: j.total, ads: (j.data || []).length, methods });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 // Sequential on purpose. Returns whatever groups succeeded + error messages.
 async function fetchAll() {
