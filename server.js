@@ -48,7 +48,7 @@ let lastTry = 0;
 let inflight = null;
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-async function p2pRequest(tradeType, payTypes) {
+async function p2pRequest(tradeType, payTypes, extra = {}) {
   const r = await fetch(P2P_URL, {
     method: 'POST',
     headers: {
@@ -59,7 +59,7 @@ async function p2pRequest(tradeType, payTypes) {
       'clienttype': 'web',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
     },
-    body: JSON.stringify({ fiat: 'MMK', page: 1, rows: 50, tradeType, asset: 'USDT', payTypes, publisherType: null }),
+    body: JSON.stringify({ fiat: 'MMK', page: 1, rows: 50, tradeType, asset: 'USDT', payTypes, publisherType: null, ...extra }),
     signal: AbortSignal.timeout(10000),
   });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);               // 403/451/429 = blocked or rate limited
@@ -73,16 +73,29 @@ async function fetchGroup(tradeType, payTypes) {
   return prices;
 }
 
-// Open /api/p2p-debug to see which payment-method names Binance really uses for MMK.
+// Open /api/p2p-debug: runs test requests to find out WHY MMK ads come back empty.
 app.get('/api/p2p-debug', async (req, res) => {
+  const FULL = { countries: [], proMerchantAds: false, shieldMerchantAds: false, filterType: 'all', periods: [], additionalKycVerifyFilter: 0 };
+  const tests = {
+    MMK_simple: { extra: {} },
+    MMK_full: { extra: FULL },
+    THB_simple: { extra: { fiat: 'THB' } },
+  };
+  const out = {};
   try {
-    const j = await p2pRequest('BUY', []);   // no payTypes filter = all MMK ads
-    const methods = {};
-    for (const a of j.data || []) for (const m of (a.adv.tradeMethods || [])) methods[m.identifier] = m.tradeMethodName;
-    res.json({ code: j.code, message: j.message, total: j.total, ads: (j.data || []).length, methods });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+    const g = await (await fetch('https://ipinfo.io/json', { signal: AbortSignal.timeout(5000) })).json();
+    out.server = { ip: g.ip, country: g.country, region: g.region, org: g.org };
+  } catch (e) { out.server = { error: e.message }; }
+  for (const [name, { extra }] of Object.entries(tests)) {
+    try {
+      const j = await p2pRequest('BUY', [], extra);
+      const methods = {};
+      for (const a of j.data || []) for (const m of (a.adv.tradeMethods || [])) methods[m.identifier] = m.tradeMethodName;
+      out[name] = { code: j.code, message: j.message, total: j.total, ads: (j.data || []).length, methods };
+    } catch (e) { out[name] = { error: e.message }; }
+    await sleep(300);
   }
+  res.json(out);
 });
 
 // Sequential on purpose. Returns whatever groups succeeded + error messages.
