@@ -698,38 +698,46 @@
       }
     }
 
-    // --- SEPARATE P2P FUNCTION FOR 45-MINUTE INTERVAL ---
+    // --- P2P: one request to our own server (it caches Binance for everyone) ---
+    const API_BASE = 'https://mmk-gold-terminal.onrender.com';
+    let p2pTimer = null;
+
+    function setP2PTags() {
+      const t = state.p2pUpdatedAt;
+      const mins = t ? Math.round((Date.now() - t) / 60000) : null;
+      const live = t && mins < 30;
+      const ago = mins >= 120 ? Math.round(mins / 60) + 'h' : mins + 'm';
+      const label = !t ? 'Offline · default' : live ? 'Live · ' + ago + ' ago' : 'Stale · ' + ago + ' ago';
+      ['bankSourceTag', 'walletSourceTag'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = label;
+        el.style.color = live ? '' : '#fbbf24';
+      });
+    }
+
     async function refreshP2PData() {
+      clearTimeout(p2pTimer);
+      let ok = false;
       try {
-        const fetchAllPrices = async (tradeType, payTypes) => {
-          // Connected to your Cloudflare Playground Worker proxy URL
-          const CLOUDFLARE_PROXY_URL = "https://workers-playground-wild-forest-f4dd.thoomdy.workers.dev";
-          
-          const response = await fetch(CLOUDFLARE_PROXY_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fiat: "MMK", page: 1, rows: 50, tradeType, asset: "USDT", payTypes, publisherType: null })
-          });
-          const json = await response.json();
-          return (json?.data || []).map(item => parseFloat(item.adv.price)).filter(Boolean);
-        };
-
-        // Fetched sequentially to prevent limits
-        const bankBuy = await fetchAllPrices("BUY", ["KBZBank", "CBBank", "BANK", "AYABank", "YomaBank"]);
-        const bankSell = await fetchAllPrices("SELL", ["KBZBank", "CBBank", "BANK", "AYABank", "YomaBank"]);
-        const walletBuy = await fetchAllPrices("BUY", ["KBZPay", "WavePay", "AYAPay"]);
-        const walletSell = await fetchAllPrices("SELL", ["KBZPay", "WavePay", "AYAPay"]);
-
-        if (bankBuy.length > 0) { bankBuy.sort((a, b) => b - a); state.bankBuy = bankBuy[0]; }
-        if (bankSell.length > 0) { bankSell.sort((a, b) => b - a); state.bankSell = bankSell[0]; }
-        if (walletBuy.length > 0) { walletBuy.sort((a, b) => a - b); state.walletBuy = walletBuy[Math.floor(walletBuy.length / 2)]; }
-        if (walletSell.length > 0) { walletSell.sort((a, b) => a - b); state.walletSell = walletSell[Math.floor(walletSell.length / 2)]; }
-
-        document.getElementById('statusDot').className = 'h-3 w-3 rounded-full bg-emerald-400 animate-pulse';
+        const res = await fetch(API_BASE + '/api/p2p');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const d = await res.json();
+        const max = a => (a && a.length) ? Math.max(...a) : null;
+        const med = a => (a && a.length) ? [...a].sort((x, y) => x - y)[Math.floor(a.length / 2)] : null;
+        state.bankBuy = max(d.bankBuy) ?? state.bankBuy;
+        state.bankSell = max(d.bankSell) ?? state.bankSell;
+        state.walletBuy = med(d.walletBuy) ?? state.walletBuy;
+        state.walletSell = med(d.walletSell) ?? state.walletSell;
+        state.p2pUpdatedAt = Date.now() - d.ageSec * 1000;
+        ok = d.ageSec < 1800;
+        if (d.errors && d.errors.length) console.log('P2P server errors:', d.errors);
       } catch (e) {
-        console.log("P2P Proxy fetch completely failed, falling back to defaults", e);
+        console.log('P2P fetch failed, showing last known / default values', e);
       }
+      setP2PTags();
       recalculateAll();
+      p2pTimer = setTimeout(refreshP2PData, ok ? 300000 : 60000); // 5 min normally, retry in 1 min on failure
     }
 
     // --- MAIN DATA FUNCTION FOR OANDA & PAXG ---
@@ -777,7 +785,7 @@
       recalculateAll();
       
       refreshAllData(); // Initial load for OANDA
-      refreshP2PData(); // Initial load for P2P via Cloudflare Worker
+      refreshP2PData(); // Initial load for P2P via our server
 
       updateDateTime();
       setInterval(updateDateTime, 1000); // Clock updates every 1 sec
@@ -785,8 +793,8 @@
       // Fast refresh for OANDA/PAXG (every 60 seconds)
       setInterval(refreshAllData, 60000);
       
-      // Slow refresh for Binance P2P (every 45 minutes to prevent bans)
-      setInterval(refreshP2PData, 2700000);
+      // P2P refreshes itself (see refreshP2PData); the server caches Binance so this is safe
+      setInterval(setP2PTags, 60000); // keep the "x min ago" label current
     });
   </script>
 </body>
