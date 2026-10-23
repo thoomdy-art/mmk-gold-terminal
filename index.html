@@ -1,9 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="pageTitle">မြန်မာ့ ရွှေဈေး</title>
+  <title id="pageTitle">Myanmar Gold Price Today: Kyat, Pae & Yway Calculator and USDT P2P Rates | မြန်မာ့ ရွှေဈေး</title>
+  <meta name="description" content="Live gold price per kyat-thar in Myanmar (old 1.873 and new 1.9047 standards), kyat-pae-yway calculator, USDT/MMK P2P rates from OKX and Bybit, in English and Burmese." />
+  <link rel="canonical" href="https://wemanage.space/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Myanmar Gold Price | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:title" content="Myanmar Gold Price Today | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:description" content="Gold price per kyat-thar, calculators and USDT/MMK P2P rates in English and Burmese." />
+  <meta property="og:url" content="https://wemanage.space/" />
+  <script>
+(function(){var l='en';try{l=localStorage.getItem('lang')||'en';}catch(e){}
+if(l!=='my')l='en';var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l==='my'?'my':'en');
+window.setLang=function(x){try{localStorage.setItem('lang',x);}catch(e){}d.setAttribute('data-lang',x);d.setAttribute('lang',x==='my'?'my':'en');};
+window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='en'?'my':'en');};})();
+</script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
@@ -12,6 +25,10 @@
     .mono { font-family: 'JetBrains Mono', monospace; }
     .card { background: #131b2e; border: 1px solid #1e293b; border-radius: 0.75rem; }
     .gold-gradient { background: linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(19,27,46,1) 100%); border-color: rgba(245,158,11,0.35); }
+    html[data-lang="en"] .my { display: none !important; }
+    html[data-lang="my"] .en { display: none !important; }
+    .my { font-family: 'Padauk', 'Inter', sans-serif; line-height: 1.9; }
+    .prose-lite p { color:#cbd5e1; font-size:.9rem; line-height:1.75; }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298"
      crossorigin="anonymous"></script>
@@ -24,7 +41,7 @@
       <div class="flex items-center gap-2.5">
         <span id="statusDot" class="h-3 w-3 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
         <h1 id="mainTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-white leading-snug">
-          မြန်မာ့ ရွှေဈေး
+          Myanmar Gold Price
         </h1>
       </div>
       <div id="liveDateTime" class="text-xs text-amber-300/90 mono mt-1 font-semibold"></div>
@@ -32,29 +49,21 @@
 
     <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
       <div class="flex flex-wrap items-center justify-end gap-3 sm:gap-4">
+        <a href="guides.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">Guides</a>
         <a href="about.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">About</a>
-        <a href="terms.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">Terms</a>
+        <a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">Contact</a>
         <a href="paxg.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">PAXG Guide</a>
         <a href="usdtusdc.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">USDT vs USDC</a>
       </div>
       <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow whitespace-nowrap flex-shrink-0">
-        🌐 <span id="langBtnText">မြန်မာ / English</span>
+        🌐 <span id="langBtnText">English / မြန်မာ</span>
       </button>
     </div>
   </header>
 
-  <!-- ADSENSE TOP BANNER -->
-  <div class="max-w-7xl mx-auto mb-4 text-center overflow-hidden">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7869394911229298"
-         data-ad-slot="2857135904"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
+  <section class="max-w-7xl mx-auto mb-4 prose-lite">
+    <p id="introText">Live reference price of gold per kyat-thar (ကျပ်သား) in Myanmar, calculated from the international spot price (OANDA XAU/USD) and the USDT/MMK peer-to-peer rate. Use the converter and calculator to work with ounces, grams, kyat, pae and yway, and read our <a href="guides.html" class="text-sky-400 underline">guides</a> to see how the numbers are built.</p>
+  </section>
 
   <main class="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
@@ -62,22 +71,20 @@
     <section class="grid grid-cols-1 gap-4">
       <div class="card gold-gradient p-4 sm:p-5">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <span class="text-xs uppercase tracking-wider font-semibold text-amber-300" id="labelPriority1">OANDA Spot ရွှေဈေး</span>
+          <span class="text-xs uppercase tracking-wider font-semibold text-amber-300" id="labelPriority1">OANDA Spot Gold</span>
           <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 mono">OANDA:XAUUSD</span>
         </div>
         <div class="mt-3 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
           <div>
-            <div class="text-xs text-slate-400" id="labelOandaRef">OANDA လက်ရှိရည်ညွှန်းရွှေဈေး</div>
-            <div class="text-2xl sm:text-3xl font-bold text-amber-300 mono mt-1" id="displayOandaPrice">$4,160.85</div>
+            <div class="text-xs text-slate-400" id="labelOandaRef">OANDA Live Reference Price</div>
+            <div class="text-2xl sm:text-3xl font-bold text-amber-300 mono mt-1" id="displayOandaPrice">$4,091.81</div>
           </div>
           <div class="flex sm:flex-col justify-between sm:text-right space-y-0 sm:space-y-1 text-xs mono border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-800">
-            <div><span class="text-slate-400" id="labelHigh">ယနေ့အမြင့်ဆုံးဈေး:</span> <span id="oandaHigh" class="text-emerald-400 font-bold">$4,171.60</span></div>
-            <div><span class="text-slate-400" id="labelLow">ယနေ့အနိမ့်ဆုံးဈေး:</span> <span id="oandaLow" class="text-rose-400 font-bold">$4,074.65</span></div>
+            <div><span class="text-slate-400" id="labelHigh">Day high:</span> <span id="oandaHigh" class="text-emerald-400 font-bold">—</span></div>
+            <div><span class="text-slate-400" id="labelLow">Day low:</span> <span id="oandaLow" class="text-rose-400 font-bold">—</span></div>
           </div>
         </div>
-        <p class="text-[11px] text-slate-400 mt-2.5" id="labelOandaDesc">
-          ၁ အောင်စ ဈေး = 31.1035g • စနစ်ဟောင်းဈေး ÷ 1.873 | စနစ်သစ်ဈေး ÷ 1.9047
-        </p>
+        <p class="text-[11px] text-slate-400 mt-2.5" id="labelOandaDesc">1 Oz = 31.1035g • Old: ÷ 1.873 | New: ÷ 1.9047</p>
       </div>
     </section>
 
@@ -88,14 +95,14 @@
       <div class="lg:col-span-5 space-y-4 flex flex-col">
         <div class="card p-4">
           <div class="flex items-center justify-between mb-3">
-            <h3 id="goldTableTitle" class="font-bold text-white text-base">မြန်မာရွှေ ၁ ကျပ်သား</h3>
+            <h3 id="goldTableTitle" class="font-bold text-white text-base">Myanmar Gold per 1 Kyat-thar (၁ ကျပ်သား)</h3>
           </div>
 
           <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
             <table class="w-full text-left border-collapse text-xs whitespace-nowrap sm:whitespace-normal">
               <thead>
                 <tr class="border-b border-slate-800 text-slate-400">
-                  <th class="py-2" id="thStandard">စနစ်</th>
+                  <th class="py-2" id="thStandard">Standard</th>
                   <th class="py-2 text-right text-sky-400">Wallet</th>
                   <th class="py-2 text-right text-emerald-400">Bank</th>
                 </tr>
@@ -103,26 +110,26 @@
               <tbody class="divide-y divide-slate-800/70 mono">
                 <tr>
                   <td class="py-3 font-sans">
-                    <div id="oldStdTitle" class="font-semibold text-amber-300">စနစ်ဟောင်း</div>
-                    <div class="text-[11px] text-slate-400">1 Oz = 1.873 ကျပ် (16.606g)</div>
+                    <div id="oldStdTitle" class="font-semibold text-amber-300">Old Standard</div>
+                    <div class="text-[11px] text-slate-400">1 Oz = 1.873 Kyat (16.606g)</div>
                   </td>
-                  <td id="goldOldWallet" class="py-3 text-right text-sm sm:text-base font-bold text-white">-</td>
-                  <td id="goldOldBank" class="py-3 text-right text-sm sm:text-base font-bold text-emerald-400">-</td>
+                  <td id="goldOldWallet" class="py-3 text-right text-sm sm:text-base font-bold text-white">9,874,523 Ks</td>
+                  <td id="goldOldBank" class="py-3 text-right text-sm sm:text-base font-bold text-emerald-400">9,994,677 Ks</td>
                 </tr>
                 <tr>
                   <td class="py-3 font-sans">
-                    <div id="newStdTitle" class="font-semibold text-sky-300">စနစ်သစ်</div>
-                    <div class="text-[11px] text-slate-400">1 Oz = 1.9047 ကျပ် (16.329g)</div>
+                    <div id="newStdTitle" class="font-semibold text-sky-300">New Standard</div>
+                    <div class="text-[11px] text-slate-400">1 Oz = 1.9047 Kyat (16.329g)</div>
                   </td>
-                  <td id="goldNewWallet" class="py-3 text-right text-sm sm:text-base font-bold text-white">-</td>
-                  <td id="goldNewBank" class="py-3 text-right text-sm sm:text-base font-bold text-emerald-400">-</td>
+                  <td id="goldNewWallet" class="py-3 text-right text-sm sm:text-base font-bold text-white">9,710,181 Ks</td>
+                  <td id="goldNewBank" class="py-3 text-right text-sm sm:text-base font-bold text-emerald-400">9,828,336 Ks</td>
                 </tr>
                 <tr>
                   <td class="py-2.5 font-sans">
-                    <div id="pae15Title" class="font-medium text-slate-300">၁၅ ပဲရည်</div>
+                    <div id="pae15Title" class="font-medium text-slate-300">15 Pae Yay</div>
                   </td>
-                  <td id="gold15PaeWallet" class="py-2.5 text-right font-semibold text-slate-300">-</td>
-                  <td id="gold15PaeBank" class="py-2.5 text-right font-semibold text-slate-300">-</td>
+                  <td id="gold15PaeWallet" class="py-2.5 text-right font-semibold text-slate-300">9,257,365 Ks</td>
+                  <td id="gold15PaeBank" class="py-2.5 text-right font-semibold text-slate-300">9,370,010 Ks</td>
                 </tr>
               </tbody>
             </table>
@@ -132,7 +139,7 @@
         <!-- 1. OZ TO KYAT CONVERTER -->
         <div class="card p-4 border border-amber-500/35">
           <div class="flex items-center justify-between mb-2">
-            <h3 id="converterTitle" class="font-bold text-amber-300 text-sm">အောင်စ မှ ကျပ် - ပဲ - ရွှေး တွက်ရန်</h3>
+            <h3 id="converterTitle" class="font-bold text-amber-300 text-sm">⚖️ Oz & Kyat - Pae - Yway Converter</h3>
             <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded" id="labelEditable">Editable</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -147,14 +154,14 @@
                 class="w-full bg-slate-900 border border-amber-500/40 rounded px-2.5 py-2 text-white mono font-bold focus:outline-none" />
             </div>
             <div class="p-2.5 rounded bg-amber-500/10 border border-amber-500/30">
-              <div class="text-amber-300 font-semibold" id="labelOldStd">စနစ်ဟောင်း</div>
-              <div id="convOldKyatText" class="mono text-sm font-bold text-white mt-1">1.8730 ကျပ်</div>
-              <div id="convOldKPY" class="text-[11px] text-slate-300 mt-0.5">1 ကျပ် 13 ပဲ 7.7 ရွေး</div>
+              <div class="text-amber-300 font-semibold" id="labelOldStd">Old Std</div>
+              <div id="convOldKyatText" class="mono text-sm font-bold text-white mt-1">1 Kyat 13 Pae 7.7 Yway</div>
+              <div id="convOldKPY" class="text-[11px] text-slate-300 mt-0.5">1.8730 Kyat (Old)</div>
             </div>
             <div class="p-2.5 rounded bg-sky-500/10 border border-sky-500/30">
-              <div class="text-sky-300 font-semibold" id="labelNewStd">စနစ်သစ်</div>
-              <div id="convNewKyatText" class="mono text-sm font-bold text-white mt-1">1.9048 ကျပ်</div>
-              <div id="convNewKPY" class="text-[11px] text-slate-300 mt-0.5">1 ကျပ် 14 ပဲ 3.8 ရွေး</div>
+              <div class="text-sky-300 font-semibold" id="labelNewStd">New Std</div>
+              <div id="convNewKyatText" class="mono text-sm font-bold text-white mt-1">1 Kyat 14 Pae 3.8 Yway</div>
+              <div id="convNewKPY" class="text-[11px] text-slate-300 mt-0.5">1.9048 Kyat (New)</div>
             </div>
           </div>
         </div>
@@ -162,7 +169,7 @@
         <!-- 2. KYAT - PAE - YWAY CALCULATOR -->
         <div class="card p-4 border border-emerald-500/35">
           <div class="flex items-center justify-between mb-2">
-            <h3 id="calcKpyTitle" class="font-bold text-emerald-300 text-sm">ကျပ် - ပဲ - ရွှေး တန်ဖိုး တွက်ချက်ရန်</h3>
+            <h3 id="calcKpyTitle" class="font-bold text-emerald-300 text-sm">Kyat - Pae - Yway Calculator</h3>
             <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">Calculator</span>
           </div>
           <div class="grid grid-cols-3 gap-2 text-xs mb-3">
@@ -183,14 +190,14 @@
             </div>
           </div>
           <div class="flex items-center justify-between mb-3 text-xs">
-            <span class="text-slate-400" id="labelCalcBasis">အခြေခံနှုန်း:</span>
+            <span class="text-slate-400" id="labelCalcBasis">Basis Rate:</span>
             <select id="calcRateSource" onchange="calculateKpyToMmk()" class="bg-slate-900 border border-slate-700 text-emerald-400 font-semibold rounded px-2 py-1">
-              <option value="bank">Bank (Max) နှုန်း</option>
-              <option value="wallet">Wallet (Mid) နှုန်း</option>
+              <option value="bank">Bank (Max)</option>
+              <option value="wallet">Wallet (Mid)</option>
             </select>
           </div>
           <div class="p-3 rounded bg-emerald-500/10 border border-emerald-500/30 text-center">
-            <div class="text-slate-400 text-xs" id="labelTotalValue">စုစုပေါင်း တန်ဖိုး (MMK):</div>
+            <div class="text-slate-400 text-xs" id="labelTotalValue">Total Value (MMK):</div>
             <div id="calcTotalMmkResult" class="mono text-lg font-bold text-emerald-400 mt-1">0 Ks</div>
           </div>
         </div>
@@ -204,7 +211,7 @@
             <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
               <button id="tabMmkChart" onclick="switchChartTab('mmk')"
                 class="px-3 py-1.5 rounded text-xs font-semibold bg-amber-500 text-slate-950 flex-shrink-0">
-                နေ့စဉ်ရွှေစျေး
+                Daily Gold Chart
               </button>
               <button id="tabOandaChart" onclick="switchChartTab('oanda')"
                 class="px-3 py-1.5 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 flex-shrink-0">
@@ -258,7 +265,7 @@
     <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <div class="card p-4 border-l-4 border-l-amber-500 bg-amber-500/5">
         <div class="flex items-center justify-between mb-3">
-          <h3 id="cryptoGoldTitle" class="font-bold text-amber-300 text-sm">ခရစ်တိုရွှေ (PAXG/USDT)</h3>
+          <h3 id="cryptoGoldTitle" class="font-bold text-amber-300 text-sm">Crypto Gold (PAXG/USDT)</h3>
           <button onclick="refreshAllData(); refreshP2PData();" class="px-2 py-0.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold transition text-xs">↻</button>
         </div>
         <div class="space-y-2 text-xs mono">
@@ -356,14 +363,30 @@
       <p class="md:col-span-2 text-[11px] text-slate-500">P2P prices are indicative advertisements, not guaranteed execution prices. If an exchange or proxy blocks the request, its card will show an error/stale status instead of implying the quote is live.</p>
     </section>
 
-    <!-- ROW 4: GOLD MARKET NEWS SECTION -->
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-12 card p-4">
-        <div class="mb-3">
-          <h3 id="newsSectionTitle" class="font-bold text-white text-base">ရွှေဈေး သတင်းများ</h3>
+    <!-- ROW 4: GUIDES -->
+    <section class="grid grid-cols-1 gap-6">
+      <div class="card p-4">
+        <div class="mb-3 flex items-center justify-between gap-2">
+          <h3 class="font-bold text-white text-base"><span class="en">Guides: How Myanmar gold prices work</span><span class="my">လမ်းညွှန်များ - မြန်မာ့ရွှေဈေး ဘယ်လိုအလုပ်လုပ်သလဲ</span></h3>
+          <a href="guides.html" class="text-xs text-sky-400 underline"><span class="en">All guides →</span><span class="my">အားလုံး →</span></a>
         </div>
-        <div id="goldNewsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <!-- Populated dynamically via JS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <a href="kyat-pae-yway-guide.html" class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition block">
+            <p class="text-sm font-semibold text-amber-300"><span class="en">Kyat, Pae and Yway: Myanmar Gold Weights Explained</span><span class="my">ကျပ်၊ ပဲ၊ ရွေး — မြန်မာ့ရွှေချိန်ခွင် ရှင်းလင်းချက်</span></p>
+            <p class="text-xs text-slate-400 mt-1.5"><span class="en">The units, the old and new standards, and step-by-step conversions from ounces and grams.</span><span class="my">ရွှေချိန်ခွင်ယူနစ်များ၊ စနစ်ဟောင်း/စနစ်သစ်နှင့် အောင်စ၊ ဂရမ်မှ ပြောင်းလဲတွက်ချက်နည်း။</span></p>
+          </a>
+          <a href="how-myanmar-gold-price-is-calculated.html" class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition block">
+            <p class="text-sm font-semibold text-amber-300"><span class="en">How the Myanmar Gold Price Is Calculated</span><span class="my">မြန်မာ့ရွှေဈေးကို ဘယ်လိုတွက်ချက်သလဲ</span></p>
+            <p class="text-xs text-slate-400 mt-1.5"><span class="en">The formula behind the numbers: spot gold, the kyat exchange rate and the local weight standard.</span><span class="my">ဂဏန်းများနောက်ကွယ်က ဖော်မြူလာ - နိုင်ငံတကာရွှေဈေး၊ ကျပ်ငွေလဲနှုန်းနှင့် ဒေသတွင်းချိန်ခွင်စံနှုန်း။</span></p>
+          </a>
+          <a href="p2p-usdt-mmk-rates-explained.html" class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition block">
+            <p class="text-sm font-semibold text-amber-300"><span class="en">USDT/MMK P2P Rates Explained</span><span class="my">USDT/MMK P2P နှုန်းများ ရှင်းလင်းချက်</span></p>
+            <p class="text-xs text-slate-400 mt-1.5"><span class="en">Buy vs sell prices, why OKX and Bybit differ, how we calculate the quotes and how to trade safely.</span><span class="my">ဝယ်ဈေး၊ ရောင်းဈေး၊ OKX နှင့် Bybit ကွာခြားပုံ၊ တွက်ချက်ပုံနှင့် ဘေးကင်းစွာ ရောင်းဝယ်ပုံ။</span></p>
+          </a>
+          <a href="gold-purity-pae-yay.html" class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition block">
+            <p class="text-sm font-semibold text-amber-300"><span class="en">Gold Purity in Myanmar: Pae Yay vs Karat</span><span class="my">မြန်မာ့ရွှေရည် - ပဲရည်နှင့် ကရက် နှိုင်းယှဉ်ချက်</span></p>
+            <p class="text-xs text-slate-400 mt-1.5"><span class="en">How 16, 15 and 14 pae yay map to karat, how purity changes the price and how to check before buying.</span><span class="my">၁၆၊ ၁၅၊ ၁၄ ပဲရည်များ ကရက်နှင့် ဘယ်လိုညီမျှသည်၊ ရွှေရည်က ဈေးကို ဘယ်လိုပြောင်းသည်၊ ဝယ်မီ ဘယ်လိုစစ်မလဲ။</span></p>
+          </a>
         </div>
       </div>
     </section>
@@ -373,7 +396,7 @@
       <div class="lg:col-span-12 card p-4">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div>
-            <h3 id="fxSectionTitle" class="font-bold text-white text-base">နိုင်ငံခြားငွေလဲနှုန်းများ ↔ ကျပ်</h3>
+            <h3 id="fxSectionTitle" class="font-bold text-white text-base">Foreign Exchange Rates ↔ MMK</h3>
           </div>
         </div>
 
@@ -381,52 +404,109 @@
           <table class="w-full text-left border-collapse text-xs whitespace-nowrap sm:whitespace-normal">
             <thead>
               <tr class="border-b border-slate-800 text-slate-400">
-                <th class="py-2.5" id="thCurrency">ငွေကြေး</th>
-                <th class="py-2.5 text-right" id="thCrossRate">နှုန်းထား</th>
+                <th class="py-2.5" id="thCurrency">Market / Currency</th>
+                <th class="py-2.5 text-right" id="thCrossRate">Cross Rate</th>
                 <th class="py-2.5 text-right text-sky-400">Wallet</th>
                 <th class="py-2.5 text-right text-emerald-400">Bank</th>
                 <th class="py-2.5 text-right text-amber-300" id="thEquals">100k MMK Equals</th>
               </tr>
             </thead>
             <tbody id="fxTableBody" class="divide-y divide-slate-800/70 mono">
-              <!-- Populated by JS -->
+              
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-2.5 font-sans font-medium text-white">🇺🇸 US Dollar (1 USD)</td>
+                <td class="py-2.5 text-right text-slate-400">1.0000</td>
+                <td class="py-2.5 text-right font-bold text-sky-400">4,520.00 Ks</td>
+                <td class="py-2.5 text-right font-bold text-emerald-400">4,575.00 Ks</td>
+                <td class="py-2.5 text-right font-bold text-amber-300">22.12 USD</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-2.5 font-sans font-medium text-white">🇸🇬 Singapore Dollar (1 SGD)</td>
+                <td class="py-2.5 text-right text-slate-400">1.34</td>
+                <td class="py-2.5 text-right font-bold text-sky-400">3,373.13 Ks</td>
+                <td class="py-2.5 text-right font-bold text-emerald-400">3,414.18 Ks</td>
+                <td class="py-2.5 text-right font-bold text-amber-300">29.65 SGD</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-2.5 font-sans font-medium text-white">🇹🇭 Thai Baht (1 THB)</td>
+                <td class="py-2.5 text-right text-slate-400">33.65</td>
+                <td class="py-2.5 text-right font-bold text-sky-400">134.32 Ks</td>
+                <td class="py-2.5 text-right font-bold text-emerald-400">135.96 Ks</td>
+                <td class="py-2.5 text-right font-bold text-amber-300">744.47 THB</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-2.5 font-sans font-medium text-white">🇯🇵 Japanese Yen (100 JPY)</td>
+                <td class="py-2.5 text-right text-slate-400">158.85</td>
+                <td class="py-2.5 text-right font-bold text-sky-400">2,845.45 Ks</td>
+                <td class="py-2.5 text-right font-bold text-emerald-400">2,880.08 Ks</td>
+                <td class="py-2.5 text-right font-bold text-amber-300">3,514.38 JPY</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-2.5 font-sans font-medium text-white">🇲🇾 Malaysian Ringgit (1 MYR)</td>
+                <td class="py-2.5 text-right text-slate-400">4.31</td>
+                <td class="py-2.5 text-right font-bold text-sky-400">1,048.72 Ks</td>
+                <td class="py-2.5 text-right font-bold text-emerald-400">1,061.48 Ks</td>
+                <td class="py-2.5 text-right font-bold text-amber-300">95.35 MYR</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-2.5 font-sans font-medium text-white">🇨🇳 Chinese Yuan (1 CNY)</td>
+                <td class="py-2.5 text-right text-slate-400">7.12</td>
+                <td class="py-2.5 text-right font-bold text-sky-400">634.83 Ks</td>
+                <td class="py-2.5 text-right font-bold text-emerald-400">642.56 Ks</td>
+                <td class="py-2.5 text-right font-bold text-amber-300">157.52 CNY</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-2.5 font-sans font-medium text-white">🇦🇪 Dubai Dirham (1 AED)</td>
+                <td class="py-2.5 text-right text-slate-400">3.67</td>
+                <td class="py-2.5 text-right font-bold text-sky-400">1,231.61 Ks</td>
+                <td class="py-2.5 text-right font-bold text-emerald-400">1,246.59 Ks</td>
+                <td class="py-2.5 text-right font-bold text-amber-300">81.19 AED</td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- ROW 6: MARKET METHODOLOGY (High Value Content for AdSense) -->
+    <!-- ROW 6: METHODOLOGY -->
     <section class="grid grid-cols-1 gap-6 mb-4">
       <div class="card p-5 sm:p-6 bg-slate-800/20 border border-slate-700/50">
-        <h3 id="faqTitle" class="font-bold text-white text-lg mb-4">About Myanmar Gold Standards & Market Methodology</h3>
-        
-        <div class="space-y-5 text-sm text-slate-300 leading-relaxed">
-          <div>
-            <h4 class="font-semibold text-amber-300 mb-1">How are Myanmar Gold Prices Calculated?</h4>
-            <p>Our dashboard provides real-time conversions bridging global spot gold prices (OANDA:XAUUSD) with local Myanmar weight standards. In Myanmar, gold is traditionally measured in Ticals (Kyat), Pae, and Yway. One Troy Ounce of gold equals approximately 31.1035 grams. We calculate the local market price by factoring in the real-time USD/MMK exchange rate and applying the standardized local weight multipliers.</p>
-          </div>
-          
-          <div>
-            <h4 class="font-semibold text-sky-300 mb-1">Old Standard vs. New Standard (စနစ်ဟောင်း နှင့် စနစ်သစ်)</h4>
-            <p>The local gold market utilizes two distinct measurement formulas. The <strong>Old Standard</strong> defines 1 Troy Ounce as 1.873 Kyat (equivalent to 16.606g per Kyat). The <strong>New Standard</strong> defines 1 Troy Ounce as 1.9047 Kyat (equivalent to 16.329g per Kyat). Our system automatically calculates both tiers, allowing merchants and buyers to see accurate pricing based on their preferred trading ecosystem.</p>
-          </div>
-
-          <div>
-            <h4 class="font-semibold text-emerald-300 mb-1">Data Sources and Real-Time Accuracy</h4>
-            <p>To ensure trading accuracy, this platform aggregates data from multiple financial APIs. The base global gold price is pulled live from the OANDA spot market. For accurate currency conversion, we track live Peer-to-Peer (P2P) USDT exchange rates—comparing both local Bank transfers and Mobile Wallet (e.g., KBZPay, WavePay) rates—to reflect the true local market premiums dynamically.</p>
-          </div>
+        <div class="en space-y-5 text-sm text-slate-300 leading-relaxed">
+          <h3 class="font-bold text-white text-lg">About Myanmar Gold Standards &amp; Market Methodology</h3>
+          <div><h4 class="font-semibold text-amber-300 mb-1">How are Myanmar gold prices calculated?</h4>
+            <p>Our dashboard bridges the global spot gold price (OANDA:XAUUSD) and local Myanmar weight standards. Gold in Myanmar is measured in kyat-thar (tical), pae and yway, and one troy ounce is 31.1035 grams. The reference price per kyat-thar is the ounce price multiplied by the USD/MMK market rate and divided by the number of kyat-thar in an ounce. See the full <a class="text-sky-400 underline" href="how-myanmar-gold-price-is-calculated.html">step-by-step explanation</a>.</p></div>
+          <div><h4 class="font-semibold text-sky-300 mb-1">Old standard vs. new standard (စနစ်ဟောင်း နှင့် စနစ်သစ်)</h4>
+            <p>The <strong>old standard</strong> defines 1 troy ounce as 1.873 kyat-thar (16.606 g per kyat-thar). The <strong>new standard</strong> defines it as 1.9047 kyat-thar (16.329 g per kyat-thar). We calculate both so you can compare like with like. Learn the units in our <a class="text-sky-400 underline" href="kyat-pae-yway-guide.html">weights guide</a>.</p></div>
+          <div><h4 class="font-semibold text-emerald-300 mb-1">Data sources and accuracy</h4>
+            <p>The international gold price comes from OANDA. USDT/MMK rates come from the public peer-to-peer advertisements on OKX and Bybit, split into bank-transfer and mobile-wallet channels. Read how these are collected in our <a class="text-sky-400 underline" href="p2p-usdt-mmk-rates-explained.html">P2P rates guide</a>. All figures are references, not guaranteed trading prices.</p></div>
+        </div>
+        <div class="my space-y-5 text-sm text-slate-300 leading-relaxed">
+          <h3 class="font-bold text-white text-lg">မြန်မာ့ရွှေစံနှုန်းများနှင့် ဈေးကွက်တွက်ချက်ပုံ အကြောင်း</h3>
+          <div><h4 class="font-semibold text-amber-300 mb-1">မြန်မာ့ရွှေဈေးကို ဘယ်လိုတွက်ချက်သလဲ</h4>
+            <p>ကျွန်ုပ်တို့ဒက်ရှ်ဘုတ်သည် ကမ္ဘာ့စပေါ့ရွှေဈေး (OANDA:XAUUSD) နှင့် မြန်မာ့ဒေသတွင်းချိန်ခွင်စံနှုန်းများကို ချိတ်ဆက်ပေးသည်။ မြန်မာနိုင်ငံတွင် ရွှေကို ကျပ်သား၊ ပဲ၊ ရွေးဖြင့် ချိန်ပြီး ၁ ထရိုင်အောင်စသည် ၃၁.၁၀၃၅ ဂရမ်ဖြစ်သည်။ ကျပ်သားတစ်ကျပ်၏ ကိုးကားဈေးမှာ အောင်စဈေးကို USD/MMK ဈေးကွက်နှုန်းဖြင့်မြှောက်ပြီး အောင်စတစ်စရှိ ကျပ်သားအရေအတွက်ဖြင့် စားထားခြင်းဖြစ်သည်။ <a class="text-sky-400 underline" href="how-myanmar-gold-price-is-calculated.html">အဆင့်ဆင့်ရှင်းလင်းချက်</a>အပြည့်အစုံကို ကြည့်ပါ။</p></div>
+          <div><h4 class="font-semibold text-sky-300 mb-1">စနစ်ဟောင်း နှင့် စနစ်သစ်</h4>
+            <p><strong>စနစ်ဟောင်း</strong>သည် ၁ ထရိုင်အောင်စကို ၁.၈၇၃ ကျပ်သား (ကျပ်သားတစ်ကျပ် ၁၆.၆၀၆ ဂရမ်) ဟု သတ်မှတ်သည်။ <strong>စနစ်သစ်</strong>သည် ၁.၉၀၄၇ ကျပ်သား (ကျပ်သားတစ်ကျပ် ၁၆.၃၂၉ ဂရမ်) ဟု သတ်မှတ်သည်။ တူတူချင်းနှိုင်းယှဉ်နိုင်ရန် နှစ်မျိုးလုံးကို တွက်ပေးသည်။ ယူနစ်များကို <a class="text-sky-400 underline" href="kyat-pae-yway-guide.html">ချိန်ခွင်လမ်းညွှန်</a>တွင် လေ့လာပါ။</p></div>
+          <div><h4 class="font-semibold text-emerald-300 mb-1">ဒေတာရင်းမြစ်များနှင့် တိကျမှု</h4>
+            <p>နိုင်ငံတကာရွှေဈေးသည် OANDA မှလာသည်။ USDT/MMK နှုန်းများသည် OKX နှင့် Bybit ရှိ အများပြည်သူမြင် P2P ကြော်ငြာများမှ ဘဏ်လွှဲနှင့် မိုဘိုင်းပိုက်ဆံအိတ်လမ်းကြောင်းနှစ်ခုခွဲ၍ ရယူထားသည်။ စုဆောင်းပုံကို <a class="text-sky-400 underline" href="p2p-usdt-mmk-rates-explained.html">P2P နှုန်းလမ်းညွှန်</a>တွင် ဖတ်ပါ။ ဂဏန်းအားလုံးသည် ကိုးကားဈေးများသာဖြစ်ပြီး ရောင်းဝယ်ဈေးအာမခံချက် မဟုတ်ပါ။</p></div>
         </div>
       </div>
     </section>
 
   </main>
 
+  <footer class="max-w-7xl mx-auto mt-10 pt-6 border-t border-slate-800 text-xs text-slate-400 space-y-2 text-center">
+    <div><a href="index.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မ</span></a> · <a href="guides.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a> · <a href="about.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">About</span><span class="my">ကျွန်ုပ်တို့အကြောင်း</span></a> · <a href="contact.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a> · <a href="privacy.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Privacy Policy</span><span class="my">ကိုယ်ရေးအချက်အလက် မူဝါဒ</span></a> · <a href="terms.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Terms & Disclaimer</span><span class="my">စည်းကမ်းချက်များ</span></a></div>
+    <p class="en">Prices and calculators are for general information only and are not financial advice. © 2026 wemanage.space</p>
+    <p class="my">ဈေးနှုန်းများနှင့် ဂဏန်းတွက်စက်များသည် အထွေထွေအချက်အလက်အတွက်သာ ဖြစ်ပြီး ငွေကြေးဆိုင်ရာ အကြံပေးချက် မဟုတ်ပါ။ © 2026 wemanage.space</p>
+  </footer>
+
   <script>
-    let currentLang = 'my';
+    let currentLang = 'en';
 
     const state = {
       oandaUsd: 4091.81,
+      oandaHigh: null,
+      oandaLow: null,
       paxgBid: 4103.39,
       paxgAsk: 4103.40,
       bankBuy: 4575,
@@ -449,27 +529,7 @@
         CNY: 7.12, 
         AED: 3.67 
       },
-      dailyGoldUsdCandles: [],
-      newsItems: [
-        {
-          enTitle: "Gold tests key support levels as market awaits US inflation data",
-          myTitle: "အမေရိကန် ငွေကြေးဖောင်းပွမှု အချက်အလက်များကို စောင့်ဆိုင်းနေစဉ် ရွှေဈေးက အဓိကထောက်ပံ့မှု အဆင့်များကို စမ်းသပ်နေ",
-          source: "Kitco News",
-          url: "https://www.kitco.com/news"
-        },
-        {
-          enTitle: "Gold ETF demand defies rising bond yields with strong quarterly inflows",
-          myTitle: "ရွှေအီးတီအက်ဖ် (Gold ETF) ဝယ်လိုအား မြင့်တက်လာပြီး ရွှေဈေးကွက်ကို အထောက်အကူဖြစ်စေ",
-          source: "World Gold Council",
-          url: "https://www.gold.org/goldhub/gold-focus"
-        },
-        {
-          enTitle: "Central banks continue physical gold accumulation amid global economic shifts",
-          myTitle: "ကမ္ဘာ့ဘဏ်များနှင့် ဗဟိုဘဏ်များအနေဖြင့် ရွှေကို ဆက်လက်သိုလှောင်ဝယ်ယူနေ",
-          source: "Reuters Markets",
-          url: "https://www.reuters.com/markets/commodities/"
-        }
-      ]
+      dailyGoldUsdCandles: []
     };
 
     let mmkChartInstance = null;
@@ -490,7 +550,7 @@
       const remPae = (kyatDecimal - kyat) * 16;
       const pae = Math.floor(remPae);
       const yway = ((remPae - pae) * 8).toFixed(1);
-      return `${kyat} ကျပ် ${pae} ပဲ ${yway} ရွေး`;
+      return currentLang === 'my' ? `${kyat} ကျပ် ${pae} ပဲ ${yway} ရွေး` : `${kyat} Kyat ${pae} Pae ${yway} Yway`;
     }
 
     function updateDateTime() {
@@ -512,50 +572,38 @@
       }
     }
 
-    function renderGoldNews() {
-      const container = document.getElementById('goldNewsContainer');
-      if (!container) return;
-
-      let html = '';
-      state.newsItems.forEach(item => {
-        const title = currentLang === 'my' ? item.myTitle : item.enTitle;
-        html += `
-          <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-             class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition flex flex-col justify-between group">
-            <p class="text-xs font-medium text-slate-200 group-hover:text-amber-300 transition line-clamp-2">${title}</p>
-            <div class="flex items-center justify-between mt-3 text-[10px] text-slate-400">
-              <span class="text-amber-400 font-semibold">📰 ${item.source}</span>
-              <span>🔗 External Link ↗</span>
-            </div>
-          </a>
-        `;
-      });
-      container.innerHTML = html;
-    }
-
     function toggleLanguage() {
       currentLang = currentLang === 'en' ? 'my' : 'en';
+      if (window.setLang) window.setLang(currentLang);
+      document.getElementById('mainTitle').textContent = currentLang === 'my' ? 'မြန်မာ့ ရွှေဈေး' : 'Myanmar Gold Price';
+      document.getElementById('introText').innerHTML = currentLang === 'my'
+        ? 'မြန်မာနိုင်ငံရှိ ရွှေကျပ်သားတစ်ကျပ်၏ တိုက်ရိုက်ကိုးကားဈေးကို နိုင်ငံတကာစပေါ့ဈေး (OANDA XAU/USD) နှင့် USDT/MMK P2P နှုန်းမှ တွက်ချက်ထားသည်။ ပြောင်းလဲကိရိယာနှင့် ဂဏန်းတွက်စက်ဖြင့် အောင်စ၊ ဂရမ်၊ ကျပ်၊ ပဲ၊ ရွေးတို့ကို တွက်နိုင်ပြီး ဂဏန်းများ ဘယ်လိုတည်ဆောက်သည်ကို <a href="guides.html" class="text-sky-400 underline">လမ်းညွှန်များ</a>တွင် ဖတ်ပါ။'
+        : 'Live reference price of gold per kyat-thar (ကျပ်သား) in Myanmar, calculated from the international spot price (OANDA XAU/USD) and the USDT/MMK peer-to-peer rate. Use the converter and calculator to work with ounces, grams, kyat, pae and yway, and read our <a href="guides.html" class="text-sky-400 underline">guides</a> to see how the numbers are built.';
+      document.getElementById('labelEditable').textContent = currentLang === 'my' ? 'ပြင်ဆင်နိုင်သည်' : 'Editable';
+      if (mmkChartInstance) {
+        mmkChartInstance.data.datasets[0].label = currentLang === 'my' ? 'စနစ်ဟောင်း (1.873)' : 'Old Standard (1.873)';
+        mmkChartInstance.data.datasets[1].label = currentLang === 'my' ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)';
+      }
       
       document.getElementById('langBtnText').textContent = currentLang === 'my' ? 'မြန်မာ / English' : 'English / မြန်မာ';
-      document.getElementById('goldTableTitle').textContent = currentLang === 'my' ? 'မြန်မာရွှေ ၁ ကျပ်သား' : 'Myanmar Gold (၁ ကျပ်သား) Live';
+      document.getElementById('goldTableTitle').textContent = currentLang === 'my' ? 'မြန်မာရွှေ ၁ ကျပ်သား' : 'Myanmar Gold per 1 Kyat-thar (၁ ကျပ်သား)';
       document.getElementById('converterTitle').textContent = currentLang === 'my' ? 'အောင်စ မှ ကျပ် - ပဲ - ရွှေး တွက်ရန်' : '⚖️ Oz & Kyat - Pae - Yway Converter';
       document.getElementById('calcKpyTitle').textContent = currentLang === 'my' ? 'ကျပ် - ပဲ - ရွှေး တန်ဖိုး တွက်ချက်ရန်' : 'Kyat - Pae - Yway Calculator';
       document.getElementById('labelCalcBasis').textContent = currentLang === 'my' ? 'အခြေခံနှုန်း:' : 'Basis Rate:';
       document.getElementById('labelTotalValue').textContent = currentLang === 'my' ? 'စုစုပေါင်း တန်ဖိုး (MMK):' : 'Total Value (MMK):';
-      document.getElementById('newsSectionTitle').textContent = currentLang === 'my' ? 'ရွှေဈေး သတင်းများ' : 'Gold Market News';
       document.getElementById('fxSectionTitle').textContent = currentLang === 'my' ? 'နိုင်ငံခြားငွေလဲနှုန်းများ ↔ ကျပ်' : 'Foreign Exchange Rates ↔ MMK';
       document.getElementById('tabMmkChart').textContent = currentLang === 'my' ? 'နေ့စဉ်ရွှေစျေး' : 'Daily Gold Chart';
       document.getElementById('cryptoGoldTitle').textContent = currentLang === 'my' ? 'ခရစ်တိုရွှေ (PAXG/USDT)' : 'Crypto Gold (PAXG/USDT)';
       
       document.getElementById('labelPriority1').textContent = currentLang === 'my' ? 'OANDA Spot ရွှေဈေး' : 'OANDA Spot Gold';
       document.getElementById('labelOandaRef').textContent = currentLang === 'my' ? 'OANDA လက်ရှိရည်ညွှန်းရွှေဈေး' : 'OANDA Live Reference Price';
-      document.getElementById('labelHigh').textContent = currentLang === 'my' ? 'ယနေ့အမြင့်ဆုံးဈေး:' : 'High:';
-      document.getElementById('labelLow').textContent = currentLang === 'my' ? 'ယနေ့အနိမ့်ဆုံးဈေး:' : 'Low:';
+      document.getElementById('labelHigh').textContent = currentLang === 'my' ? 'ယနေ့အမြင့်ဆုံးဈေး:' : 'Day high:';
+      document.getElementById('labelLow').textContent = currentLang === 'my' ? 'ယနေ့အနိမ့်ဆုံးဈေး:' : 'Day low:';
       document.getElementById('labelOandaDesc').textContent = currentLang === 'my' ? '၁ အောင်စ ဈေး = 31.1035g • စနစ်ဟောင်းဈေး ÷ 1.873 | စနစ်သစ်ဈေး ÷ 1.9047' : '1 Oz = 31.1035g • Old: ÷ 1.873 | New: ÷ 1.9047';
 
       document.getElementById('oldStdTitle').textContent = currentLang === 'my' ? 'စနစ်ဟောင်း' : 'Old Standard';
       document.getElementById('newStdTitle').textContent = currentLang === 'my' ? 'စနစ်သစ်' : 'New Standard';
-      document.getElementById('pae15Title').textContent = currentLang === 'my' ? '၁၅ ပဲရည်' : '15 Pae';
+      document.getElementById('pae15Title').textContent = currentLang === 'my' ? '၁၅ ပဲရည်' : '15 Pae Yay';
       document.getElementById('labelOldStd').textContent = currentLang === 'my' ? 'စနစ်ဟောင်း' : 'Old Std';
       document.getElementById('labelNewStd').textContent = currentLang === 'my' ? 'စနစ်သစ်' : 'New Std';
 
@@ -566,7 +614,6 @@
 
       convertGoldWeight('oz');
       calculateKpyToMmk();
-      renderGoldNews();
       recalculateAll();
     }
 
@@ -588,9 +635,9 @@
       const newKyat = grams / 16.329325;
 
       document.getElementById('convOldKyatText').textContent = decimalKyatToKPY(oldKyat);
-      document.getElementById('convOldKPY').textContent = `${oldKyat.toFixed(4)} Kyat (Old)`;
+      document.getElementById('convOldKPY').textContent = `${oldKyat.toFixed(4)} ` + (currentLang === 'my' ? 'ကျပ် (စနစ်ဟောင်း)' : 'Kyat (Old)');
       document.getElementById('convNewKyatText').textContent = decimalKyatToKPY(newKyat);
-      document.getElementById('convNewKPY').textContent = `${newKyat.toFixed(4)} Kyat (New)`;
+      document.getElementById('convNewKPY').textContent = `${newKyat.toFixed(4)} ` + (currentLang === 'my' ? 'ကျပ် (စနစ်သစ်)' : 'Kyat (New)');
     }
 
     function calculateKpyToMmk() {
@@ -608,8 +655,8 @@
 
     function recalculateAll() {
       document.getElementById('displayOandaPrice').textContent = '$' + formatNumber(state.oandaUsd, 2);
-      document.getElementById('oandaHigh').textContent = '$' + formatNumber(state.oandaUsd + 79.79, 2);
-      document.getElementById('oandaLow').textContent = '$' + formatNumber(state.oandaUsd - 17.16, 2);
+      document.getElementById('oandaHigh').textContent = state.oandaHigh == null ? '—' : '$' + formatNumber(state.oandaHigh, 2);
+      document.getElementById('oandaLow').textContent = state.oandaLow == null ? '—' : '$' + formatNumber(state.oandaLow, 2);
 
       document.getElementById('displayBankBuy').textContent = formatNumber(state.bankBuy, 0) + ' Ks';
       document.getElementById('displayBankSell').textContent = formatNumber(state.bankSell, 0) + ' Ks';
@@ -688,7 +735,7 @@
           labels: [],
           datasets: [
             {
-              label: 'စနစ်ဟောင်း (1.873)',
+              label: 'Old Standard (1.873)',
               data: [],
               borderColor: '#f59e0b',
               backgroundColor: 'rgba(245, 158, 11, 0.12)',
@@ -697,7 +744,7 @@
               tension: 0.3
             },
             {
-              label: 'စနစ်သစ် (1.9047)',
+              label: 'New Standard (1.9047)',
               data: [],
               borderColor: '#38bdf8',
               borderDash: [5, 5],
@@ -886,6 +933,8 @@
           if (oandaData.close) {
             state.oandaUsd = oandaData.close;
           }
+          state.oandaHigh = Number(oandaData.high) > 0 ? Number(oandaData.high) : null;
+          state.oandaLow = Number(oandaData.low) > 0 ? Number(oandaData.low) : null;
         }
 
         const bookRes = await fetch('https://api.binance.com/api/v3/ticker/bookTicker?symbol=PAXGUSDT');
@@ -916,10 +965,12 @@
 
     // --- TIMERS ---
     window.addEventListener('DOMContentLoaded', () => {
+      let saved = 'en';
+      try { saved = localStorage.getItem('lang') || 'en'; } catch (e) {}
       convertGoldWeight('oz');
       initMmkGoldChart();
-      renderGoldNews();
       recalculateAll();
+      if (saved === 'my') toggleLanguage();
       
       refreshAllData(); // Initial load for OANDA
       refreshP2PData(); // Initial load for OKX/Bybit

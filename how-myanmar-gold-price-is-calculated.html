@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How the Myanmar Gold Price Is Calculated | မြန်မာ့ ရွှေဈေး</title>
+  <meta name="description" content="See the formula that turns the international gold price (XAU/USD) and the USDT/MMK rate into a price per kyat-thar, with a worked example and the reasons shop prices differ." />
+  <link rel="canonical" href="https://wemanage.space/how-myanmar-gold-price-is-calculated" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Myanmar Gold Price | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:title" content="How the Myanmar Gold Price Is Calculated | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:description" content="See the formula that turns the international gold price (XAU/USD) and the USDT/MMK rate into a price per kyat-thar, with a worked example and the reasons shop prices differ." />
+  <meta property="og:url" content="https://wemanage.space/how-myanmar-gold-price-is-calculated" />
+  <script>
+(function(){var l='en';try{l=localStorage.getItem('lang')||'en';}catch(e){}
+if(l!=='my')l='en';var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l==='my'?'my':'en');
+window.setLang=function(x){try{localStorage.setItem('lang',x);}catch(e){}d.setAttribute('data-lang',x);d.setAttribute('lang',x==='my'?'my':'en');};
+window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='en'?'my':'en');};})();
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', 'Padauk', sans-serif; background-color: #0b0f17; color: #e2e8f0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .card { background: #131b2e; border: 1px solid #1e293b; border-radius: 0.75rem; }
+    html[data-lang="en"] .my { display: none !important; }
+    html[data-lang="my"] .en { display: none !important; }
+    .my { font-family: 'Padauk', 'Inter', sans-serif; line-height: 1.9; }
+    .prose h2 { color:#fcd34d; font-weight:700; font-size:1.25rem; margin:1.75rem 0 .6rem; }
+    .prose h3 { color:#e2e8f0; font-weight:600; font-size:1.05rem; margin:1.25rem 0 .4rem; }
+    .prose p { color:#cbd5e1; font-size:.95rem; line-height:1.75; margin:.7rem 0; }
+    .my.prose p, .prose .my p { line-height:2; }
+    .prose ul, .prose ol { color:#cbd5e1; font-size:.95rem; line-height:1.75; margin:.7rem 0 .7rem 1.25rem; }
+    .prose ul { list-style:disc; } .prose ol { list-style:decimal; }
+    .prose li { margin:.3rem 0; }
+    .prose table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.88rem; }
+    .prose th { text-align:left; color:#94a3b8; border-bottom:1px solid #334155; padding:.5rem .4rem; }
+    .prose td { color:#e2e8f0; border-bottom:1px solid #1e293b; padding:.5rem .4rem; }
+    .prose a { color:#38bdf8; text-decoration:underline; }
+    .note { border-left:4px solid #f59e0b; background:rgba(245,158,11,.08); padding:.75rem 1rem; border-radius:.5rem; margin:1rem 0; }
+    .note p { margin:.2rem 0; }
+</style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298" crossorigin="anonymous"></script>
+</head>
+<body class="min-h-screen p-3 sm:p-4 md:p-6">
+  <header class="max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+    <a href="index.html" class="text-xl sm:text-2xl font-bold tracking-tight text-white"><span class="en">Myanmar Gold Price <span class="text-slate-400 text-base">(မြန်မာ့ ရွှေဈေး)</span></span><span class="my">မြန်မာ့ ရွှေဈေး</span></a>
+    <div class="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
+      <nav class="flex flex-wrap items-center gap-3 sm:gap-4" aria-label="Main"><a href="index.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မစာမျက်နှာ</span></a><a href="guides.html" class="text-sm font-medium text-amber-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">About</span><span class="my">ကျွန်ုပ်တို့အကြောင်း</span></a><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a></nav>
+      <button onclick="toggleSiteLang()" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow whitespace-nowrap">🌐 <span class="en">မြန်မာ</span><span class="my">English</span></button>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto">
+    <article class="card p-6 sm:p-8 prose">
+      <div class="en">
+<h1 class="text-2xl sm:text-3xl font-bold text-white">How the Myanmar Gold Price Is Calculated</h1>
+<p>Gold has no single price in Myanmar. Shops quote their own prices, and those prices follow the international market with adjustments for the exchange rate, weight standard, purity and the shop's margin. This guide shows the reference calculation used by our dashboard, so you can understand where the numbers on our home page come from and why a shop quote can differ.</p>
+
+<h2>Step 1: The international gold price</h2>
+<p>Gold is traded globally in US dollars per troy ounce. Our reference is the <strong>OANDA:XAUUSD</strong> spot price. It changes continuously during the trading week and moves on news such as US inflation data, interest-rate expectations and central-bank buying.</p>
+
+<h2>Step 2: The kyat exchange rate</h2>
+<p>To convert dollars into kyats you need a USD/MMK rate. Myanmar has had more than one rate at the same time, and the rate that people actually use to move money in and out of the country is often different from the official one. Our dashboard uses the <strong>USDT/MMK peer-to-peer (P2P) rate</strong> as a practical market reference, because USDT trades close to one US dollar. You can read how we collect it in our <a href="p2p-usdt-mmk-rates-explained.html">P2P rates guide</a>.</p>
+
+<h2>Step 3: Convert ounces to kyat-thar</h2>
+<p>Local gold is sold by the kyat-thar, so the price per ounce is divided by the number of kyat-thar in an ounce: <strong>1.873</strong> for the old standard or <strong>1.9047</strong> for the new standard (see our <a href="kyat-pae-yway-guide.html">weights guide</a>).</p>
+
+<div class="note"><p><strong>Formula:</strong> price per kyat-thar (MMK) = XAUUSD price × MMK per USD ÷ 1.873 (old) or ÷ 1.9047 (new)</p></div>
+
+<h2>Worked example (illustrative numbers only)</h2>
+<p>Suppose gold is $4,000 per ounce and the market rate is 4,500 kyats per US dollar.</p>
+<ul>
+<li>Price of one ounce in kyats: 4,000 × 4,500 = 18,000,000 Ks.</li>
+<li>Old standard: 18,000,000 ÷ 1.873 ≈ <strong>9,610,251 Ks per kyat-thar</strong>.</li>
+<li>New standard: 18,000,000 ÷ 1.9047 ≈ <strong>9,450,307 Ks per kyat-thar</strong>.</li>
+</ul>
+<p>These figures are an example, not a current quote. Open the <a href="index.html">home page</a> for live values.</p>
+
+<h2>Bank rate versus wallet rate</h2>
+<p>People pay for P2P trades through bank transfers or mobile wallets such as KBZPay, WavePay and AYA Pay. The prices for these two channels are slightly different, so the dashboard shows both a Bank column and a Wallet column. Pick the one that matches how you will actually move your money.</p>
+
+<h2>Why a shop's price is different</h2>
+<ul>
+<li><strong>Buy and sell spread.</strong> A shop buys from you for less than it sells to you. That gap is how it earns a living and covers risk.</li>
+<li><strong>Purity.</strong> The reference price is for pure (24K, "16 pae yay") gold. Lower purity is worth proportionally less; see our <a href="gold-purity-pae-yay.html">purity guide</a>.</li>
+<li><strong>Workmanship.</strong> Jewellery usually carries a making charge on top of the metal value.</li>
+<li><strong>Timing.</strong> Shops update prices on their own schedule, and the international price may have moved in the meantime.</li>
+<li><strong>Local supply and demand.</strong> In stressed periods people may pay more or accept less than the formula suggests.</li>
+</ul>
+
+<h2>How to use this</h2>
+<p>Treat the dashboard as a fair reference, not as a guaranteed buying or selling price. Before a large transaction, compare at least two shops, ask which weight standard and purity they are using, and write the agreed price down.</p>
+<p class="text-xs text-slate-500">Last updated: October 23, 2026 · wemanage.space team</p></div>
+      <div class="my">
+<h1 class="text-2xl sm:text-3xl font-bold text-white">မြန်မာ့ရွှေဈေးကို ဘယ်လိုတွက်ချက်သလဲ</h1>
+<p>မြန်မာနိုင်ငံတွင် ရွှေ၏ဈေးတစ်ခုတည်း မရှိပါ။ ဆိုင်များက ကိုယ်ပိုင်ဈေးပေါက်ကြပြီး ထိုဈေးများသည် နိုင်ငံတကာဈေးကွက်ကို လိုက်ကာ ငွေလဲနှုန်း၊ ချိန်ခွင်စံနှုန်း၊ ရွှေရည်နှင့် ဆိုင်၏အမြတ်တို့ဖြင့် ချိန်ညှိထားခြင်းဖြစ်ပါသည်။ ဤလမ်းညွှန်သည် ကျွန်ုပ်တို့ဒက်ရှ်ဘုတ်သုံးသော ကိုးကားတွက်ချက်နည်းကို ပြထားသဖြင့် ပင်မစာမျက်နှာရှိ ဂဏန်းများ ဘယ်ကလာသည်နှင့် ဆိုင်ဈေးနှင့် ဘာကြောင့်ကွာနိုင်သည်ကို နားလည်နိုင်ပါသည်။</p>
+
+<h2>အဆင့် ၁ - နိုင်ငံတကာရွှေဈေး</h2>
+<p>ရွှေကို ကမ္ဘာတစ်ဝန်း ထရိုင်အောင်စတစ်စလျှင် အမေရိကန်ဒေါ်လာဖြင့် ရောင်းဝယ်ကြပါသည်။ ကျွန်ုပ်တို့၏ ကိုးကားဈေးမှာ <strong>OANDA:XAUUSD</strong> စပေါ့ဈေး ဖြစ်ပါသည်။ ၎င်းသည် ရောင်းဝယ်ရက်များအတွင်း အဆက်မပြတ်ပြောင်းလဲပြီး အမေရိကန်ငွေကြေးဖောင်းပွမှုအချက်အလက်၊ အတိုးနှုန်းမျှော်မှန်းချက်နှင့် ဗဟိုဘဏ်များ၏ ဝယ်ယူမှုကဲ့သို့ သတင်းများအပေါ် လှုပ်ရှားပါသည်။</p>
+
+<h2>အဆင့် ၂ - ကျပ်ငွေလဲနှုန်း</h2>
+<p>ဒေါ်လာကို ကျပ်သို့ပြောင်းရန် USD/MMK နှုန်းလိုအပ်ပါသည်။ မြန်မာနိုင်ငံတွင် တစ်ချိန်တည်း ငွေလဲနှုန်းတစ်ခုထက်ပိုခဲ့ဖူးပြီး လူအများ ငွေအဝင်အထွက်လုပ်ရာတွင် အမှန်တကယ်သုံးသောနှုန်းသည် တရားဝင်နှုန်းနှင့် မကြာခဏ ကွာခြားပါသည်။ ကျွန်ုပ်တို့ဒက်ရှ်ဘုတ်သည် USDT သည် အမေရိကန်ဒေါ်လာတစ်ဒေါ်လာနှင့် နီးကပ်စွာ ရောင်းဝယ်ခံရသောကြောင့် <strong>USDT/MMK P2P နှုန်း</strong>ကို လက်တွေ့ဈေးကွက်ကိုးကားအဖြစ် သုံးပါသည်။ စုဆောင်းပုံကို <a href="p2p-usdt-mmk-rates-explained.html">P2P နှုန်းလမ်းညွှန်</a>တွင် ဖတ်နိုင်ပါသည်။</p>
+
+<h2>အဆင့် ၃ - အောင်စမှ ကျပ်သားသို့ ပြောင်းခြင်း</h2>
+<p>ဒေသတွင်းတွင် ရွှေကို ကျပ်သားဖြင့် ရောင်းချသဖြင့် အောင်စတစ်စဈေးကို အောင်စတစ်စရှိ ကျပ်သားအရေအတွက်ဖြင့် စားပါသည် - စနစ်ဟောင်းအတွက် <strong>၁.၈၇၃</strong> သို့မဟုတ် စနစ်သစ်အတွက် <strong>၁.၉၀၄၇</strong> (<a href="kyat-pae-yway-guide.html">ချိန်ခွင်လမ်းညွှန်</a>ကို ကြည့်ပါ)။</p>
+
+<div class="note"><p><strong>ဖော်မြူလာ:</strong> ကျပ်သားတစ်ကျပ်ဈေး (ကျပ်) = XAUUSD ဈေး × ဒေါ်လာတစ်ဒေါ်လာလျှင် ကျပ် ÷ ၁.၈၇၃ (စနစ်ဟောင်း) သို့မဟုတ် ÷ ၁.၉၀၄၇ (စနစ်သစ်)</p></div>
+
+<h2>ဥပမာ (ပုံဆောင်ဂဏန်းများသာ)</h2>
+<p>ရွှေသည် တစ်အောင်စလျှင် ဒေါ်လာ ၄,၀၀၀ ဖြစ်ပြီး ဈေးကွက်နှုန်းမှာ ဒေါ်လာတစ်ဒေါ်လာလျှင် ၄,၅၀၀ ကျပ် ဖြစ်သည်ဆိုပါစို့။</p>
+<ul>
+<li>အောင်စတစ်စ၏ ကျပ်ဈေး - ၄,၀၀၀ × ၄,၅၀၀ = ၁၈,၀၀၀,၀၀၀ ကျပ်။</li>
+<li>စနစ်ဟောင်း - ၁၈,၀၀၀,၀၀၀ ÷ ၁.၈၇၃ ≈ <strong>ကျပ်သားတစ်ကျပ်လျှင် ၉,၆၁၀,၂၅၁ ကျပ်</strong>။</li>
+<li>စနစ်သစ် - ၁၈,၀၀၀,၀၀၀ ÷ ၁.၉၀၄၇ ≈ <strong>ကျပ်သားတစ်ကျပ်လျှင် ၉,၄၅၀,၃၀၇ ကျပ်</strong>။</li>
+</ul>
+<p>ဤဂဏန်းများသည် ဥပမာသာဖြစ်ပြီး လက်ရှိဈေး မဟုတ်ပါ။ တိုက်ရိုက်တန်ဖိုးများအတွက် <a href="index.html">ပင်မစာမျက်နှာ</a>ကို ဖွင့်ပါ။</p>
+
+<h2>ဘဏ်နှုန်းနှင့် ပိုက်ဆံအိတ်နှုန်း</h2>
+<p>P2P ရောင်းဝယ်မှုများကို ဘဏ်လွှဲခြင်း သို့မဟုတ် KBZPay၊ WavePay၊ AYA Pay ကဲ့သို့ မိုဘိုင်းပိုက်ဆံအိတ်များဖြင့် ပေးချေကြပါသည်။ ဤလမ်းကြောင်းနှစ်ခု၏ဈေး အနည်းငယ်ကွာသဖြင့် ဒက်ရှ်ဘုတ်တွင် Bank ကော်လံနှင့် Wallet ကော်လံ နှစ်ခုလုံး ပြထားပါသည်။ မိမိငွေရွှေ့မည့်နည်းလမ်းနှင့် ကိုက်ညီသည့်အရာကို ရွေးပါ။</p>
+
+<h2>ဆိုင်ဈေး ဘာကြောင့် ကွာသလဲ</h2>
+<ul>
+<li><strong>ဝယ်ဈေး၊ ရောင်းဈေး ကွာဟချက်။</strong> ဆိုင်က သင့်ထံမှ ဝယ်သည့်ဈေးသည် သင့်ကို ရောင်းသည့်ဈေးထက် နည်းသည်။ ၎င်းသည် ဆိုင်၏ဝင်ငွေနှင့် အန္တရာယ်ကာကွယ်ခဖြစ်သည်။</li>
+<li><strong>ရွှေရည်။</strong> ကိုးကားဈေးသည် စင်ကြယ်သောရွှေ (၂၄ ကရက်၊ "၁၆ ပဲရည်") အတွက်ဖြစ်သည်။ ရည်နိမ့်လျှင် အချိုးကျ တန်ဖိုးနည်းသည်၊ <a href="gold-purity-pae-yay.html">ရွှေရည်လမ်းညွှန်</a>ကို ကြည့်ပါ။</li>
+<li><strong>လက်ခ။</strong> ရတနာများတွင် ရွှေတန်ဖိုးအပေါ် လက်ခပါလေ့ရှိသည်။</li>
+<li><strong>အချိန်။</strong> ဆိုင်များသည် ကိုယ်ပိုင်အချိန်ဇယားအတိုင်း ဈေးပြင်ကြပြီး ထိုအတောအတွင်း နိုင်ငံတကာဈေး ပြောင်းသွားနိုင်သည်။</li>
+<li><strong>ဒေသတွင်း ဝယ်လိုအား၊ ရောင်းလိုအား။</strong> ဖိအားရှိသောကာလတွင် လူများက ဖော်မြူလာထက် ပိုပေးခြင်း သို့မဟုတ် လျော့လက်ခံခြင်း ဖြစ်နိုင်သည်။</li>
+</ul>
+
+<h2>ဘယ်လိုအသုံးချမလဲ</h2>
+<p>ဒက်ရှ်ဘုတ်ကို အာမခံထားသော ရောင်းဝယ်ဈေးအဖြစ် မသုံးဘဲ တရားမျှတသော ကိုးကားအဖြစ် သဘောထားပါ။ အကြီးစား ရောင်းဝယ်မှုမပြုမီ ဆိုင်အနည်းဆုံးနှစ်ဆိုင်ကို နှိုင်းယှဉ်ပါ၊ မည်သည့်ချိန်ခွင်စံနှုန်းနှင့် ရွှေရည်သုံးသည်ကို မေးပါ၊ သဘောတူဈေးကို ရေးမှတ်ထားပါ။</p>
+<p class="text-xs text-slate-500">နောက်ဆုံးပြင်ဆင်သည့်ရက်: ၂၀၂၆ ခုနှစ်၊ အောက်တိုဘာ ၂၃ · wemanage.space အဖွဲ့</p></div>
+      <div class="note"><p class="en"><strong>Disclaimer:</strong> This guide is for general education only. It is not financial, investment or legal advice. Gold and P2P prices change quickly, so always confirm the price with your shop or exchange before you trade.</p><p class="my"><strong>သတိပြုရန်:</strong> ဤလမ်းညွှန်သည် အထွေထွေ ပညာပေးရန်သာ ဖြစ်ပါသည်။ ငွေကြေး၊ ရင်းနှီးမြှုပ်နှံမှု သို့မဟုတ် ဥပဒေရေးရာ အကြံပေးချက် မဟုတ်ပါ။ ရွှေနှင့် P2P ဈေးနှုန်းများ မြန်မြန်ပြောင်းလဲတတ်သဖြင့် ရောင်းဝယ်မီ ဆိုင် သို့မဟုတ် အိတ်ချိန်းတွင် ဈေးကို ပြန်လည်အတည်ပြုပါ။</p></div>
+      <p><a href="guides.html"><span class="en">← All guides</span><span class="my">← လမ်းညွှန်အားလုံး</span></a> · <a href="index.html"><span class="en">Live prices & calculators</span><span class="my">တိုက်ရိုက်ဈေးနှုန်းနှင့် ဂဏန်းတွက်စက်များ</span></a></p>
+    </article>
+  </main>
+
+  <footer class="max-w-4xl mx-auto mt-10 pt-6 border-t border-slate-800 text-xs text-slate-400 space-y-2 text-center">
+    <div><a href="index.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မ</span></a> · <a href="guides.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a> · <a href="about.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">About</span><span class="my">ကျွန်ုပ်တို့အကြောင်း</span></a> · <a href="contact.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a> · <a href="privacy.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Privacy Policy</span><span class="my">ကိုယ်ရေးအချက်အလက် မူဝါဒ</span></a> · <a href="terms.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Terms & Disclaimer</span><span class="my">စည်းကမ်းချက်များ</span></a></div>
+    <p class="en">Prices and calculators are for general information only and are not financial advice. © 2026 wemanage.space</p>
+    <p class="my">ဈေးနှုန်းများနှင့် ဂဏန်းတွက်စက်များသည် အထွေထွေအချက်အလက်အတွက်သာ ဖြစ်ပြီး ငွေကြေးဆိုင်ရာ အကြံပေးချက် မဟုတ်ပါ။ © 2026 wemanage.space</p>
+  </footer>
+</body>
+</html>
