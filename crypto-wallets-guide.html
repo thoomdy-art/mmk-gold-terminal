@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Wallet Guide: Hot vs Cold, Custodial vs Self-Custody | မြန်မာ့ ရွှေဈေး</title>
+  <meta name="description" content="Hot wallets, cold wallets, hardware wallets, seed phrases and networks explained in English and Burmese, with a safety checklist for holding USDT and PAXG." />
+  <link rel="canonical" href="https://wemanage.space/crypto-wallets-guide" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Myanmar Gold Price | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:title" content="Crypto Wallet Guide: Hot vs Cold, Custodial vs Self-Custody | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:description" content="Hot wallets, cold wallets, hardware wallets, seed phrases and networks explained in English and Burmese, with a safety checklist for holding USDT and PAXG." />
+  <meta property="og:url" content="https://wemanage.space/crypto-wallets-guide" />
+  <script>
+(function(){var l='en';try{l=localStorage.getItem('lang')||'en';}catch(e){}
+if(l!=='my')l='en';var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l==='my'?'my':'en');
+window.setLang=function(x){try{localStorage.setItem('lang',x);}catch(e){}d.setAttribute('data-lang',x);d.setAttribute('lang',x==='my'?'my':'en');};
+window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='en'?'my':'en');};})();
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', 'Padauk', sans-serif; background-color: #0b0f17; color: #e2e8f0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .card { background: #131b2e; border: 1px solid #1e293b; border-radius: 0.75rem; }
+    html[data-lang="en"] .my { display: none !important; }
+    html[data-lang="my"] .en { display: none !important; }
+    .my { font-family: 'Padauk', 'Inter', sans-serif; line-height: 1.9; }
+    .prose h2 { color:#fcd34d; font-weight:700; font-size:1.25rem; margin:1.75rem 0 .6rem; }
+    .prose h3 { color:#e2e8f0; font-weight:600; font-size:1.05rem; margin:1.25rem 0 .4rem; }
+    .prose p { color:#cbd5e1; font-size:.95rem; line-height:1.75; margin:.7rem 0; }
+    .my.prose p, .prose .my p { line-height:2; }
+    .prose ul, .prose ol { color:#cbd5e1; font-size:.95rem; line-height:1.75; margin:.7rem 0 .7rem 1.25rem; }
+    .prose ul { list-style:disc; } .prose ol { list-style:decimal; }
+    .prose li { margin:.3rem 0; }
+    .prose table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.88rem; }
+    .prose th { text-align:left; color:#94a3b8; border-bottom:1px solid #334155; padding:.5rem .4rem; }
+    .prose td { color:#e2e8f0; border-bottom:1px solid #1e293b; padding:.5rem .4rem; }
+    .prose a { color:#38bdf8; text-decoration:underline; }
+    .note { border-left:4px solid #f59e0b; background:rgba(245,158,11,.08); padding:.75rem 1rem; border-radius:.5rem; margin:1rem 0; }
+    .note p { margin:.2rem 0; }
+</style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="premium.css">
+</head>
+<body class="min-h-screen p-3 sm:p-4 md:p-6">
+  <header class="max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+    <a href="index.html" class="text-xl sm:text-2xl font-bold tracking-tight text-white"><span class="en">Myanmar Gold Price <span class="text-slate-400 text-base">(မြန်မာ့ ရွှေဈေး)</span></span><span class="my">မြန်မာ့ ရွှေဈေး</span></a>
+    <div class="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
+      <nav class="flex flex-wrap items-center gap-3 sm:gap-4" aria-label="Main"><a href="index.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မစာမျက်နှာ</span></a><a href="guides.html" class="text-sm font-medium text-amber-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">About</span><span class="my">ကျွန်ုပ်တို့အကြောင်း</span></a><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a></nav>
+      <button onclick="toggleSiteLang()" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow whitespace-nowrap">🌐 <span class="en">မြန်မာ</span><span class="my">English</span></button>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto space-y-5">
+<section class="card hero p-7 sm:p-10">
+<span class="eyebrow"><span class="en">Security Essentials</span><span class="my">လုံခြုံရေး အခြေခံ</span></span>
+<h1 class="text-3xl sm:text-4xl font-bold mt-4"><span class="en">Crypto Wallet Guide: Hot, Cold &amp; Everything In Between</span><span class="my">ခရစ်ပ်တို ဝေါလက် လမ်းညွှန် - Hot၊ Cold နှင့် အခြားအမျိုးအစားများ</span></h1>
+<p class="text-slate-300 text-sm sm:text-base mt-4 leading-relaxed max-w-3xl"><span class="en">Before you buy USDT through P2P or hold PAXG, you need a safe place to keep it. This guide explains the wallet types, which one fits which situation, and the habits that protect your money.</span><span class="my">P2P ဖြင့် USDT ဝယ်ခြင်း သို့မဟုတ် PAXG ကိုင်ဆောင်ခြင်း မလုပ်မီ ကာကွယ်သိမ်းဆည်းရန် လုံခြုံသောနေရာ လိုအပ်ပါသည်။ ဤလမ်းညွှန်သည် ဝေါလက်အမျိုးအစားများ၊ အခြေအနေအလိုက် ဘယ်ဟာသင့်သည်နှင့် ငွေကြေးကို ကာကွယ်ပေးသော အကျင့်များကို ရှင်းပြပါသည်။</span></p>
+<nav class="toc mt-5" aria-label="Contents"><a href="#basics"><span class="en">Basics</span><span class="my">အခြေခံ</span></a><a href="#hot"><span class="en">Hot wallets</span><span class="my">Hot ဝေါလက်</span></a><a href="#cold"><span class="en">Cold wallets</span><span class="my">Cold ဝေါလက်</span></a><a href="#compare"><span class="en">Compare</span><span class="my">နှိုင်းယှဉ်</span></a><a href="#custody"><span class="en">Custody</span><span class="my">Custody</span></a><a href="#seed"><span class="en">Seed phrase</span><span class="my">Seed phrase</span></a><a href="#network"><span class="en">Networks</span><span class="my">ကွန်ယက်</span></a><a href="#choose"><span class="en">Which to use</span><span class="my">ဘယ်ဟာသုံးမလဲ</span></a><a href="#scams"><span class="en">Scams</span><span class="my">လိမ်လည်မှု</span></a><a href="#checklist"><span class="en">Checklist</span><span class="my">စစ်ဆေးစာရင်း</span></a></nav>
+</section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="basics">What a crypto wallet really is</h2>
+<p>A wallet does not "hold" coins the way a leather wallet holds cash. Your coins live on the blockchain. The wallet stores your <strong>private key</strong>, the secret that proves ownership and signs transactions. Whoever controls the private key controls the funds.</p>
+<ul><li><strong>Address (public key):</strong> like a bank account number. Safe to share so people can send you money.</li><li><strong>Private key:</strong> like your PIN and signature combined. Never share it.</li><li><strong>Seed phrase (recovery phrase):</strong> 12 or 24 words that can rebuild every key in the wallet. It is the master backup.</li></ul>
+<div class="note"><p><strong>Hot vs cold</strong> is only about one thing: is the private key on a device that is connected to the internet (hot) or kept offline (cold)?</p></div></div><div class="my prose"><h2 id="basics">ဝေါလက်ဆိုတာ တကယ်ဘာလဲ</h2>
+<p>ဝေါလက်သည် ပိုက်ဆံအိတ်ထဲက ငွေစက္ကူလို coin များကို "ထည့်ထား" ခြင်း မဟုတ်ပါ။ coin များသည် blockchain ပေါ်တွင် ရှိပါသည်။ ဝေါလက်က သိမ်းထားသည်မှာ ပိုင်ဆိုင်မှုကို သက်သေပြပြီး ငွေလွှဲကို လက်မှတ်ထိုးပေးသော လျှို့ဝှက်ကီး <strong>Private key</strong> ဖြစ်ပါသည်။ Private key ကို ထိန်းချုပ်ထားသူက ငွေကို ထိန်းချုပ်ပါသည်။</p>
+<ul><li><strong>Address (Public key):</strong> ဘဏ်အကောင့်နံပါတ်လိုဖြစ်ပြီး ငွေလက်ခံရန် လူတွေကို ပေးနိုင်ပါသည်။</li><li><strong>Private key:</strong> PIN နှင့် လက်မှတ်ပေါင်းစပ်ထားသလို ဖြစ်ပြီး ဘယ်သူ့ကိုမှ မပေးပါနှင့်။</li><li><strong>Seed phrase (Recovery phrase):</strong> စကားလုံး ၁၂ လုံး သို့မဟုတ် ၂၄ လုံးဖြစ်ပြီး ဝေါလက်ထဲမှ ကီးအားလုံးကို ပြန်ဖန်တီးနိုင်သော မူလအရန်ဖြစ်ပါသည်။</li></ul>
+<div class="note"><p><strong>Hot နှင့် Cold</strong> ကွာခြားချက်မှာ တစ်ချက်တည်းပါ - private key သည် အင်တာနက်ချိတ်ထားသော စက်ပေါ်တွင် ရှိသလား (hot)၊ အင်တာနက်မချိတ်ဘဲ သိမ်းထားသလား (cold) ဆိုတာပါ။</p></div></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="hot">Hot wallets (connected to the internet)</h2>
+<p>Convenient for everyday use and small amounts. The trade-off is that anything online can be targeted by malware, phishing and fake apps.</p>
+<div class="wgrid"><div class="wbox hotbox"><h3><span class="pill hot">HOT</span>Exchange wallet</h3><p>The balance inside Binance, OKX or Bybit. The exchange holds the keys (custodial). Needed for P2P trading, but treat it as a stopover, not a savings account.</p></div>
+<div class="wbox hotbox"><h3><span class="pill hot">HOT</span>Mobile app wallet</h3><p>Apps such as Trust Wallet or Exodus. You control the keys (non-custodial). Good for spending and receiving. Install only from the official app store page.</p></div>
+<div class="wbox hotbox"><h3><span class="pill hot">HOT</span>Browser extension</h3><p>Extensions such as MetaMask connect to websites and DeFi apps. Powerful but the most exposed to fake sites and malicious approvals.</p></div>
+<div class="wbox hotbox"><h3><span class="pill hot">HOT</span>Desktop wallet</h3><p>Software on a PC. Safe only as the PC itself is clean. A computer used for pirated software or random downloads is a poor home for keys.</p></div></div>
+<p><strong>Pros:</strong> free, fast, easy for beginners, works with apps. <strong>Cons:</strong> exposed to hacking, phishing and phone theft.</p></div><div class="my prose"><h2 id="hot">Hot ဝေါလက်များ (အင်တာနက်ချိတ်ထားသည်)</h2>
+<p>နေ့စဉ်သုံးရန်နှင့် ပမာဏနည်းနည်းအတွက် အဆင်ပြေပါသည်။ ဆိုးကျိုးမှာ အွန်လိုင်းပေါ်ရှိ အရာအားလုံးသည် malware၊ phishing နှင့် အတုအပ app များ၏ ပစ်မှတ်ဖြစ်နိုင်ခြင်းပါ။</p>
+<div class="wgrid"><div class="wbox hotbox"><h3><span class="pill hot">HOT</span>Exchange ဝေါလက်</h3><p>Binance၊ OKX၊ Bybit ထဲရှိ လက်ကျန်ဖြစ်ပါသည်။ ကီးကို exchange က ကိုင်ထားသည် (custodial)။ P2P ရောင်းဝယ်ရန် လိုအပ်သော်လည်း စုဆောင်းငွေအကောင့်မဟုတ်ဘဲ ခေတ္တနားရာနေရာအဖြစ်သာ သုံးပါ။</p></div>
+<div class="wbox hotbox"><h3><span class="pill hot">HOT</span>Mobile app ဝေါလက်</h3><p>Trust Wallet၊ Exodus ကဲ့သို့ app များ။ ကီးကို သင်ကိုယ်တိုင်ထိန်းချုပ်သည် (non-custodial)။ သုံးစွဲရန်နှင့် လက်ခံရန် ကောင်းပါသည်။ တရားဝင် app store စာမျက်နှာမှသာ ထည့်သွင်းပါ။</p></div>
+<div class="wbox hotbox"><h3><span class="pill hot">HOT</span>Browser extension</h3><p>MetaMask ကဲ့သို့ extension များသည် website နှင့် DeFi app များနှင့် ချိတ်ဆက်ပါသည်။ အားကောင်းသော်လည်း ဝဘ်ဆိုက်အတု နှင့် အန္တရာယ်ရှိသော approval များကို အလွယ်ဆုံးခံရနိုင်ပါသည်။</p></div>
+<div class="wbox hotbox"><h3><span class="pill hot">HOT</span>Desktop ဝေါလက်</h3><p>ကွန်ပျူတာပေါ်ရှိ software ဖြစ်ပါသည်။ ကွန်ပျူတာကိုယ်တိုင် သန့်ရှင်းမှသာ လုံခြုံပါသည်။ ခိုးကူးဆော့ဖ်ဝဲ သို့မဟုတ် ကျပန်းဒေါင်းလုဒ်များ လုပ်ထားသော PC သည် ကီးသိမ်းရန် မသင့်ပါ။</p></div></div>
+<p><strong>အားသာချက်:</strong> အခမဲ့၊ မြန်၊ အစပြုသူအတွက် လွယ်ကူ၊ app များနှင့် သုံးနိုင်။ <strong>အားနည်းချက်:</strong> hacking၊ phishing နှင့် ဖုန်းခိုးခံရမှု အန္တရာယ်ရှိ။</p></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="cold">Cold wallets (kept offline)</h2>
+<p>The private key never touches an internet-connected device, so remote hackers cannot reach it. This is the standard choice for savings you do not plan to move often.</p>
+<div class="wgrid"><div class="wbox coldbox"><h3><span class="pill cold">COLD</span>Hardware wallet</h3><p>A small dedicated device (for example Ledger, Trezor or similar) that signs transactions internally. The key never leaves it. Buy <strong>only from the manufacturer's official store</strong>, never second-hand, and never use a device that arrives with a pre-written seed phrase.</p></div>
+<div class="wbox coldbox"><h3><span class="pill cold">COLD</span>Paper / metal backup</h3><p>The seed phrase written on paper or stamped in steel. Metal survives fire and water. This is a <em>backup</em>, not a daily wallet. Generating keys on a website for a "paper wallet" is not recommended for beginners.</p></div>
+<div class="wbox coldbox"><h3><span class="pill cold">COLD</span>Air-gapped device</h3><p>A phone or computer that is permanently offline and only signs transactions via QR code or SD card. Strong security but harder to set up. For advanced users.</p></div>
+<div class="wbox coldbox"><h3><span class="pill cold">COLD</span>Multisig</h3><p>Needs two or three separate keys to approve a transfer, so one stolen key is not enough. Useful for larger holdings or shared family and business funds.</p></div></div>
+<p><strong>Pros:</strong> strongest protection from online attacks. <strong>Cons:</strong> costs money, slower to use, and if you lose both the device and the seed phrase the funds are gone for good.</p></div><div class="my prose"><h2 id="cold">Cold ဝေါလက်များ (အင်တာနက်မချိတ်ထားပါ)</h2>
+<p>Private key သည် အင်တာနက်ချိတ်ထားသော စက်ကို တစ်ခါမှ မထိတွေ့သောကြောင့် အဝေးမှ hacker များ မရောက်နိုင်ပါ။ မကြာခဏမရွှေ့လိုသော စုဆောင်းငွေအတွက် စံနှုန်းရွေးချယ်မှုဖြစ်ပါသည်။</p>
+<div class="wgrid"><div class="wbox coldbox"><h3><span class="pill cold">COLD</span>Hardware ဝေါလက်</h3><p>လွှဲပြောင်းမှုကို စက်အတွင်းမှာပင် လက်မှတ်ထိုးပေးသော သီးသန့်စက်သေးသေး (ဥပမာ Ledger၊ Trezor စသည်) ဖြစ်ပြီး ကီးသည် စက်ပြင်ပသို့ မထွက်ပါ။ <strong>ထုတ်လုပ်သူ၏ တရားဝင်စတိုးမှသာ</strong> ဝယ်ပါ၊ ဒုတိယလက်မဝယ်ပါနှင့်၊ seed phrase ကြိုရေးပြီးသား ပါလာသောစက်ကို လုံးဝမသုံးပါနှင့်။</p></div>
+<div class="wbox coldbox"><h3><span class="pill cold">COLD</span>စက္ကူ / သတ္တုအရန်</h3><p>Seed phrase ကို စက္ကူပေါ်ရေးခြင်း သို့မဟုတ် သံမဏိပြားပေါ် ရိုက်ထားခြင်းဖြစ်ပါသည်။ သတ္တုသည် မီးနှင့်ရေကို ခံနိုင်ပါသည်။ ၎င်းသည် နေ့စဉ်သုံးဝေါလက်မဟုတ်ဘဲ <em>အရန်</em>သာ ဖြစ်ပါသည်။ ဝဘ်ဆိုက်ပေါ်တွင် "paper wallet" ထုတ်ခြင်းကို အစပြုသူများ မလုပ်သင့်ပါ။</p></div>
+<div class="wbox coldbox"><h3><span class="pill cold">COLD</span>Air-gapped စက်</h3><p>အင်တာနက်ကို အမြဲဖြတ်ထားသော ဖုန်း/ကွန်ပျူတာဖြစ်ပြီး QR code သို့မဟုတ် SD card ဖြင့်သာ လက်မှတ်ထိုးပါသည်။ လုံခြုံမှုမြင့်သော်လည်း စနစ်ထည့်သွင်းရ ခက်ပါသည်။ အဆင့်မြင့်သူများအတွက်ဖြစ်ပါသည်။</p></div>
+<div class="wbox coldbox"><h3><span class="pill cold">COLD</span>Multisig</h3><p>ငွေလွှဲရန် သီးခြားကီး ၂ ခု သို့မဟုတ် ၃ ခု၏ ခွင့်ပြုချက်လိုသောကြောင့် ကီးတစ်ခုခိုးခံရရုံဖြင့် မလုံလောက်ပါ။ ပမာဏများသော ငွေ၊ မိသားစု သို့မဟုတ် လုပ်ငန်းအတွက် အသုံးဝင်ပါသည်။</p></div></div>
+<p><strong>အားသာချက်:</strong> အွန်လိုင်းတိုက်ခိုက်မှုမှ အကောင်းဆုံးကာကွယ်ပေးနိုင်။ <strong>အားနည်းချက်:</strong> ငွေကုန်ကျ၊ အသုံးပြုရနှေး၊ စက်နှင့် seed phrase နှစ်ခုလုံးပျောက်လျှင် ငွေပြန်မရတော့ပါ။</p></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="compare">Side-by-side comparison</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Type</th><th>Online?</th><th>Who holds keys</th><th>Security</th><th>Convenience</th><th>Best for</th></tr></thead><tbody>
+<tr><td>Exchange (Binance, OKX, Bybit)</td><td>Yes</td><td>Exchange</td><td>Medium</td><td>Very high</td><td>P2P trades, short stops</td></tr>
+<tr><td>Mobile app</td><td>Yes</td><td>You</td><td>Medium</td><td>High</td><td>Everyday amounts</td></tr>
+<tr><td>Browser extension</td><td>Yes</td><td>You</td><td>Medium-low</td><td>High</td><td>DeFi, dApps (small balances)</td></tr>
+<tr><td>Hardware wallet</td><td>Offline</td><td>You</td><td>High</td><td>Medium</td><td>Long-term savings</td></tr>
+<tr><td>Metal / paper backup</td><td>Offline</td><td>You</td><td>High (if stored well)</td><td>Low</td><td>Seed phrase backup</td></tr>
+<tr><td>Multisig</td><td>Mixed</td><td>You (several keys)</td><td>Very high</td><td>Low</td><td>Large or shared funds</td></tr></tbody></table></div></div><div class="my prose"><h2 id="compare">ဘေးချင်းယှဉ် နှိုင်းယှဉ်ချက်</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>အမျိုးအစား</th><th>အွန်လိုင်း?</th><th>ကီးကိုင်သူ</th><th>လုံခြုံမှု</th><th>အဆင်ပြေမှု</th><th>အသင့်တော်ဆုံး</th></tr></thead><tbody>
+<tr><td>Exchange (Binance, OKX, Bybit)</td><td>ဟုတ်</td><td>Exchange</td><td>အလယ်အလတ်</td><td>အလွန်မြင့်</td><td>P2P ရောင်းဝယ်၊ ခေတ္တသိမ်း</td></tr>
+<tr><td>Mobile app</td><td>ဟုတ်</td><td>သင်</td><td>အလယ်အလတ်</td><td>မြင့်</td><td>နေ့စဉ်သုံးပမာဏ</td></tr>
+<tr><td>Browser extension</td><td>ဟုတ်</td><td>သင်</td><td>အလယ်-နိမ့်</td><td>မြင့်</td><td>DeFi၊ dApp (လက်ကျန်နည်း)</td></tr>
+<tr><td>Hardware ဝေါလက်</td><td>အော့ဖ်လိုင်း</td><td>သင်</td><td>မြင့်</td><td>အလယ်အလတ်</td><td>ရေရှည်စုဆောင်းငွေ</td></tr>
+<tr><td>သတ္တု / စက္ကူအရန်</td><td>အော့ဖ်လိုင်း</td><td>သင်</td><td>မြင့် (ကောင်းစွာသိမ်းလျှင်)</td><td>နိမ့်</td><td>Seed phrase အရန်</td></tr>
+<tr><td>Multisig</td><td>ရောနှော</td><td>သင် (ကီးများစွာ)</td><td>အလွန်မြင့်</td><td>နိမ့်</td><td>ပမာဏကြီး / မျှဝေငွေ</td></tr></tbody></table></div></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="custody">Custodial vs non-custodial</h2>
+<div class="wgrid"><div class="wbox"><h3>Custodial</h3><p>A company holds the keys for you. You log in with a password, and support can help if you forget it. Risks: the exchange can freeze accounts, suffer a hack, or fail. Your money is a claim on the company.</p></div>
+<div class="wbox"><h3>Non-custodial (self-custody)</h3><p>You hold the keys. No one can freeze your funds, but no one can recover them either. A common saying: <em>"not your keys, not your coins."</em></p></div></div>
+<p>Most people in Myanmar start with a custodial exchange because P2P trading requires one. A sensible path is to move only what you need to trade, and withdraw long-term holdings to a wallet you control once you understand the basics.</p></div><div class="my prose"><h2 id="custody">Custodial နှင့် Non-custodial</h2>
+<div class="wgrid"><div class="wbox"><h3>Custodial</h3><p>ကုမ္ပဏီတစ်ခုက သင့်အတွက် ကီးကိုင်ထားပါသည်။ စကားဝှက်ဖြင့် login ဝင်ရပြီး မေ့သွားလျှင် support က ကူညီနိုင်ပါသည်။ အန္တရာယ် - exchange က အကောင့်ပိတ်နိုင်ခြင်း၊ hack ခံရနိုင်ခြင်း၊ ပျက်စီးနိုင်ခြင်း။ သင့်ငွေသည် ကုမ္ပဏီအပေါ် တောင်းဆိုခွင့်တစ်ခုမျှသာ ဖြစ်ပါသည်။</p></div>
+<div class="wbox"><h3>Non-custodial (ကိုယ်တိုင်ထိန်းသိမ်း)</h3><p>ကီးကို သင်ကိုယ်တိုင်ကိုင်ပါသည်။ ဘယ်သူမှ သင့်ငွေကို ပိတ်မထားနိုင်သလို ပြန်ရှာပေးလည်း မပေးနိုင်ပါ။ နာမည်ကြီးဆိုရိုးတစ်ခုမှာ <em>"ကီးမပိုင်ရင် coin မပိုင်"</em> ဖြစ်ပါသည်။</p></div></div>
+<p>P2P ရောင်းဝယ်ရန် exchange လိုအပ်သောကြောင့် မြန်မာနိုင်ငံရှိ လူအများစုသည် custodial exchange ဖြင့် စတင်ကြပါသည်။ ရောင်းဝယ်ရန် လိုအပ်သည့်ပမာဏကိုသာ exchange ထဲထားပြီး အခြေခံနားလည်လာသောအခါ ရေရှည်ကိုင်ဆောင်မည့်ပမာဏကို ကိုယ်တိုင်ထိန်းသော ဝေါလက်သို့ ထုတ်ယူခြင်းသည် သင့်တော်သောလမ်းကြောင်းဖြစ်ပါသည်။</p></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="seed">Seed phrase: the rules that matter most</h2>
+<ol class="steps"><li><strong>Write it on paper or metal, by hand.</strong> Do not photograph it, screenshot it, or store it in notes, email, Viber, Telegram or cloud drives.</li><li><strong>Never type it into any website or share it.</strong> No genuine support agent, exchange or wallet company will ever ask for it.</li><li><strong>Keep at least two copies in two separate safe places</strong> (for example a home safe and a trusted relative's place) so fire or theft does not wipe you out.</li><li><strong>Test your backup</strong> with a small amount first: restore the wallet from the phrase and confirm the same address appears.</li><li><strong>Tell someone you trust where it is</strong>, so your family is not locked out if something happens to you.</li></ol>
+<div class="danger"><p><strong>If anyone has your seed phrase, they own your funds.</strong> There is no "forgot password" button and no bank to reverse the transfer.</p></div></div><div class="my prose"><h2 id="seed">Seed phrase - အရေးအကြီးဆုံး စည်းမျဉ်းများ</h2>
+<ol class="steps"><li><strong>စက္ကူ သို့မဟုတ် သတ္တုပြားပေါ် လက်ဖြင့်ရေးပါ။</strong> ဓာတ်ပုံမရိုက်ပါနှင့်၊ screenshot မရိုက်ပါနှင့်၊ notes၊ email၊ Viber၊ Telegram သို့မဟုတ် cloud တွင် မသိမ်းပါနှင့်။</li><li><strong>ဝဘ်ဆိုက်တစ်ခုခုတွင် မရိုက်ထည့်ပါနှင့်၊ မည်သူ့ကိုမျှ မပေးပါနှင့်။</strong> တကယ့် support၊ exchange သို့မဟုတ် ဝေါလက်ကုမ္ပဏီတို့ မည်သည့်အခါမျှ မတောင်းပါ။</li><li><strong>လုံခြုံသောနေရာ ၂ ခုတွင် အနည်းဆုံး ကော်ပီ ၂ စောင်</strong> သိမ်းပါ (ဥပမာ အိမ်ရှိ သေတ္တာနှင့် ယုံကြည်ရသောဆွေမျိုးထံ) - မီးလောင်ခြင်း သို့မဟုတ် ခိုးခံရခြင်းကြောင့် အားလုံးမဆုံးရှုံးစေရန်။</li><li><strong>ငွေအနည်းငယ်ဖြင့် အရန်ကို စမ်းသပ်ပါ။</strong> phrase ဖြင့် ဝေါလက်ပြန်ဖွင့်ပြီး address တူညီမှု စစ်ပါ။</li><li><strong>ယုံကြည်ရသူတစ်ဦးကို ဘယ်မှာသိမ်းထားကြောင်း ပြောထားပါ။</strong> သင့်အတွက် တစ်ခုခုဖြစ်လျှင် မိသားစု ထိုငွေကို မရယူနိုင်ဘဲ မဖြစ်စေရန်။</li></ol>
+<div class="danger"><p><strong>Seed phrase ကို အခြားသူတစ်ဦးရသွားလျှင် သင့်ငွေကို သူပိုင်သွားပါသည်။</strong> "စကားဝှက်မေ့သွားသည်" ခလုတ်လည်း မရှိ၊ ငွေလွှဲကို ပြန်ရုပ်သိမ်းပေးမည့် ဘဏ်လည်း မရှိပါ။</p></div></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="network">Networks: send on the right chain</h2>
+<p>The same coin can exist on several blockchains. USDT, for example, is commonly sent on <strong>TRC20 (Tron)</strong>, <strong>ERC20 (Ethereum)</strong> and <strong>BEP20 (BNB Chain)</strong>. The sending and receiving sides must use the <strong>same network</strong>, or the funds may be lost.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Network</th><th>Address looks like</th><th>Typical trait</th></tr></thead><tbody>
+<tr><td>TRC20 (Tron)</td><td>Starts with <span class="mono">T</span></td><td>Popular for USDT transfers, usually low fees</td></tr>
+<tr><td>ERC20 (Ethereum)</td><td>Starts with <span class="mono">0x</span></td><td>Widest support, fees can be high; where PAXG lives</td></tr>
+<tr><td>BEP20 (BNB Chain)</td><td>Starts with <span class="mono">0x</span></td><td>Lower fees, commonly supported on exchanges</td></tr></tbody></table></div>
+<ul><li>Check the network label on the withdrawal screen every time, and confirm the receiving wallet supports it.</li><li>ERC20 and BEP20 addresses look identical, so the label matters more than the address.</li><li><strong>Send a small test amount first</strong>, then the rest. Fees change, so check the current fee before you send.</li></ul></div><div class="my prose"><h2 id="network">ကွန်ယက် (Network) - မှန်သော chain ပေါ်မှ ပို့ပါ</h2>
+<p>Coin တစ်မျိုးတည်းသည် blockchain အများအပြားပေါ်တွင် ရှိနိုင်ပါသည်။ ဥပမာ USDT ကို <strong>TRC20 (Tron)</strong>၊ <strong>ERC20 (Ethereum)</strong> နှင့် <strong>BEP20 (BNB Chain)</strong> တို့ဖြင့် အများအားဖြင့် ပို့ကြပါသည်။ ပို့သူနှင့် လက်ခံသူ နှစ်ဖက်လုံး <strong>ကွန်ယက်တူညီရမည်</strong>၊ မဟုတ်လျှင် ငွေဆုံးရှုံးနိုင်ပါသည်။</p>
+<div style="overflow-x:auto"><table><thead><tr><th>ကွန်ယက်</th><th>Address ပုံစံ</th><th>ထူးခြားချက်</th></tr></thead><tbody>
+<tr><td>TRC20 (Tron)</td><td><span class="mono">T</span> ဖြင့်စသည်</td><td>USDT လွှဲရန် ရေပန်း၊ ပုံမှန်အားဖြင့် ကြေးနည်း</td></tr>
+<tr><td>ERC20 (Ethereum)</td><td><span class="mono">0x</span> ဖြင့်စသည်</td><td>ပံ့ပိုးမှုအကျယ်ဆုံး၊ ကြေးမြင့်နိုင်၊ PAXG ရှိသောနေရာ</td></tr>
+<tr><td>BEP20 (BNB Chain)</td><td><span class="mono">0x</span> ဖြင့်စသည်</td><td>ကြေးနိမ့်၊ exchange များတွင် ပံ့ပိုးမှုများ</td></tr></tbody></table></div>
+<ul><li>ထုတ်ယူမည့်စခရင်ရှိ ကွန်ယက်အမည်ကို အကြိမ်တိုင်းစစ်ပြီး လက်ခံမည့်ဝေါလက်က ထောက်ပံ့မှုရှိမရှိ ဆန်းစစ်ပါ။</li><li>ERC20 နှင့် BEP20 address များ ပုံစံတူသောကြောင့် address ထက် ကွန်ယက်အမည်က ပိုအရေးကြီးပါသည်။</li><li><strong>ပထမဆုံး ငွေအနည်းငယ် စမ်းပို့ပါ</strong>၊ ပြီးမှ ကျန်သည်ကို ပို့ပါ။ ကြေးသည် ပြောင်းလဲတတ်သောကြောင့် မပို့မီ လက်ရှိကြေးကို စစ်ပါ။</li></ul></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="choose">Which wallet should you use?</h2>
+<p>There is no single right answer. Match the wallet to the job, and to how much you could afford to lose.</p>
+<table><thead><tr><th>Your situation</th><th>Suggested setup</th></tr></thead><tbody>
+<tr><td>Trading USDT/MMK on P2P</td><td>Exchange wallet, keeping only the working balance there</td></tr>
+<tr><td>Small savings, learning</td><td>Reputable mobile wallet with a properly backed-up seed phrase</td></tr>
+<tr><td>Holding USDT or PAXG for months or years</td><td>Hardware wallet, with the seed phrase on metal or paper in two places</td></tr>
+<tr><td>Large amounts, family or business funds</td><td>Hardware wallet or multisig, plus a written recovery plan</td></tr></tbody></table>
+<div class="note"><p><strong>Hybrid approach:</strong> many careful users keep a "spending" hot wallet with a small balance and a cold wallet for the bulk, like keeping cash in your pocket and savings in a safe.</p></div></div><div class="my prose"><h2 id="choose">ဘယ်ဝေါလက်ကို သုံးသင့်သလဲ</h2>
+<p>အဖြေမှန်တစ်ခုတည်း မရှိပါ။ လုပ်ငန်းနှင့် ဆုံးရှုံးခံနိုင်သောပမာဏအလိုက် ဝေါလက်ကို ရွေးပါ။</p>
+<table><thead><tr><th>သင့်အခြေအနေ</th><th>အကြံပြုချိန်ညှိမှု</th></tr></thead><tbody>
+<tr><td>P2P ဖြင့် USDT/MMK ရောင်းဝယ်</td><td>Exchange ဝေါလက်၊ လုပ်ငန်းသုံးလက်ကျန်သာ ထားပါ</td></tr>
+<tr><td>စုငွေအနည်းငယ်၊ လေ့လာနေ</td><td>ယုံကြည်ရသော mobile ဝေါလက်၊ seed phrase ကို ကောင်းစွာအရန်ထား</td></tr>
+<tr><td>USDT သို့မဟုတ် PAXG ကို လများ/နှစ်များ ကိုင်ထား</td><td>Hardware ဝေါလက်၊ seed phrase ကို သတ္တု/စက္ကူဖြင့် နေရာ ၂ ခုတွင် သိမ်း</td></tr>
+<tr><td>ပမာဏကြီး၊ မိသားစု သို့မဟုတ် လုပ်ငန်းငွေ</td><td>Hardware ဝေါလက် သို့မဟုတ် multisig နှင့် ရေးသားထားသော ပြန်လည်ရယူရေးအစီအစဉ်</td></tr></tbody></table>
+<div class="note"><p><strong>ပေါင်းစပ်နည်း:</strong> သတိကြီးသူများစွာသည် ပမာဏနည်းသော "သုံးစွဲရန်" hot ဝေါလက်တစ်ခုနှင့် အများစုကို cold ဝေါလက်တွင် ထားကြပါသည် - ခါးပိုက်ထဲ ငွေသားနှင့် သေတ္တာထဲ စုငွေလိုပင်။</p></div></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="scams">Common scams to avoid</h2>
+<ul><li><strong>Fake support:</strong> a stranger messages you offering "help" and asks for your seed phrase or a screen share. Real support never does.</li><li><strong>Phishing sites and fake apps:</strong> copies of exchange or wallet sites. Type addresses yourself or use bookmarks. Check the developer name in the app store.</li><li><strong>Giveaway and "double your crypto" offers:</strong> if someone promises guaranteed profit, it is a scam.</li><li><strong>Malicious approvals:</strong> connecting your wallet to an unknown site and signing a request you do not understand can let it drain your tokens.</li><li><strong>Address poisoning:</strong> scammers send tiny transfers from lookalike addresses hoping you copy one from your history. Always verify the full address.</li><li><strong>P2P payment fraud:</strong> release crypto only after the money is confirmed in <em>your own</em> bank or wallet app, not from a screenshot.</li></ul>
+<div class="danger"><p><strong>Golden rule:</strong> if you feel rushed or pressured, stop. Scammers manufacture urgency.</p></div></div><div class="my prose"><h2 id="scams">ရှောင်ရန် မကြာခဏတွေ့ရသော လိမ်လည်မှုများ</h2>
+<ul><li><strong>Support အတု:</strong> မသိသူတစ်ဦးက "ကူညီမည်" ဟုပြောကာ seed phrase သို့မဟုတ် screen share တောင်းခြင်း။ တကယ့် support သည် မည်သည့်အခါမျှ မတောင်းပါ။</li><li><strong>Phishing ဝဘ်ဆိုက်နှင့် app အတု:</strong> exchange သို့မဟုတ် ဝေါလက်ဆိုက်အတုများ။ လိပ်စာကို ကိုယ်တိုင်ရိုက်ပါ သို့မဟုတ် bookmark သုံးပါ။ app store တွင် developer အမည်ကို စစ်ပါ။</li><li><strong>Giveaway နှင့် "crypto နှစ်ဆ" ကမ်းလှမ်းချက်:</strong> အမြတ်အာမခံသည်ဟု ပြောလျှင် လိမ်လည်မှုဖြစ်ပါသည်။</li><li><strong>အန္တရာယ်ရှိသော approval:</strong> မသိသောဆိုက်သို့ ဝေါလက်ချိတ်ပြီး နားမလည်သော request ကို လက်မှတ်ထိုးလျှင် သင့် token များ ဆွဲယူခံရနိုင်ပါသည်။</li><li><strong>Address poisoning:</strong> လိမ်သူများက ပုံစံတူ address မှ ငွေအနည်းငယ်ပို့ပြီး သင်၏ history ထဲမှ ကူးယူမည်ဟု မျှော်လင့်ပါသည်။ address အပြည့်အစုံကို အမြဲစစ်ပါ။</li><li><strong>P2P ငွေပေးချေမှု လိမ်လည်မှု:</strong> screenshot ကိုမကြည့်ဘဲ <em>သင့်ကိုယ်ပိုင်</em> ဘဏ် သို့မဟုတ် ဝေါလက် app တွင် ငွေဝင်ကြောင်း အတည်ပြုပြီးမှသာ crypto ကို release လုပ်ပါ။</li></ul>
+<div class="danger"><p><strong>ရွှေစည်းမျဉ်း:</strong> အလျင်စလိုလုပ်ရမည်ဟု ဖိအားခံစားရလျှင် ရပ်လိုက်ပါ။ လိမ်သူများသည် အရေးပေါ်ဟန်ဆောင်တတ်ပါသည်။</p></div></div></section>
+<section class="card p-6 sm:p-8 "><div class="en prose"><h2 id="checklist">Safety checklist</h2>
+<ul><li><span class="pill ok">✓</span>Enable two-factor authentication (an authenticator app, not SMS) on every exchange account.</li><li><span class="pill ok">✓</span>Use a unique, strong password per site, ideally in a password manager.</li><li><span class="pill ok">✓</span>Keep phone and computer updated; avoid cracked apps and unknown APK files.</li><li><span class="pill ok">✓</span>Seed phrase written offline, stored in two places, backup tested.</li><li><span class="pill ok">✓</span>Whitelist withdrawal addresses on the exchange if the option exists.</li><li><span class="pill ok">✓</span>Test transfer before every large transfer, and double-check the network.</li><li><span class="pill ok">✓</span>Only keep on an exchange what you plan to trade soon.</li><li><span class="pill ok">✓</span>Never invest money you cannot afford to lose, and never share screens with strangers.</li></ul>
+<div class="note"><p>This guide is educational and not financial or legal advice. Crypto rules in Myanmar can change, so check the current local regulations and the policies of any platform you use. Wallet brands named here are examples, not endorsements.</p></div>
+<p>Related guides: <a href="paxg.html">What is PAXG &amp; how to buy it</a> · <a href="usdtusdc.html">USDT vs USDC</a> · <a href="p2p-usdt-mmk-rates-explained.html">USDT/MMK P2P rates explained</a></p></div><div class="my prose"><h2 id="checklist">လုံခြုံရေး စစ်ဆေးစာရင်း</h2>
+<ul><li><span class="pill ok">✓</span>Exchange အကောင့်တိုင်းတွင် two-factor authentication (SMS မဟုတ်ဘဲ authenticator app) ဖွင့်ပါ။</li><li><span class="pill ok">✓</span>ဆိုက်တစ်ခုချင်းစီအတွက် မတူညီသော ခိုင်မာသောစကားဝှက်သုံးပါ၊ password manager ဖြင့်ဆိုလျှင် ပိုကောင်းသည်။</li><li><span class="pill ok">✓</span>ဖုန်းနှင့်ကွန်ပျူတာကို update လုပ်ထားပါ၊ crack app နှင့် မသိသော APK ဖိုင်များ ရှောင်ပါ။</li><li><span class="pill ok">✓</span>Seed phrase ကို အော့ဖ်လိုင်းရေး၊ နေရာ ၂ ခုသိမ်း၊ အရန်ကို စမ်းသပ်ပြီး။</li><li><span class="pill ok">✓</span>Exchange တွင် ရွေးချယ်စရာရှိလျှင် ငွေထုတ် address များကို whitelist လုပ်ပါ။</li><li><span class="pill ok">✓</span>ပမာဏကြီးမလွှဲမီ စမ်းလွှဲပြီး ကွန်ယက်ကို ထပ်စစ်ပါ။</li><li><span class="pill ok">✓</span>မကြာမီ ရောင်းဝယ်မည့်ပမာဏကိုသာ exchange ထဲထားပါ။</li><li><span class="pill ok">✓</span>ဆုံးရှုံးခံနိုင်သောငွေကိုသာ ရင်းနှီးပါ၊ မသိသူများနှင့် screen မမျှဝေပါနှင့်။</li></ul>
+<div class="note"><p>ဤလမ်းညွှန်သည် ပညာပေးရည်ရွယ်ချက်သာဖြစ်ပြီး ငွေကြေး သို့မဟုတ် ဥပဒေအကြံပေးချက် မဟုတ်ပါ။ မြန်မာနိုင်ငံ၏ crypto စည်းမျဉ်းများ ပြောင်းလဲနိုင်သောကြောင့် လက်ရှိဒေသတွင်းစည်းမျဉ်းများနှင့် သုံးစွဲသည့်ပလက်ဖောင်း၏ မူဝါဒများကို စစ်ဆေးပါ။ ဤနေရာတွင် ဖော်ပြသော ဝေါလက်အမှတ်တံဆိပ်များသည် ဥပမာသာဖြစ်ပြီး အကြံပြုချက်မဟုတ်ပါ။</p></div>
+<p>ဆက်စပ်လမ်းညွှန်များ: <a href="paxg.html">PAXG ဆိုတာ ဘာလဲ၊ ဘယ်လိုဝယ်မလဲ</a> · <a href="usdtusdc.html">USDT နှင့် USDC</a> · <a href="p2p-usdt-mmk-rates-explained.html">USDT/MMK P2P နှုန်းများ</a></p></div></section>
+</main>
+
+  <footer class="max-w-4xl mx-auto mt-10 pt-6 border-t border-slate-800 text-xs text-slate-400 space-y-2 text-center">
+    <div><a href="index.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မ</span></a> · <a href="guides.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a> · <a href="about.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">About</span><span class="my">ကျွန်ုပ်တို့အကြောင်း</span></a> · <a href="contact.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a> · <a href="privacy.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Privacy Policy</span><span class="my">ကိုယ်ရေးအချက်အလက် မူဝါဒ</span></a> · <a href="terms.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Terms & Disclaimer</span><span class="my">စည်းကမ်းချက်များ</span></a></div>
+    <p class="en">Prices and calculators are for general information only and are not financial advice. © 2026 wemanage.space</p>
+    <p class="my">ဈေးနှုန်းများနှင့် ဂဏန်းတွက်စက်များသည် အထွေထွေအချက်အလက်အတွက်သာ ဖြစ်ပြီး ငွေကြေးဆိုင်ရာ အကြံပေးချက် မဟုတ်ပါ။ © 2026 wemanage.space</p>
+  </footer>
+</body>
+</html>
