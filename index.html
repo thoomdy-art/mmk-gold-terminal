@@ -254,7 +254,7 @@
       </script>
     </div>
 
-    <!-- ROW 3: CRYPTO GOLD (PAXG) & BINANCE P2P USDT RATES -->
+    <!-- ROW 3: CRYPTO GOLD (PAXG) & MEAN P2P USDT RATES -->
     <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <div class="card p-4 border-l-4 border-l-amber-500 bg-amber-500/5">
         <div class="flex items-center justify-between mb-3">
@@ -278,7 +278,7 @@
           <div>
             <h2 class="text-xs sm:text-sm font-semibold text-white truncate">KBZ Bank • CB • AYA • Yoma</h2>
           </div>
-          <span id="bankSourceTag" class="text-[10px] sm:text-[11px] bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded mono">Feed</span>
+          <span id="bankSourceTag" class="text-[10px] sm:text-[11px] bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded mono">Live Mean</span>
         </div>
         <div class="grid grid-cols-2 gap-3 mt-3">
           <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
@@ -297,7 +297,7 @@
           <div>
             <h2 class="text-xs sm:text-sm font-semibold text-white truncate">KBZPay • WavePay • AYAPay</h2>
           </div>
-          <span id="walletSourceTag" class="text-[10px] sm:text-[11px] bg-sky-500/15 text-sky-300 px-2 py-0.5 rounded mono">Feed</span>
+          <span id="walletSourceTag" class="text-[10px] sm:text-[11px] bg-sky-500/15 text-sky-300 px-2 py-0.5 rounded mono">Live Mean</span>
         </div>
         <div class="grid grid-cols-2 gap-3 mt-3">
           <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
@@ -389,6 +389,7 @@
       bankSell: 4535,
       walletBuy: 4520,
       walletSell: 4485,
+      p2pUpdatedAt: null,
       usdCross: { 
         USD: 1.00, 
         SGD: 1.34, 
@@ -718,18 +719,17 @@
       if (tab === 'mmk') {
         mmkDiv.classList.remove('hidden');
         oandaDiv.classList.add('hidden');
-        btnMmk.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-amber-500 text-slate-950';
-        btnOanda.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700';
+        btnMmk.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-amber-500 text-slate-950 flex-shrink-0';
+        btnOanda.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 flex-shrink-0';
       } else {
         mmkDiv.classList.add('hidden');
         oandaDiv.classList.remove('hidden');
-        btnOanda.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-amber-500 text-slate-950';
-        btnMmk.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700';
+        btnOanda.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-amber-500 text-slate-950 flex-shrink-0';
+        btnMmk.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 flex-shrink-0';
       }
     }
 
-    // --- P2P: one request to our own server (it caches Binance for everyone) ---
-    const API_BASE = 'https://mmk-gold-terminal.onrender.com';
+    // --- P2P Fetch OKX and Bybit using Proxy ---
     let p2pTimer = null;
 
     function setP2PTags() {
@@ -737,7 +737,7 @@
       const mins = t ? Math.round((Date.now() - t) / 60000) : null;
       const live = t && mins < 30;
       const ago = mins >= 120 ? Math.round(mins / 60) + 'h' : mins + 'm';
-      const label = !t ? 'Offline · default' : live ? 'Live · ' + ago + ' ago' : 'Stale · ' + ago + ' ago';
+      const label = !t ? 'Offline · default' : live ? 'Live Mean · ' + ago + ' ago' : 'Stale · ' + ago + ' ago';
       ['bankSourceTag', 'walletSourceTag'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -750,20 +750,18 @@
       clearTimeout(p2pTimer);
       let ok = false;
       try {
-        // Use a CORS proxy to bypass exchange frontend blocks
         const proxy = 'https://corsproxy.io/?';
 
-        // 1. Fetch OKX P2P Data (MMK)
+        // 1. Fetch OKX P2P Data
         const okxBuyRes = await fetch(proxy + encodeURIComponent('https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=MMK&baseCurrency=USDT&side=sell&paymentMethod=all&userType=all&limit=2'));
         const okxSellRes = await fetch(proxy + encodeURIComponent('https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=MMK&baseCurrency=USDT&side=buy&paymentMethod=all&userType=all&limit=2'));
-        
         const okxBuyData = await okxBuyRes.json();
         const okxSellData = await okxSellRes.json();
         
         const okxBuyPrice = parseFloat(okxBuyData?.data?.sell?.[0]?.price) || null;
         const okxSellPrice = parseFloat(okxSellData?.data?.buy?.[0]?.price) || null;
 
-        // 2. Fetch Bybit P2P Data (MMK)
+        // 2. Fetch Bybit P2P Data
         const bybitBuyRes = await fetch(proxy + encodeURIComponent('https://api2.bybit.com/fiat/otc/item/online'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -781,7 +779,7 @@
         const bybitBuyPrice = parseFloat(bybitBuyData?.result?.items?.[0]?.price) || null;
         const bybitSellPrice = parseFloat(bybitSellData?.result?.items?.[0]?.price) || null;
 
-        // 3. Calculate Mean (Average) Value
+        // 3. Calculate Mean (Average)
         const calcMean = (p1, p2) => {
           const valid = [p1, p2].filter(p => p !== null && !isNaN(p));
           if (valid.length === 0) return null;
@@ -792,11 +790,9 @@
         const meanSell = calcMean(okxSellPrice, bybitSellPrice);
 
         if (meanBuy && meanSell) {
-          // Update the global state with the calculated means
           state.bankBuy = meanBuy;
           state.bankSell = meanSell;
-          
-          // Apply a standard 25 Ks spread for Mobile Wallets (KBZPay/Wave) vs Bank Transfers
+          // Apply a standard 25 Ks spread for Wallets
           state.walletBuy = meanBuy - 25; 
           state.walletSell = meanSell - 25;
 
@@ -810,8 +806,6 @@
       
       setP2PTags();
       recalculateAll();
-      
-      // Refresh every 60 seconds
       p2pTimer = setTimeout(refreshP2PData, ok ? 60000 : 30000); 
     }
 
@@ -860,7 +854,7 @@
       recalculateAll();
       
       refreshAllData(); // Initial load for OANDA
-      refreshP2PData(); // Initial load for P2P via our server
+      refreshP2PData(); // Initial load for OKX/Bybit
 
       updateDateTime();
       setInterval(updateDateTime, 1000); // Clock updates every 1 sec
@@ -868,8 +862,8 @@
       // Fast refresh for OANDA/PAXG (every 60 seconds)
       setInterval(refreshAllData, 60000);
       
-      // P2P refreshes itself (see refreshP2PData); the server caches Binance so this is safe
-      setInterval(setP2PTags, 60000); // keep the "x min ago" label current
+      // Update P2P ago tags
+      setInterval(setP2PTags, 60000);
     });
   </script>
 </body>
