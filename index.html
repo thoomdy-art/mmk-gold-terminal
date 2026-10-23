@@ -312,6 +312,50 @@
       </div>
     </section>
 
+    <!-- ROW 3B: INDIVIDUAL EXCHANGE P2P RATES -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="card p-4 border-l-4 border-l-violet-500">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <div>
+            <h2 class="text-sm font-bold text-white">OKX P2P · USDT/MMK</h2>
+            <p class="text-[11px] text-slate-400 mt-0.5">Individual exchange quotes</p>
+          </div>
+          <span id="okxSourceTag" class="text-[10px] px-2 py-1 rounded bg-violet-500/15 text-violet-300 mono">Waiting…</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+            <div class="text-[11px] text-slate-400">BUY USDT</div>
+            <div id="displayOkxBuy" class="mt-1 text-lg sm:text-xl font-bold text-emerald-400 mono">—</div>
+          </div>
+          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+            <div class="text-[11px] text-slate-400">SELL USDT</div>
+            <div id="displayOkxSell" class="mt-1 text-lg sm:text-xl font-bold text-rose-400 mono">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-4 border-l-4 border-l-orange-500">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <div>
+            <h2 class="text-sm font-bold text-white">Bybit P2P · USDT/MMK</h2>
+            <p class="text-[11px] text-slate-400 mt-0.5">Individual exchange quotes</p>
+          </div>
+          <span id="bybitSourceTag" class="text-[10px] px-2 py-1 rounded bg-orange-500/15 text-orange-300 mono">Waiting…</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+            <div class="text-[11px] text-slate-400">BUY USDT</div>
+            <div id="displayBybitBuy" class="mt-1 text-lg sm:text-xl font-bold text-emerald-400 mono">—</div>
+          </div>
+          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+            <div class="text-[11px] text-slate-400">SELL USDT</div>
+            <div id="displayBybitSell" class="mt-1 text-lg sm:text-xl font-bold text-rose-400 mono">—</div>
+          </div>
+        </div>
+      </div>
+      <p class="md:col-span-2 text-[11px] text-slate-500">P2P prices are indicative advertisements, not guaranteed execution prices. If an exchange or proxy blocks the request, its card will show an error/stale status instead of implying the quote is live.</p>
+    </section>
+
     <!-- ROW 4: GOLD MARKET NEWS SECTION -->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="lg:col-span-12 card p-4">
@@ -390,6 +434,12 @@
       walletBuy: 4520,
       walletSell: 4485,
       p2pUpdatedAt: null,
+      okxBuy: null,
+      okxSell: null,
+      bybitBuy: null,
+      bybitSell: null,
+      okxUpdatedAt: null,
+      bybitUpdatedAt: null,
       usdCross: { 
         USD: 1.00, 
         SGD: 1.34, 
@@ -736,7 +786,7 @@
       const t = state.p2pUpdatedAt;
       const mins = t ? Math.round((Date.now() - t) / 60000) : null;
       const live = t && mins < 30;
-      const ago = mins >= 120 ? Math.round(mins / 60) + 'h' : mins + 'm';
+      const ago = mins == null ? '' : (mins >= 120 ? Math.round(mins / 60) + 'h' : mins + 'm');
       const label = !t ? 'Offline · default' : live ? 'Live Mean · ' + ago + ' ago' : 'Stale · ' + ago + ' ago';
       ['bankSourceTag', 'walletSourceTag'].forEach(id => {
         const el = document.getElementById(id);
@@ -744,69 +794,107 @@
         el.textContent = label;
         el.style.color = live ? '' : '#fbbf24';
       });
+      setExchangeTag('okxSourceTag', state.okxUpdatedAt, state.okxBuy != null || state.okxSell != null);
+      setExchangeTag('bybitSourceTag', state.bybitUpdatedAt, state.bybitBuy != null || state.bybitSell != null);
+    }
+
+    function setExchangeTag(id, updatedAt, hasPrice) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!updatedAt || !hasPrice) {
+        el.textContent = 'Unavailable';
+        el.style.color = '#fbbf24';
+        return;
+      }
+      const mins = Math.max(0, Math.round((Date.now() - updatedAt) / 60000));
+      el.textContent = mins < 30 ? 'Updated ' + mins + 'm ago' : 'Stale ' + mins + 'm';
+      el.style.color = mins < 30 ? '#86efac' : '#fbbf24';
+    }
+
+    function parsePositivePrice(value) {
+      const n = Number.parseFloat(value);
+      return Number.isFinite(n) && n > 0 ? n : null;
+    }
+
+    async function fetchJsonViaProxy(url, options = {}) {
+      const proxyUrl = 'https://corsproxy.io/?url=' + encodeURIComponent(url);
+      const response = await fetch(proxyUrl, { ...options, cache: 'no-store' });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      return await response.json();
+    }
+
+    async function fetchOkxP2P() {
+      const [buyData, sellData] = await Promise.all([
+        fetchJsonViaProxy('https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=MMK&baseCurrency=USDT&side=sell&paymentMethod=all&userType=all&limit=10'),
+        fetchJsonViaProxy('https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=MMK&baseCurrency=USDT&side=buy&paymentMethod=all&userType=all&limit=10')
+      ]);
+      const buy = parsePositivePrice(buyData?.data?.sell?.[0]?.price);
+      const sell = parsePositivePrice(sellData?.data?.buy?.[0]?.price);
+      if (buy == null && sell == null) throw new Error('Unexpected OKX response format or no MMK ads');
+      state.okxBuy = buy;
+      state.okxSell = sell;
+      state.okxUpdatedAt = Date.now();
+      document.getElementById('displayOkxBuy').textContent = buy == null ? '—' : formatNumber(buy) + ' Ks';
+      document.getElementById('displayOkxSell').textContent = sell == null ? '—' : formatNumber(sell) + ' Ks';
+      return { buy, sell };
+    }
+
+    async function fetchBybitP2P() {
+      const endpoint = 'https://api2.bybit.com/fiat/otc/item/online';
+      const post = side => fetchJsonViaProxy(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tokenId: 'USDT', currencyId: 'MMK', payment: [], side, size: '10', page: '1' })
+      });
+      const [buyData, sellData] = await Promise.all([post('1'), post('0')]);
+      const buyItems = buyData?.result?.items || buyData?.result?.data || [];
+      const sellItems = sellData?.result?.items || sellData?.result?.data || [];
+      const buy = parsePositivePrice(buyItems?.[0]?.price);
+      const sell = parsePositivePrice(sellItems?.[0]?.price);
+      if (buy == null && sell == null) throw new Error('Unexpected Bybit response format or no MMK ads');
+      state.bybitBuy = buy;
+      state.bybitSell = sell;
+      state.bybitUpdatedAt = Date.now();
+      document.getElementById('displayBybitBuy').textContent = buy == null ? '—' : formatNumber(buy) + ' Ks';
+      document.getElementById('displayBybitSell').textContent = sell == null ? '—' : formatNumber(sell) + ' Ks';
+      return { buy, sell };
+    }
+
+    function calcMean(values) {
+      const valid = values.filter(v => v != null && Number.isFinite(v));
+      return valid.length ? Math.round(valid.reduce((a, b) => a + b, 0) / valid.length) : null;
     }
 
     async function refreshP2PData() {
       clearTimeout(p2pTimer);
-      let ok = false;
-      try {
-        const proxy = 'https://corsproxy.io/?';
 
-        // 1. Fetch OKX P2P Data
-        const okxBuyRes = await fetch(proxy + encodeURIComponent('https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=MMK&baseCurrency=USDT&side=sell&paymentMethod=all&userType=all&limit=2'));
-        const okxSellRes = await fetch(proxy + encodeURIComponent('https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=MMK&baseCurrency=USDT&side=buy&paymentMethod=all&userType=all&limit=2'));
-        const okxBuyData = await okxBuyRes.json();
-        const okxSellData = await okxSellRes.json();
-        
-        const okxBuyPrice = parseFloat(okxBuyData?.data?.sell?.[0]?.price) || null;
-        const okxSellPrice = parseFloat(okxSellData?.data?.buy?.[0]?.price) || null;
-
-        // 2. Fetch Bybit P2P Data
-        const bybitBuyRes = await fetch(proxy + encodeURIComponent('https://api2.bybit.com/fiat/otc/item/online'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tokenId: "USDT", currencyId: "MMK", payment: [], side: "1", size: "2", page: "1" })
-        });
-        const bybitSellRes = await fetch(proxy + encodeURIComponent('https://api2.bybit.com/fiat/otc/item/online'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tokenId: "USDT", currencyId: "MMK", payment: [], side: "0", size: "2", page: "1" })
-        });
-        
-        const bybitBuyData = await bybitBuyRes.json();
-        const bybitSellData = await bybitSellRes.json();
-
-        const bybitBuyPrice = parseFloat(bybitBuyData?.result?.items?.[0]?.price) || null;
-        const bybitSellPrice = parseFloat(bybitSellData?.result?.items?.[0]?.price) || null;
-
-        // 3. Calculate Mean (Average)
-        const calcMean = (p1, p2) => {
-          const valid = [p1, p2].filter(p => p !== null && !isNaN(p));
-          if (valid.length === 0) return null;
-          return Math.round(valid.reduce((a, b) => a + b, 0) / valid.length);
-        };
-
-        const meanBuy = calcMean(okxBuyPrice, bybitBuyPrice);
-        const meanSell = calcMean(okxSellPrice, bybitSellPrice);
-
-        if (meanBuy && meanSell) {
-          state.bankBuy = meanBuy;
-          state.bankSell = meanSell;
-          // Apply a standard 25 Ks spread for Wallets
-          state.walletBuy = meanBuy - 25; 
-          state.walletSell = meanSell - 25;
-
-          state.p2pUpdatedAt = Date.now();
-          ok = true;
-          console.log(`Updated P2P Mean - Buy: ${meanBuy}, Sell: ${meanSell}`);
+      // Fetch each exchange independently: one failing endpoint must not prevent
+      // the other exchange's prices from being displayed.
+      const results = await Promise.allSettled([fetchOkxP2P(), fetchBybitP2P()]);
+      results.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.warn((index === 0 ? 'OKX' : 'Bybit') + ' P2P fetch failed:', result.reason);
         }
-      } catch (e) {
-        console.log('OKX/Bybit P2P fetch failed, showing last known values', e);
+      });
+
+      const meanBuy = calcMean([state.okxBuy, state.bybitBuy]);
+      const meanSell = calcMean([state.okxSell, state.bybitSell]);
+
+      // Keep the previous mean if both sources fail; otherwise update each side
+      // using whichever valid exchange prices are available.
+      if (meanBuy != null) {
+        state.bankBuy = meanBuy;
+        state.walletBuy = meanBuy - 25;
       }
-      
+      if (meanSell != null) {
+        state.bankSell = meanSell;
+        state.walletSell = meanSell - 25;
+      }
+      if (meanBuy != null || meanSell != null) state.p2pUpdatedAt = Date.now();
+
       setP2PTags();
       recalculateAll();
-      p2pTimer = setTimeout(refreshP2PData, ok ? 60000 : 30000); 
+      p2pTimer = setTimeout(refreshP2PData, 60000);
     }
 
     // --- MAIN DATA FUNCTION FOR OANDA & PAXG ---
