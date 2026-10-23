@@ -750,24 +750,69 @@
       clearTimeout(p2pTimer);
       let ok = false;
       try {
-        const res = await fetch(API_BASE + '/api/p2p');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const d = await res.json();
-        const max = a => (a && a.length) ? Math.max(...a) : null;
-        const med = a => (a && a.length) ? [...a].sort((x, y) => x - y)[Math.floor(a.length / 2)] : null;
-        state.bankBuy = max(d.bankBuy) ?? state.bankBuy;
-        state.bankSell = max(d.bankSell) ?? state.bankSell;
-        state.walletBuy = med(d.walletBuy) ?? state.walletBuy;
-        state.walletSell = med(d.walletSell) ?? state.walletSell;
-        state.p2pUpdatedAt = Date.now() - d.ageSec * 1000;
-        ok = d.ageSec < 1800;
-        if (d.errors && d.errors.length) console.log('P2P server errors:', d.errors);
+        // Use a CORS proxy to bypass exchange frontend blocks
+        const proxy = 'https://corsproxy.io/?';
+
+        // 1. Fetch OKX P2P Data (MMK)
+        const okxBuyRes = await fetch(proxy + encodeURIComponent('https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=MMK&baseCurrency=USDT&side=sell&paymentMethod=all&userType=all&limit=2'));
+        const okxSellRes = await fetch(proxy + encodeURIComponent('https://www.okx.com/v3/c2c/tradingOrders/books?quoteCurrency=MMK&baseCurrency=USDT&side=buy&paymentMethod=all&userType=all&limit=2'));
+        
+        const okxBuyData = await okxBuyRes.json();
+        const okxSellData = await okxSellRes.json();
+        
+        const okxBuyPrice = parseFloat(okxBuyData?.data?.sell?.[0]?.price) || null;
+        const okxSellPrice = parseFloat(okxSellData?.data?.buy?.[0]?.price) || null;
+
+        // 2. Fetch Bybit P2P Data (MMK)
+        const bybitBuyRes = await fetch(proxy + encodeURIComponent('https://api2.bybit.com/fiat/otc/item/online'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tokenId: "USDT", currencyId: "MMK", payment: [], side: "1", size: "2", page: "1" })
+        });
+        const bybitSellRes = await fetch(proxy + encodeURIComponent('https://api2.bybit.com/fiat/otc/item/online'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tokenId: "USDT", currencyId: "MMK", payment: [], side: "0", size: "2", page: "1" })
+        });
+        
+        const bybitBuyData = await bybitBuyRes.json();
+        const bybitSellData = await bybitSellRes.json();
+
+        const bybitBuyPrice = parseFloat(bybitBuyData?.result?.items?.[0]?.price) || null;
+        const bybitSellPrice = parseFloat(bybitSellData?.result?.items?.[0]?.price) || null;
+
+        // 3. Calculate Mean (Average) Value
+        const calcMean = (p1, p2) => {
+          const valid = [p1, p2].filter(p => p !== null && !isNaN(p));
+          if (valid.length === 0) return null;
+          return Math.round(valid.reduce((a, b) => a + b, 0) / valid.length);
+        };
+
+        const meanBuy = calcMean(okxBuyPrice, bybitBuyPrice);
+        const meanSell = calcMean(okxSellPrice, bybitSellPrice);
+
+        if (meanBuy && meanSell) {
+          // Update the global state with the calculated means
+          state.bankBuy = meanBuy;
+          state.bankSell = meanSell;
+          
+          // Apply a standard 25 Ks spread for Mobile Wallets (KBZPay/Wave) vs Bank Transfers
+          state.walletBuy = meanBuy - 25; 
+          state.walletSell = meanSell - 25;
+
+          state.p2pUpdatedAt = Date.now();
+          ok = true;
+          console.log(`Updated P2P Mean - Buy: ${meanBuy}, Sell: ${meanSell}`);
+        }
       } catch (e) {
-        console.log('P2P fetch failed, showing last known / default values', e);
+        console.log('OKX/Bybit P2P fetch failed, showing last known values', e);
       }
+      
       setP2PTags();
       recalculateAll();
-      p2pTimer = setTimeout(refreshP2PData, ok ? 300000 : 60000); // 5 min normally, retry in 1 min on failure
+      
+      // Refresh every 60 seconds
+      p2pTimer = setTimeout(refreshP2PData, ok ? 60000 : 30000); 
     }
 
     // --- MAIN DATA FUNCTION FOR OANDA & PAXG ---
