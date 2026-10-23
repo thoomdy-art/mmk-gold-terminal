@@ -161,6 +161,16 @@ function median(values) {
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
+// The median of 50 ads is dragged away from the real market by stale/low-quality ads deep in
+// the book. Real P2P screens show the best ads first, so use the median of the TOP_N best ones.
+// 'buy' = customer buys USDT (cheapest ads best), 'sell' = customer sells USDT (highest ads best).
+const TOP_N = 8;
+function topMedian(values, side) {
+  const sorted = values.map(Number).filter(n => Number.isFinite(n) && n > 0)
+    .sort((a, b) => side === 'sell' ? b - a : a - b);
+  return median(sorted.slice(0, TOP_N));
+}
+
 function validPrices(items) {
   return (Array.isArray(items) ? items : [])
     .map(item => Number(item && (item.price ?? item.adv?.price ?? item.advertisement?.price)))
@@ -290,18 +300,18 @@ async function collectP2P() {
       errors.push(`${key}: ${err.message}`);
     }
   }
-  result.okx.buy = median(raw.okxBuy);
-  result.okx.sell = median(raw.okxSell);
+  result.okx.buy = topMedian(raw.okxBuy, 'buy');
+  result.okx.sell = topMedian(raw.okxSell, 'sell');
   result.okx.buyCount = raw.okxBuy.length;
   result.okx.sellCount = raw.okxSell.length;
-  result.bybit.buy = median(raw.bybitBuy);
-  result.bybit.sell = median(raw.bybitSell);
+  result.bybit.buy = topMedian(raw.bybitBuy, 'buy');
+  result.bybit.sell = topMedian(raw.bybitSell, 'sell');
   result.bybit.buyCount = raw.bybitBuy.length;
   result.bybit.sellCount = raw.bybitSell.length;
   // Central reference = median of all usable advertised prices on both exchanges,
   // calculated separately for the customer-buy and customer-sell sides.
-  result.reference.buy = median([...raw.okxBuy, ...raw.bybitBuy]);
-  result.reference.sell = median([...raw.okxSell, ...raw.bybitSell]);
+  result.reference.buy = median([result.okx.buy, result.bybit.buy]);
+  result.reference.sell = median([result.okx.sell, result.bybit.sell]);
   // Keep last good value for a side that failed this round instead of showing "—".
   const prev = p2pCache;
   if (prev) {
