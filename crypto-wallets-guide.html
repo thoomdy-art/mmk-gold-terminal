@@ -17,7 +17,7 @@ if(l!=='my')l='en';var d=document.documentElement;d.setAttribute('data-lang',l);
 window.setLang=function(x){try{localStorage.setItem('lang',x);}catch(e){}d.setAttribute('data-lang',x);d.setAttribute('lang',x==='my'?'my':'en');};
 window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='en'?'my':'en');};})();
 </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="tailwind.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', 'Padauk', sans-serif; background-color: #0b0f17; color: #e2e8f0; }
@@ -160,6 +160,14 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 <ul><li><span class="pill ok">✓</span>Exchange အကောင့်တိုင်းတွင် two-factor authentication (SMS မဟုတ်ဘဲ authenticator app) ဖွင့်ပါ။</li><li><span class="pill ok">✓</span>ဆိုက်တစ်ခုချင်းစီအတွက် မတူညီသော ခိုင်မာသောစကားဝှက်သုံးပါ၊ password manager ဖြင့်ဆိုလျှင် ပိုကောင်းသည်။</li><li><span class="pill ok">✓</span>ဖုန်းနှင့်ကွန်ပျူတာကို update လုပ်ထားပါ၊ crack app နှင့် မသိသော APK ဖိုင်များ ရှောင်ပါ။</li><li><span class="pill ok">✓</span>Seed phrase ကို အော့ဖ်လိုင်းရေး၊ နေရာ ၂ ခုသိမ်း၊ အရန်ကို စမ်းသပ်ပြီး။</li><li><span class="pill ok">✓</span>Exchange တွင် ရွေးချယ်စရာရှိလျှင် ငွေထုတ် address များကို whitelist လုပ်ပါ။</li><li><span class="pill ok">✓</span>ပမာဏကြီးမလွှဲမီ စမ်းလွှဲပြီး ကွန်ယက်ကို ထပ်စစ်ပါ။</li><li><span class="pill ok">✓</span>မကြာမီ ရောင်းဝယ်မည့်ပမာဏကိုသာ exchange ထဲထားပါ။</li><li><span class="pill ok">✓</span>ဆုံးရှုံးခံနိုင်သောငွေကိုသာ ရင်းနှီးပါ၊ မသိသူများနှင့် screen မမျှဝေပါနှင့်။</li></ul>
 <div class="note"><p>ဤလမ်းညွှန်သည် ပညာပေးရည်ရွယ်ချက်သာဖြစ်ပြီး ငွေကြေး သို့မဟုတ် ဥပဒေအကြံပေးချက် မဟုတ်ပါ။ မြန်မာနိုင်ငံ၏ crypto စည်းမျဉ်းများ ပြောင်းလဲနိုင်သောကြောင့် လက်ရှိဒေသတွင်းစည်းမျဉ်းများနှင့် သုံးစွဲသည့်ပလက်ဖောင်း၏ မူဝါဒများကို စစ်ဆေးပါ။ ဤနေရာတွင် ဖော်ပြသော ဝေါလက်အမှတ်တံဆိပ်များသည် ဥပမာသာဖြစ်ပြီး အကြံပြုချက်မဟုတ်ပါ။</p></div>
 <p>ဆက်စပ်လမ်းညွှန်များ: <a href="paxg.html">PAXG ဆိုတာ ဘာလဲ၊ ဘယ်လိုဝယ်မလဲ</a> · <a href="usdtusdc.html">USDT နှင့် USDC</a> · <a href="p2p-usdt-mmk-rates-explained.html">USDT/MMK P2P နှုန်းများ</a></p></div></section>
+<section class="card p-6 sm:p-8 eeat" id="sources">
+<div class="author-row"><div class="avatar" aria-hidden="true">W</div><div>
+<p class="author-name"><span class="en">Written and maintained by the wemanage.space team</span><span class="my">wemanage.space အဖွဲ့မှ ရေးသားထိန်းသိမ်းထားသည်</span></p>
+<p class="author-meta"><span class="en">Last updated: October 23, 2026 · Independent, not affiliated with any exchange, bank or gold shop · <a href="about.html">About us</a> · <a href="contact.html">Report a correction</a></span><span class="my">နောက်ဆုံးပြင်ဆင်သည့်ရက်: ၂၀၂၆ ခုနှစ် အောက်တိုဘာ ၂၃ · exchange၊ ဘဏ် သို့မဟုတ် ရွှေဆိုင်များနှင့် မသက်ဆိုင်ဘဲ လွတ်လပ်သည် · <a href="about.html">ကျွန်ုပ်တို့အကြောင်း</a> · <a href="contact.html">ပြင်ဆင်ချက်ပို့ရန်</a></span></p></div></div>
+<div class="src-list"><h2 class="src-title"><span class="en">Sources &amp; further reading</span><span class="my">ကိုးကားချက်များနှင့် ဆက်လက်ဖတ်ရန်</span></h2>
+<ul><li><a href="https://ethereum.org/en/wallets/" target="_blank" rel="noopener noreferrer">Ethereum.org: wallets</a></li><li><a href="https://bitcoin.org/en/secure-your-wallet" target="_blank" rel="noopener noreferrer">Bitcoin.org: secure your wallet</a></li><li><a href="https://consumer.ftc.gov/articles/what-know-about-cryptocurrency-and-scams" target="_blank" rel="noopener noreferrer">US FTC: cryptocurrency scams</a></li></ul>
+<p class="src-note"><span class="en">External sites are listed as references; we do not control their content. This page is general information, not financial advice.</span><span class="my">ပြင်ပဝဘ်ဆိုက်များကို ကိုးကားချက်အဖြစ်သာ ဖော်ပြထားပြီး ၎င်းတို့၏ အကြောင်းအရာကို ကျွန်ုပ်တို့ မထိန်းချုပ်ပါ။ ဤစာမျက်နှာသည် အထွေထွေအချက်အလက်သာဖြစ်ပြီး ငွေကြေးအကြံပေးချက် မဟုတ်ပါ။</span></p></div>
+</section>
 </main>
 
   <footer class="max-w-4xl mx-auto mt-10 pt-6 border-t border-slate-800 text-xs text-slate-400 space-y-2 text-center">

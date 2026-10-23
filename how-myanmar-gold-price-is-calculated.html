@@ -17,7 +17,7 @@ if(l!=='my')l='en';var d=document.documentElement;d.setAttribute('data-lang',l);
 window.setLang=function(x){try{localStorage.setItem('lang',x);}catch(e){}d.setAttribute('data-lang',x);d.setAttribute('lang',x==='my'?'my':'en');};
 window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='en'?'my':'en');};})();
 </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="tailwind.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', 'Padauk', sans-serif; background-color: #0b0f17; color: #e2e8f0; }
@@ -136,7 +136,15 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       <div class="note"><p class="en"><strong>Disclaimer:</strong> This guide is for general education only. It is not financial, investment or legal advice. Gold and P2P prices change quickly, so always confirm the price with your shop or exchange before you trade.</p><p class="my"><strong>သတိပြုရန်:</strong> ဤလမ်းညွှန်သည် အထွေထွေ ပညာပေးရန်သာ ဖြစ်ပါသည်။ ငွေကြေး၊ ရင်းနှီးမြှုပ်နှံမှု သို့မဟုတ် ဥပဒေရေးရာ အကြံပေးချက် မဟုတ်ပါ။ ရွှေနှင့် P2P ဈေးနှုန်းများ မြန်မြန်ပြောင်းလဲတတ်သဖြင့် ရောင်းဝယ်မီ ဆိုင် သို့မဟုတ် အိတ်ချိန်းတွင် ဈေးကို ပြန်လည်အတည်ပြုပါ။</p></div>
       <p><a href="guides.html"><span class="en">← All guides</span><span class="my">← လမ်းညွှန်အားလုံး</span></a> · <a href="index.html"><span class="en">Live prices & calculators</span><span class="my">တိုက်ရိုက်ဈေးနှုန်းနှင့် ဂဏန်းတွက်စက်များ</span></a></p>
     </article>
-  </main>
+  <section class="card p-6 sm:p-8 eeat" id="sources">
+<div class="author-row"><div class="avatar" aria-hidden="true">W</div><div>
+<p class="author-name"><span class="en">Written and maintained by the wemanage.space team</span><span class="my">wemanage.space အဖွဲ့မှ ရေးသားထိန်းသိမ်းထားသည်</span></p>
+<p class="author-meta"><span class="en">Last updated: October 23, 2026 · Independent, not affiliated with any exchange, bank or gold shop · <a href="about.html">About us</a> · <a href="contact.html">Report a correction</a></span><span class="my">နောက်ဆုံးပြင်ဆင်သည့်ရက်: ၂၀၂၆ ခုနှစ် အောက်တိုဘာ ၂၃ · exchange၊ ဘဏ် သို့မဟုတ် ရွှေဆိုင်များနှင့် မသက်ဆိုင်ဘဲ လွတ်လပ်သည် · <a href="about.html">ကျွန်ုပ်တို့အကြောင်း</a> · <a href="contact.html">ပြင်ဆင်ချက်ပို့ရန်</a></span></p></div></div>
+<div class="src-list"><h2 class="src-title"><span class="en">Sources &amp; further reading</span><span class="my">ကိုးကားချက်များနှင့် ဆက်လက်ဖတ်ရန်</span></h2>
+<ul><li><a href="https://www.gold.org" target="_blank" rel="noopener noreferrer">World Gold Council</a></li><li><a href="https://www.lbma.org.uk" target="_blank" rel="noopener noreferrer">LBMA (London Bullion Market Association)</a></li><li><a href="https://www.tradingview.com/symbols/XAUUSD/" target="_blank" rel="noopener noreferrer">TradingView (OANDA:XAUUSD)</a></li><li><a href="https://www.cbm.gov.mm" target="_blank" rel="noopener noreferrer">Central Bank of Myanmar</a></li></ul>
+<p class="src-note"><span class="en">External sites are listed as references; we do not control their content. This page is general information, not financial advice.</span><span class="my">ပြင်ပဝဘ်ဆိုက်များကို ကိုးကားချက်အဖြစ်သာ ဖော်ပြထားပြီး ၎င်းတို့၏ အကြောင်းအရာကို ကျွန်ုပ်တို့ မထိန်းချုပ်ပါ။ ဤစာမျက်နှာသည် အထွေထွေအချက်အလက်သာဖြစ်ပြီး ငွေကြေးအကြံပေးချက် မဟုတ်ပါ။</span></p></div>
+</section>
+</main>
 
   <footer class="max-w-4xl mx-auto mt-10 pt-6 border-t border-slate-800 text-xs text-slate-400 space-y-2 text-center">
     <div><a href="index.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မ</span></a> · <a href="guides.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a> · <a href="about.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">About</span><span class="my">ကျွန်ုပ်တို့အကြောင်း</span></a> · <a href="contact.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a> · <a href="privacy.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Privacy Policy</span><span class="my">ကိုယ်ရေးအချက်အလက် မူဝါဒ</span></a> · <a href="terms.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Terms & Disclaimer</span><span class="my">စည်းကမ်းချက်များ</span></a></div>

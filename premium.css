@@ -75,3 +75,19 @@ main>*:nth-child(2){animation-delay:.06s}main>*:nth-child(3){animation-delay:.12
 .steps li::before{content:counter(s);position:absolute;left:0;top:-.1rem;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.85rem;color:#1a1204;background:linear-gradient(135deg,#fde68a,#f5c451)}
 .toc a{display:inline-block;margin:.2rem .3rem .2rem 0;padding:.3rem .8rem;border-radius:999px;border:1px solid var(--line);font-size:.78rem;color:#e2e8f0 !important;text-decoration:none !important;background:rgba(255,255,255,.02)}
 .toc a:hover{border-color:var(--gold);color:var(--gold-2) !important}
+
+/* Author / sources / FAQ */
+.eeat{border-top:3px solid var(--gold) !important}
+.author-row{display:flex;gap:.9rem;align-items:center;padding-bottom:1rem;border-bottom:1px solid rgba(148,163,184,.12);margin-bottom:1rem}
+.avatar{flex:0 0 2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:700;color:#1a1204;background:linear-gradient(135deg,#fde68a,#f5c451)}
+.author-name{font-weight:600;color:#f1f5f9;font-size:.9rem}
+.author-meta{font-size:.75rem;color:#94a3b8;margin-top:.15rem;line-height:1.6}.author-meta a{color:#7dd3fc;text-decoration:underline}
+.src-title{font-size:1rem;font-weight:700;color:var(--gold-2);margin-bottom:.4rem}
+.src-list ul{list-style:disc;margin-left:1.2rem;font-size:.88rem;line-height:1.9;color:#cbd5e1}.src-list a{color:#7dd3fc;text-decoration:underline}
+.src-note{font-size:.72rem;color:#7c8aa3;margin-top:.6rem}
+.faq{border:1px solid rgba(148,163,184,.14);border-radius:.8rem;padding:.2rem 1rem;margin:.55rem 0;background:rgba(255,255,255,.02)}
+.faq summary{cursor:pointer;padding:.75rem 0;font-weight:600;color:#f1f5f9;font-size:.95rem;list-style:none}
+.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:"+";float:right;color:var(--gold);font-weight:700}
+.faq[open] summary::after{content:"–"}.faq[open]{border-color:var(--line)}
+.faq p{color:#cbd5e1;font-size:.9rem;line-height:1.8;padding-bottom:.9rem}
+.guide-strip{margin-top:1.2rem;font-size:.82rem;color:#94a3b8}.guide-strip a{color:#7dd3fc;text-decoration:underline}
