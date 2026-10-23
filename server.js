@@ -204,23 +204,65 @@ async function fetchOkxSide(side) {
   return validPrices(ads);
 }
 
-async function fetchBybitSide(side) {
-  const json = await fetchJson('https://api.bybit.com/v5/p2p/item/online', {
+// Bybit: the old /v5/p2p/item/online endpoint needs a signed API key, so it always fails.
+// The public web endpoint is api2.bybit.com/fiat/otc/item/online (what bybit.com itself uses).
+// Bybit sits behind CloudFront and blocks many datacenter/US IPs, so we try alternate
+// domains and an optional proxy (BYBIT_PROXY_URL, e.g. a Cloudflare Worker that forwards the request).
+const BYBIT_HOSTS = [
+  'https://api2.bybit.com',
+  'https://api2.bytick.com',
+];
+const BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+
+function bybitBody(side) {
+  return {
+    userId: '',
+    tokenId: 'USDT',
+    currencyId: 'MMK',
+    payment: [],
+    side,            // '1' = customer buys USDT, '0' = customer sells USDT
+    size: '50',
+    page: '1',
+    amount: '',
+    authMaker: false,
+    canTrade: false,
+  };
+}
+
+async function bybitOnce(base, side) {
+  const json = await fetchJson(`${base}/fiat/otc/item/online`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      tokenId: 'USDT',
-      currencyId: 'MMK',
-      side,
-      page: '1',
-      size: '50'
-    })
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Origin': 'https://www.bybit.com',
+      'Referer': 'https://www.bybit.com/',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'User-Agent': BROWSER_UA,
+      'platform': 'web',
+    },
+    body: JSON.stringify(bybitBody(side)),
   });
-  const items = json?.result?.items || json?.result?.data || json?.items || [];
-  if (json?.retCode !== undefined && Number(json.retCode) !== 0) {
-    throw new Error(`Bybit retCode ${json.retCode}: ${json.retMsg || 'request failed'}`);
+  const code = json?.ret_code ?? json?.retCode;
+  if (code !== undefined && Number(code) !== 0) {
+    throw new Error(`Bybit code ${code}: ${json.ret_msg || json.retMsg || 'request failed'}`);
   }
+  const items = json?.result?.items || json?.result?.data || json?.items || [];
   return validPrices(items);
+}
+
+async function fetchBybitSide(side) {
+  const bases = [...new Set([process.env.BYBIT_PROXY_URL, ...BYBIT_HOSTS].filter(Boolean))];
+  const errs = [];
+  for (const base of bases) {
+    try {
+      const prices = await bybitOnce(base.replace(/\/$/, ''), side);
+      if (prices.length) return prices;
+      errs.push(`${base}: no ads`);
+    } catch (e) {
+      errs.push(`${base}: ${e.message}`);
+    }
+  }
+  throw new Error(errs.join(' | '));
 }
 
 async function collectP2P() {
@@ -260,13 +302,29 @@ async function collectP2P() {
   // calculated separately for the customer-buy and customer-sell sides.
   result.reference.buy = median([...raw.okxBuy, ...raw.bybitBuy]);
   result.reference.sell = median([...raw.okxSell, ...raw.bybitSell]);
+  // Keep last good value for a side that failed this round instead of showing "—".
+  const prev = p2pCache;
+  if (prev) {
+    for (const ex of ['okx', 'bybit']) {
+      for (const k of ['buy', 'sell']) {
+        if (result[ex][k] == null && prev[ex] && prev[ex][k] != null) {
+          result[ex][k] = prev[ex][k];
+          result[ex][k + 'Count'] = prev[ex][k + 'Count'] || 0;
+          result[ex].stale = true;
+        }
+      }
+    }
+    result.reference.buy = result.reference.buy ?? prev.reference?.buy ?? null;
+    result.reference.sell = result.reference.sell ?? prev.reference?.sell ?? null;
+  }
   result.errors = errors;
   result.updatedAt = Date.now();
   return result;
 }
 
 app.get('/api/p2p', async (req, res) => {
-  const fresh = p2pCache && Date.now() - p2pUpdatedAt < P2P_CACHE_TTL;
+  const ttl = p2pLastErrors.length ? 2 * 60 * 1000 : P2P_CACHE_TTL; // retry sooner after a failure
+  const fresh = p2pCache && Date.now() - p2pUpdatedAt < ttl;
   if (!fresh) {
     if (!p2pInFlight) {
       p2pInFlight = collectP2P()
