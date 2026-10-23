@@ -121,7 +121,7 @@ function refreshP2P() {
   return inflight;
 }
 
-app.get('/api/p2p', async (req, res) => {
+app.get('/api/binance-p2p', async (req, res) => {
   const age = cache ? Date.now() - cache.updatedAt : Infinity;
   const pushedFresh = cache && cache.source === 'push' && age < PUSH_FRESH;
   if (!pushedFresh && age > TTL && Date.now() - lastTry > RETRY_GAP) await refreshP2P();
@@ -143,6 +143,173 @@ app.post('/api/p2p-push', (req, res) => {
   cache = { ...clean, updatedAt: Date.now(), source: 'push' };
   res.json({ ok: true });
 });
+
+
+// ---------- OKX + Bybit P2P (server-side, cached for 15 minutes) ----------
+// The browser calls this Render endpoint, so exchange requests do not depend on
+// a third-party CORS proxy. Prices are medians of valid advertised prices.
+const P2P_CACHE_TTL = 15 * 60 * 1000;
+let p2pCache = null;
+let p2pUpdatedAt = 0;
+let p2pLastErrors = [];
+let p2pInFlight = null;
+
+function median(values) {
+  const sorted = values.map(Number).filter(n => Number.isFinite(n) && n > 0).sort((a, b) => a - b);
+  if (!sorted.length) return null;
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+function validPrices(items) {
+  return (Array.isArray(items) ? items : [])
+    .map(item => Number(item && (item.price ?? item.adv?.price ?? item.advertisement?.price)))
+    .filter(n => Number.isFinite(n) && n > 0);
+}
+
+async function fetchJson(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
+    signal: AbortSignal.timeout(12000),
+    headers: {
+      'Accept': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (compatible; MMKGoldTerminal/1.0)',
+      ...(options.headers || {})
+    }
+  });
+  const body = await response.text();
+  if (!response.ok) throw new Error(`HTTP ${response.status}: ${body.slice(0, 180)}`);
+  try { return JSON.parse(body); }
+  catch { throw new Error(`Non-JSON response: ${body.slice(0, 120)}`); }
+}
+
+async function fetchOkxSide(side) {
+  const url = new URL('https://www.okx.com/v3/c2c/tradingOrders/books');
+  url.search = new URLSearchParams({
+    quoteCurrency: 'MMK',
+    baseCurrency: 'USDT',
+    side,
+    paymentMethod: 'all',
+    userType: 'all',
+    limit: '20'
+  }).toString();
+  const json = await fetchJson(url.toString(), { headers: { 'Referer': 'https://www.okx.com/' } });
+  const data = json?.data;
+  // OKX returns ad books grouped by side. The requested book is preferred,
+  // with alternate common response shapes handled for resilience.
+  const candidates = side === 'sell'
+    ? [data?.sell, data?.sellOrders, data?.sellList, data?.data?.sell, data?.list]
+    : [data?.buy, data?.buyOrders, data?.buyList, data?.data?.buy, data?.list];
+  const ads = candidates.find(Array.isArray) || [];
+  return validPrices(ads);
+}
+
+async function fetchBybitSide(side) {
+  const json = await fetchJson('https://api.bybit.com/v5/p2p/item/online', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      tokenId: 'USDT',
+      currencyId: 'MMK',
+      side,
+      page: '1',
+      size: '50'
+    })
+  });
+  const items = json?.result?.items || json?.result?.data || json?.items || [];
+  if (json?.retCode !== undefined && Number(json.retCode) !== 0) {
+    throw new Error(`Bybit retCode ${json.retCode}: ${json.retMsg || 'request failed'}`);
+  }
+  return validPrices(items);
+}
+
+async function collectP2P() {
+  const errors = [];
+  const tasks = [
+    ['okxBuy', () => fetchOkxSide('sell')], // advertiser sells USDT; customer buys USDT
+    ['okxSell', () => fetchOkxSide('buy')], // advertiser buys USDT; customer sells USDT
+    ['bybitBuy', () => fetchBybitSide('1')],
+    ['bybitSell', () => fetchBybitSide('0')]
+  ];
+  const result = {
+    okx: { buy: null, sell: null, buyCount: 0, sellCount: 0 },
+    bybit: { buy: null, sell: null, buyCount: 0, sellCount: 0 },
+    reference: { buy: null, sell: null },
+    updatedAt: Date.now(),
+    source: 'OKX + Bybit P2P',
+    errors: []
+  };
+  const raw = { okxBuy: [], okxSell: [], bybitBuy: [], bybitSell: [] };
+  for (const [key, task] of tasks) {
+    try {
+      raw[key] = await task();
+      if (!raw[key].length) errors.push(`${key}: exchange returned no usable MMK ads`);
+    } catch (err) {
+      errors.push(`${key}: ${err.message}`);
+    }
+  }
+  result.okx.buy = median(raw.okxBuy);
+  result.okx.sell = median(raw.okxSell);
+  result.okx.buyCount = raw.okxBuy.length;
+  result.okx.sellCount = raw.okxSell.length;
+  result.bybit.buy = median(raw.bybitBuy);
+  result.bybit.sell = median(raw.bybitSell);
+  result.bybit.buyCount = raw.bybitBuy.length;
+  result.bybit.sellCount = raw.bybitSell.length;
+  // Central reference = median of all usable advertised prices on both exchanges,
+  // calculated separately for the customer-buy and customer-sell sides.
+  result.reference.buy = median([...raw.okxBuy, ...raw.bybitBuy]);
+  result.reference.sell = median([...raw.okxSell, ...raw.bybitSell]);
+  result.errors = errors;
+  result.updatedAt = Date.now();
+  return result;
+}
+
+app.get('/api/p2p', async (req, res) => {
+  const fresh = p2pCache && Date.now() - p2pUpdatedAt < P2P_CACHE_TTL;
+  if (!fresh) {
+    if (!p2pInFlight) {
+      p2pInFlight = collectP2P()
+        .then(data => {
+          p2pCache = data;
+          p2pUpdatedAt = Date.now();
+          p2pLastErrors = data.errors;
+        })
+        .catch(err => { p2pLastErrors = [err.message]; })
+        .finally(() => { p2pInFlight = null; });
+    }
+    await p2pInFlight;
+  }
+  if (!p2pCache) {
+    return res.status(503).json({
+      error: 'P2P prices unavailable',
+      errors: p2pLastErrors,
+      hint: 'Check Render logs and /api/p2p-status.'
+    });
+  }
+  res.set('Cache-Control', 'no-store');
+  res.json({
+    ...p2pCache,
+    ageSec: Math.max(0, Math.round((Date.now() - p2pUpdatedAt) / 1000)),
+    cacheTtlSec: Math.max(0, Math.ceil((P2P_CACHE_TTL - (Date.now() - p2pUpdatedAt)) / 1000))
+  });
+});
+
+app.get('/api/p2p-status', (req, res) => {
+  res.json({
+    hasCache: Boolean(p2pCache),
+    updatedAt: p2pUpdatedAt || null,
+    ageSec: p2pUpdatedAt ? Math.round((Date.now() - p2pUpdatedAt) / 1000) : null,
+    cacheTtlSec: P2P_CACHE_TTL / 1000,
+    errors: p2pLastErrors,
+    data: p2pCache ? {
+      okx: p2pCache.okx,
+      bybit: p2pCache.bybit,
+      reference: p2pCache.reference
+    } : null
+  });
+});
+
 
 module.exports = { fetchAll };
 
