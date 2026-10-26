@@ -1,93 +1,230 @@
-/* ===== Premium theme layer — loads after each page's inline styles ===== */
-:root{--gold:#f5c451;--gold-2:#fde68a;--gold-3:#b7791f;--ink:#07090f;--ink-2:#0c111b;--panel:#0f1624;--line:rgba(245,196,81,.14);--muted:#94a3b8}
-html{scroll-behavior:smooth}
-body{
-  background:
-   radial-gradient(900px 500px at 85% -10%,rgba(245,196,81,.10),transparent 60%),
-   radial-gradient(700px 500px at -10% 10%,rgba(56,189,248,.07),transparent 60%),
-   linear-gradient(180deg,#07090f 0%,#0a0e17 100%) !important;
-  background-attachment:fixed !important;
-  color:#e5e9f0;-webkit-font-smoothing:antialiased;letter-spacing:.005em;
+/* ==========================================================================
+   DayBook "Cashmere" theme layer for MMK Gold Terminal
+   Loads last on every page, so it re-skins the inline styles and Tailwind
+   utilities. Light + dark follow the visitor's system setting (same as
+   DayBook); add data-theme="light" or "dark" on <html> to force one.
+   ========================================================================== */
+
+:root{
+  --font-ui:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --bg:#E5E1D8; --bg-shell:#F7F5F0; --sf:#EFECE6; --sf-elevated:#FFFFFF; --sf-pill:#FFFFFF;
+  --tx:#111111; --mu:#6E6A63; --mu-2:#8A857B;
+  --bd:#E2DDD3; --bd-strong:#C7C1B4;
+  --g:21,128,61; --l:190,18,60; --blue:37,99,235;
+  --ac:#141413; --ac-ink:#FFFFFF;
+  --gold:#F5C451; --gold-text:#8F6A12;
+  --hero-bg:linear-gradient(135deg,#FFFFFF 0%,#F5F2EB 65%,#DFD6C3 100%);
+  --hero-tx:#141413; --hero-mu:#6E6A63;
+  --stroke-curve:#141413;
+  --radius-card:28px; --radius-sub:22px; --radius-pill:9999px;
+  --shadow-soft:0 10px 30px -6px rgba(17,17,17,.05);
+  --shadow-hero:0 20px 45px -12px rgba(17,17,17,.08);
+  --nav-bg:rgba(247,245,240,.88);
+  color-scheme:light;
 }
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.5;
-  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-  background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at 50% 0%,#000 20%,transparent 75%)}
-::selection{background:rgba(245,196,81,.35);color:#fff}
+:root[data-theme="dark"]{
+  --bg:#111110; --bg-shell:#181816; --sf:#20201D; --sf-elevated:#292925; --sf-pill:#2E2E2A;
+  --tx:#F5F3EE; --mu:#949087; --mu-2:#7B776D;
+  --bd:#2E2D29; --bd-strong:#45433D;
+  --g:74,222,128; --l:251,113,133; --blue:96,165,250;
+  --ac:#F5C451; --ac-ink:#141413;
+  --gold-text:#F5C451;
+  --hero-bg:linear-gradient(135deg,#242320 0%,#191816 100%);
+  --hero-tx:#F5F3EE; --hero-mu:#949087;
+  --stroke-curve:#F5F3EE;
+  --shadow-soft:0 14px 34px -8px rgba(0,0,0,.45);
+  --shadow-hero:0 20px 45px -12px rgba(0,0,0,.65);
+  --nav-bg:rgba(24,24,22,.9);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#111110; --bg-shell:#181816; --sf:#20201D; --sf-elevated:#292925; --sf-pill:#2E2E2A;
+    --tx:#F5F3EE; --mu:#949087; --mu-2:#7B776D;
+    --bd:#2E2D29; --bd-strong:#45433D;
+    --g:74,222,128; --l:251,113,133; --blue:96,165,250;
+    --ac:#F5C451; --ac-ink:#141413;
+    --gold-text:#F5C451;
+    --hero-bg:linear-gradient(135deg,#242320 0%,#191816 100%);
+    --hero-tx:#F5F3EE; --hero-mu:#949087;
+    --stroke-curve:#F5F3EE;
+    --shadow-soft:0 14px 34px -8px rgba(0,0,0,.45);
+    --shadow-hero:0 20px 45px -12px rgba(0,0,0,.65);
+    --nav-bg:rgba(24,24,22,.9);
+    color-scheme:dark;
+  }
+}
 
-/* Header: floating glass bar */
-body>header{position:sticky;top:.6rem;z-index:50;background:rgba(9,12,19,.72) !important;
+/* ---- Base, font ---------------------------------------------------------- */
+html{scroll-behavior:smooth}
+html,body,body *,body *::before,body *::after,button,input,select,textarea{font-family:var(--font-ui) !important}
+html[lang="my"],html[data-lang="my"]{--font-ui:'Noto Sans Myanmar','Myanmar Text',system-ui,-apple-system,'Segoe UI',sans-serif}
+body{
+  background:var(--bg) !important;background-image:none !important;
+  color:var(--tx) !important;-webkit-font-smoothing:antialiased;letter-spacing:0;
+}
+body::before{display:none !important}
+::selection{background:rgba(245,196,81,.45);color:var(--tx)}
+.mono,.num-mono{font-variant-numeric:tabular-nums;letter-spacing:-.02em;font-feature-settings:"tnum" on,"lnum" on}
+.my{line-height:1.85}
+h1,h2,h3,.prose h2,main h2.text-2xl{font-family:var(--font-ui) !important;font-weight:700;letter-spacing:-.02em}
+main h1{background:none !important;-webkit-text-fill-color:currentColor;color:var(--tx) !important}
+
+/* ---- Surfaces: cards, header, footer, mobile nav ------------------------- */
+.card,.lux-card{
+  background:var(--sf) !important;background-image:none !important;
+  border:1px solid var(--bd) !important;border-radius:var(--radius-card) !important;
+  box-shadow:var(--shadow-soft) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.card:hover{border-color:var(--bd-strong) !important}
+a.card:hover{transform:translateY(-2px);border-color:var(--bd-strong) !important;box-shadow:var(--shadow-soft) !important}
+
+/* hero card (the main gold price block) uses DayBook's obsidian "hero vault" */
+.gold-gradient{
+  background:var(--hero-bg) !important;color:var(--hero-tx) !important;
+  border:1px solid rgba(255,255,255,.08) !important;box-shadow:var(--shadow-hero) !important;
+  position:relative;overflow:hidden;
+}
+.gold-gradient::after{content:"";position:absolute;bottom:-55px;left:10%;right:10%;height:120px;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(245,196,81,.38) 0%,rgba(245,196,81,0) 72%)}
+.gold-gradient>*{position:relative;z-index:1}
+.gold-gradient .text-white,.gold-gradient .text-slate-300,.gold-gradient .text-slate-400{color:var(--hero-tx) !important}
+.gold-gradient .text-slate-400,.gold-gradient .text-slate-500{color:var(--hero-mu) !important}
+
+body>header{
+  position:sticky;top:.6rem;z-index:50;background:var(--nav-bg) !important;
   backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
-  border:1px solid var(--line) !important;border-radius:1rem;padding:.8rem 1.1rem !important;
-  box-shadow:0 10px 40px -12px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.04)}
-body>header>a:first-child{background:linear-gradient(90deg,#fff,var(--gold-2) 60%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent !important;font-family:'Fraunces','Padauk',serif;letter-spacing:-.01em}
-body>header>a:first-child span span{-webkit-text-fill-color:#94a3b8}
-body>header nav a{position:relative;border-radius:.5rem;padding:.3rem .55rem;text-decoration:none !important}
-body>header nav a:hover{background:rgba(245,196,81,.08);color:var(--gold-2) !important}
-body>header button{background:linear-gradient(135deg,#f5c451,#b7791f) !important;color:#1a1204 !important;border-radius:999px !important;box-shadow:0 6px 18px -6px rgba(245,196,81,.55)}
-body>header button:hover{filter:brightness(1.08)}
+  border:1px solid var(--bd) !important;border-radius:var(--radius-card) !important;padding:.8rem 1.1rem !important;
+  box-shadow:var(--shadow-soft) !important;
+}
+body>header>a:first-child{background:none !important;-webkit-text-fill-color:currentColor;color:var(--tx) !important;
+  font-weight:700;letter-spacing:-.02em}
+body>header>a:first-child span span{-webkit-text-fill-color:currentColor;color:var(--mu) !important}
+body>header nav a{border-radius:var(--radius-pill);padding:.3rem .7rem;text-decoration:none !important;color:var(--mu)}
+body>header nav a:hover{background:rgba(245,196,81,.16);color:var(--tx) !important}
+/* header pill buttons (language switch etc.) = DayBook cta-obsidian */
+body>header button,.btn-primary{
+  background:var(--ac) !important;color:var(--ac-ink) !important;border:1px solid var(--ac) !important;
+  border-radius:var(--radius-pill) !important;box-shadow:none !important;font-weight:600;
+}
+body>header button:hover{opacity:.94;filter:none;transform:translateY(-1px)}
+body>footer{border-top:1px solid var(--bd) !important;padding-top:1.5rem !important;color:var(--mu) !important}
+body>footer a:hover{color:var(--tx) !important}
+body>nav.fixed,nav.md\:hidden{background:var(--nav-bg) !important;border-top:1px solid var(--bd) !important;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 
-/* Cards */
-.card{background:linear-gradient(160deg,rgba(20,28,45,.92),rgba(12,17,28,.92)) !important;border:1px solid rgba(148,163,184,.12) !important;
-  border-radius:1.1rem !important;box-shadow:0 18px 50px -24px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.04);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
-a.card:hover{transform:translateY(-3px);border-color:rgba(245,196,81,.45) !important;box-shadow:0 24px 60px -22px rgba(245,196,81,.22),inset 0 1px 0 rgba(255,255,255,.06)}
+/* ---- Tailwind utility remaps (slate/amber/emerald/sky/rose -> DayBook) ---- */
+html body .text-white,html body .hover\:text-white:hover,html body .text-slate-100,html body .text-slate-200{color:var(--tx) !important}
+html body .text-slate-300{color:color-mix(in srgb,var(--tx) 82%,var(--mu)) !important}
+html body .text-slate-400,html body .text-slate-500{color:var(--mu) !important}
+html body .text-amber-200,html body .text-amber-300,html body .text-amber-300\/90,html body .text-amber-400,
+html body .hover\:text-amber-300:hover{color:var(--gold-text) !important}
+html body .text-sky-300,html body .text-sky-400{color:rgb(var(--blue)) !important}
+html body .text-emerald-300,html body .text-emerald-400{color:rgb(var(--g)) !important}
+html body .text-rose-300\/80,html body .text-rose-400{color:rgb(var(--l)) !important}
+html body .text-orange-300{color:var(--gold-text) !important}
+html body .text-slate-950{color:var(--ac-ink) !important}
 
-/* Typography */
-h1,.prose h2,main h2.text-2xl{font-family:'Fraunces','Padauk',Georgia,serif;letter-spacing:-.015em}
-main h1{background:linear-gradient(90deg,#fff 30%,var(--gold-2));-webkit-background-clip:text;background-clip:text;color:transparent !important}
-.prose h2{color:var(--gold-2) !important;position:relative;padding-top:.4rem}
-.prose h3{color:#f1f5f9 !important}
-.prose a,main p a{color:#7dd3fc}
-.prose th{color:var(--gold) !important;text-transform:uppercase;font-size:.7rem;letter-spacing:.08em;border-bottom:1px solid var(--line) !important}
-.prose td{border-bottom:1px solid rgba(148,163,184,.1) !important}
-.prose table{border-radius:.75rem;overflow:hidden}
-.note{border-left:3px solid var(--gold) !important;background:linear-gradient(90deg,rgba(245,196,81,.10),rgba(245,196,81,.02)) !important}
+html body .border-slate-700,html body .border-slate-800,html body .border-slate-800\/80,html body .border-slate-800\/90,
+html body .md\:border-slate-700,html body .divide-slate-800\/70>:not([hidden])~:not([hidden]){border-color:var(--bd) !important}
+html body .hover\:border-amber-500\/50:hover,html body .hover\:border-amber-400:hover,
+html body .border-amber-400\/30,html body .border-amber-500\/30,html body .border-amber-500\/35,html body .border-amber-500\/40{border-color:var(--bd-strong) !important}
+html body .border-emerald-500\/30,html body .border-emerald-500\/35{border-color:rgba(var(--g),.35) !important}
+html body .border-rose-500\/30,html body .border-rose-500\/50{border-color:rgba(var(--l),.35) !important}
+html body .border-sky-500\/30{border-color:rgba(var(--blue),.35) !important}
 
-/* Buttons & inputs (works with Tailwind utility classes already in pages) */
-button,.btn{transition:all .2s ease}
-input,select,textarea{background:#0b101a !important;border:1px solid rgba(148,163,184,.18) !important;border-radius:.65rem !important}
-input:focus,select:focus,textarea:focus{outline:none !important;border-color:var(--gold) !important;box-shadow:0 0 0 3px rgba(245,196,81,.18) !important}
-.mono{font-variant-numeric:tabular-nums}
+html body .bg-slate-950\/70,html body .bg-slate-950\/80,html body .bg-slate-950\/95,
+html body .bg-slate-900\/80{background-color:var(--sf-elevated) !important}
+html body .bg-slate-900\/60{background-color:color-mix(in srgb,var(--tx) 4%,transparent) !important}
+html body .bg-slate-800\/30,html body .bg-slate-800\/50,html body .hover\:bg-slate-800\/40:hover{background-color:color-mix(in srgb,var(--tx) 5%,transparent) !important}
+html body .bg-amber-500\/10,html body .bg-amber-500\/20,html body .bg-orange-500\/15{background-color:rgba(245,196,81,.2) !important}
+html body .bg-emerald-500\/10,html body .bg-emerald-500\/15,html body .bg-emerald-500\/20,html body .bg-emerald-900\/20,html body .to-emerald-500\/15{background-color:rgba(var(--g),.12) !important}
+html body .bg-rose-900\/20{background-color:rgba(var(--l),.1) !important}
+html body .bg-sky-500\/10,html body .bg-sky-500\/15{background-color:rgba(var(--blue),.12) !important}
+html body .bg-amber-500,html body .bg-amber-500:hover,html body .hover\:bg-amber-400:hover{background:var(--ac) !important;color:var(--ac-ink) !important}
+html body .bg-emerald-400{background-color:rgb(var(--g)) !important}
+html body .bg-gradient-to-br{background-image:none !important;background-color:var(--sf-elevated) !important}
+html body .from-amber-500,html body .to-amber-400{--tw-gradient-from:var(--ac);--tw-gradient-to:var(--ac)}
 
-/* Footer */
-body>footer{border-top:1px solid var(--line) !important;padding-top:1.5rem !important;color:#7c8aa3}
-body>footer a:hover{color:var(--gold-2) !important}
+/* ---- Pills, inputs, tabs, selects --------------------------------------- */
+button,.btn{transition:all .18s cubic-bezier(.16,1,.3,1)}
+input,select,textarea,.app-input{
+  background:var(--sf-elevated) !important;color:var(--tx) !important;
+  border:1px solid var(--bd) !important;border-radius:14px !important;
+}
+input::placeholder,textarea::placeholder{color:var(--mu-2)}
+input:focus,select:focus,textarea:focus,.app-input:focus{
+  outline:none !important;border-color:var(--bd-strong) !important;box-shadow:0 0 0 3px rgba(245,196,81,.28) !important}
+select option{background:var(--sf-elevated);color:var(--tx)}
+/* chart tab buttons / small chips become DayBook pill buttons */
+main button:not([class*="bg-amber"]):not(.btn-primary){border-radius:var(--radius-pill)}
+html body main button.bg-amber-500,html body main button.bg-amber-500\/20{
+  background:var(--ac) !important;color:var(--ac-ink) !important;border-color:var(--ac) !important;font-weight:700;
+  box-shadow:0 6px 18px -4px rgba(245,196,81,.45)}
+details.faq,.faq,.wbox{background:var(--sf-elevated) !important;border:1px solid var(--bd) !important;border-radius:var(--radius-sub) !important}
+details.faq summary,.faq summary{color:var(--tx) !important}
+details.faq p,.faq p,.prose-lite p{color:var(--mu) !important}
+.faq summary::after{color:var(--gold-text)}
+.faq[open]{border-color:var(--bd-strong) !important}
+.guide-strip{border-top:1px solid var(--bd) !important;color:var(--mu) !important}
+.guide-strip a,.prose a,main p a,.src-list a,.author-meta a{color:rgb(var(--blue)) !important}
 
-/* Reveal motion */
-@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-main>*{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
-main>*:nth-child(2){animation-delay:.06s}main>*:nth-child(3){animation-delay:.12s}main>*:nth-child(4){animation-delay:.18s}main>*:nth-child(n+5){animation-delay:.24s}
-@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
-
-/* Wallet guide components */
-.hero{position:relative;overflow:hidden}
-.hero::after{content:"";position:absolute;right:-80px;top:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(245,196,81,.25),transparent 70%);pointer-events:none}
-.eyebrow{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line);padding:.25rem .7rem;border-radius:999px;background:rgba(245,196,81,.06)}
-.pill{display:inline-block;font-size:.68rem;font-weight:700;padding:.15rem .55rem;border-radius:999px;margin-right:.3rem}
-.pill.hot{background:rgba(251,113,133,.15);color:#fda4af}.pill.cold{background:rgba(56,189,248,.15);color:#7dd3fc}.pill.ok{background:rgba(52,211,153,.15);color:#6ee7b7}
-.wgrid{display:grid;gap:1rem;grid-template-columns:1fr}@media(min-width:768px){.wgrid{grid-template-columns:1fr 1fr}}
-.wbox{border:1px solid rgba(148,163,184,.14);border-radius:.9rem;padding:1.1rem 1.2rem;background:rgba(255,255,255,.02)}
-.wbox.hotbox{border-top:3px solid #fb7185}.wbox.coldbox{border-top:3px solid #38bdf8}
-.wbox h3{margin-top:0 !important}
-.danger{border-left:3px solid #fb7185;background:linear-gradient(90deg,rgba(251,113,133,.10),rgba(251,113,133,.02));padding:.75rem 1rem;border-radius:.5rem;margin:1rem 0}
+/* tables */
+table{border-collapse:collapse}
+thead th,.prose th{color:var(--mu) !important;text-transform:uppercase;font-size:.7rem;letter-spacing:.06em;border-bottom:1px solid var(--bd) !important}
+.prose td{color:var(--tx) !important}
+.prose td,tbody td{border-color:var(--bd) !important}
+.prose table{border-radius:var(--radius-sub);overflow:hidden}
+.prose h2{color:var(--tx) !important}.prose h3{color:var(--tx) !important}
+.prose,.prose p,.prose li{color:color-mix(in srgb,var(--tx) 82%,var(--mu))}
+.note{border-left:3px solid var(--gold) !important;background:rgba(245,196,81,.14) !important;color:var(--tx)}
+.danger{border-left:3px solid rgb(var(--l));background:rgba(var(--l),.1);padding:.75rem 1rem;border-radius:var(--radius-sub);margin:1rem 0}
 .danger p{margin:.2rem 0}
+
+/* ---- Guide-page components ---------------------------------------------- */
+.hero{position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-80px;top:-80px;width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,196,81,.28),transparent 70%);pointer-events:none}
+.eyebrow{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-text);border:1px solid var(--bd-strong);padding:.25rem .7rem;border-radius:999px;background:var(--sf-elevated)}
+.pill{display:inline-block;font-size:.68rem;font-weight:700;padding:.15rem .55rem;border-radius:999px;margin-right:.3rem}
+.pill.hot{background:rgba(var(--l),.14);color:rgb(var(--l))}
+.pill.cold{background:rgba(var(--blue),.14);color:rgb(var(--blue))}
+.pill.ok{background:rgba(var(--g),.14);color:rgb(var(--g))}
+.wgrid{display:grid;gap:1rem;grid-template-columns:1fr}@media(min-width:768px){.wgrid{grid-template-columns:1fr 1fr}}
+.wbox{padding:1.1rem 1.2rem}
+.wbox.hotbox{border-top:3px solid rgb(var(--l))}.wbox.coldbox{border-top:3px solid rgb(var(--blue))}
+.wbox h3{margin-top:0 !important}
 .steps{counter-reset:s;list-style:none !important;margin-left:0 !important}
 .steps li{counter-increment:s;position:relative;padding-left:2.6rem;margin:.9rem 0}
-.steps li::before{content:counter(s);position:absolute;left:0;top:-.1rem;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.85rem;color:#1a1204;background:linear-gradient(135deg,#fde68a,#f5c451)}
-.toc a{display:inline-block;margin:.2rem .3rem .2rem 0;padding:.3rem .8rem;border-radius:999px;border:1px solid var(--line);font-size:.78rem;color:#e2e8f0 !important;text-decoration:none !important;background:rgba(255,255,255,.02)}
-.toc a:hover{border-color:var(--gold);color:var(--gold-2) !important}
-
-/* Author / sources / FAQ */
+.steps li::before{content:counter(s);position:absolute;left:0;top:-.1rem;width:1.9rem;height:1.9rem;border-radius:50%;
+  display:grid;place-items:center;font-weight:700;font-size:.85rem;color:var(--ac-ink);background:var(--ac)}
+.toc a{display:inline-block;margin:.2rem .3rem .2rem 0;padding:.3rem .8rem;border-radius:999px;border:1px solid var(--bd);
+  font-size:.78rem;color:var(--tx) !important;text-decoration:none !important;background:var(--sf-elevated)}
+.toc a:hover{border-color:var(--bd-strong);background:rgba(245,196,81,.18)}
 .eeat{border-top:3px solid var(--gold) !important}
-.author-row{display:flex;gap:.9rem;align-items:center;padding-bottom:1rem;border-bottom:1px solid rgba(148,163,184,.12);margin-bottom:1rem}
-.avatar{flex:0 0 2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:700;color:#1a1204;background:linear-gradient(135deg,#fde68a,#f5c451)}
-.author-name{font-weight:600;color:#f1f5f9;font-size:.9rem}
-.author-meta{font-size:.75rem;color:#94a3b8;margin-top:.15rem;line-height:1.6}.author-meta a{color:#7dd3fc;text-decoration:underline}
-.src-title{font-size:1rem;font-weight:700;color:var(--gold-2);margin-bottom:.4rem}
-.src-list ul{list-style:disc;margin-left:1.2rem;font-size:.88rem;line-height:1.9;color:#cbd5e1}.src-list a{color:#7dd3fc;text-decoration:underline}
-.src-note{font-size:.72rem;color:#7c8aa3;margin-top:.6rem}
-.faq{border:1px solid rgba(148,163,184,.14);border-radius:.8rem;padding:.2rem 1rem;margin:.55rem 0;background:rgba(255,255,255,.02)}
-.faq summary{cursor:pointer;padding:.75rem 0;font-weight:600;color:#f1f5f9;font-size:.95rem;list-style:none}
-.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:"+";float:right;color:var(--gold);font-weight:700}
-.faq[open] summary::after{content:"–"}.faq[open]{border-color:var(--line)}
-.faq p{color:#cbd5e1;font-size:.9rem;line-height:1.8;padding-bottom:.9rem}
-.guide-strip{margin-top:1.2rem;font-size:.82rem;color:#94a3b8}.guide-strip a{color:#7dd3fc;text-decoration:underline}
+.author-row{display:flex;gap:.9rem;align-items:center;padding-bottom:1rem;border-bottom:1px solid var(--bd);margin-bottom:1rem}
+.avatar{flex:0 0 2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;font-weight:700;
+  color:#141413;background:var(--gold)}
+.author-name{font-weight:600;color:var(--tx);font-size:.9rem}
+.author-meta{font-size:.75rem;color:var(--mu);margin-top:.15rem;line-height:1.6}
+.src-title{font-size:1rem;font-weight:700;color:var(--tx);margin-bottom:.4rem}
+.src-list ul{list-style:disc;margin-left:1.2rem;font-size:.88rem;line-height:1.9;color:var(--mu)}
+.src-note{font-size:.72rem;color:var(--mu);margin-top:.6rem}
+
+/* ---- Motion -------------------------------------------------------------- */
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+main>*{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+
+/* chart tabs on the home page: DayBook pill buttons */
+#tabMmkChart,#tabOandaChart{border-radius:9999px !important;padding:.4rem 1rem !important;font-size:.75rem}
+#chartTabBar{border-radius:9999px !important;padding:4px !important;background:var(--sf-elevated) !important;border:1px solid var(--bd) !important;flex:0 0 auto;max-width:100%}
+#tabMmkChart.text-slate-300,#tabOandaChart.text-slate-300{background:transparent;border:0}
+#oandaTvContainer{border-color:var(--bd) !important;border-radius:var(--radius-sub) !important}
+
+/* header language pill: always readable (ink on the DayBook CTA fill) */
+html body header button[class],html body header button[class] *{color:var(--ac-ink) !important}
+html body .text-violet-300{color:var(--mu) !important}
+html body .bg-violet-500\/15{background-color:color-mix(in srgb,var(--tx) 7%,transparent) !important}

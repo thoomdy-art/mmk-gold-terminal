@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#090d16" />
+  <meta name="theme-color" content="#E5E1D8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)" />
   <title id="pageTitle">Myanmar Gold Price Today: Kyat, Pae & Yway Calculator and USDT P2P Rates | မြန်မာ့ ရွှေဈေး</title>
   <meta name="description" content="Live gold price per kyat-thar in Myanmar (old 1.873 and new 1.9047 standards), kyat-pae-yway calculator, USDT/MMK P2P rates from OKX and Bybit, in English and Burmese." />
   <link rel="canonical" href="https://wemanage.space/" />
@@ -26,9 +27,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
   <link rel="stylesheet" href="tailwind.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
+<style>
     :root {
       --bg-app: #090d16;
       --bg-surface: #111827;
@@ -123,8 +122,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     .guide-strip a { color: #38bdf8; text-decoration: underline; }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298" crossorigin="anonymous"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="premium.css">
+<link rel="stylesheet" href="premium.css">
 </head>
 <body class="min-h-screen p-3 sm:p-4 md:p-6">
 
@@ -314,7 +312,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       <div id="secChart" class="lg:col-span-7 card p-4 sm:p-5 flex flex-col justify-between">
         <div>
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <div class="flex items-center gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-slate-800 overflow-x-auto">
+            <div id="chartTabBar" class="flex items-center gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-slate-800 overflow-x-auto">
               <button id="tabMmkChart" onclick="switchChartTab('mmk')"
                 class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition flex-shrink-0">
                 Daily Gold Chart
@@ -852,73 +850,161 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       tbody.innerHTML = html;
     }
 
+    // TradingView embed follows the same light/dark choice as the rest of the page
+    function dbIsDark() {
+      const t = document.documentElement.getAttribute('data-theme');
+      return t ? t === 'dark' : !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    function syncTvTheme() {
+      const f = document.querySelector('#oandaTvContainer iframe');
+      if (!f) return;
+      const cur = f.getAttribute('src') || '';
+      const next = cur.replace(/theme=(dark|light)/, 'theme=' + (dbIsDark() ? 'dark' : 'light'))
+                      .replace(/toolbarbg=[0-9a-fA-F]+/, 'toolbarbg=' + (dbIsDark() ? '181816' : 'f7f5f0'));
+      if (next !== cur) f.setAttribute('src', next);
+    }
+
     function initMmkGoldChart() {
       const ctx = document.getElementById('mmkGoldChart').getContext('2d');
-      const goldGrad = ctx.createLinearGradient(0, 0, 0, 280);
-      goldGrad.addColorStop(0, 'rgba(245, 158, 11, 0.28)');
-      goldGrad.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
+      // --- DayBook-style chart: ink curve, soft gold area, dashed grid, gold value badge ---
+      const dbVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+      const fmtAxis = (val) => {
+        const curr = document.getElementById('chartCurrencySelect').value;
+        return curr === 'MMK' ? (val / 1000000).toFixed(1) + 'M Ks' : '$' + formatNumber(val, 0);
+      };
+      const fmtBadge = (val) => {
+        const curr = document.getElementById('chartCurrencySelect').value;
+        return curr === 'MMK' ? (val / 1000000).toFixed(2) + 'M Ks' : '$' + formatNumber(val, 2);
+      };
 
-      if (state.dailyGoldUsdCandles.length === 0) {
-        const today = new Date();
-        for (let i = 13; i >= 0; i--) {
-          const d = new Date(today);
-          d.setDate(today.getDate() - i);
-          const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          const drift = Math.sin(i * 0.6) * 28 + (13 - i) * 2.5;
-          state.dailyGoldUsdCandles.push({ date: label, close: +(state.oandaUsd - 35 + drift).toFixed(2) });
+      // Hollow end-point marker + gold pill with the latest value (same as DayBook's curve chart)
+      const endBadgePlugin = {
+        id: 'dbEndBadge',
+        afterDatasetsDraw(chart) {
+          const meta = chart.getDatasetMeta(0);
+          const pts = meta && meta.data;
+          if (!pts || !pts.length || chart.data.datasets[0].data.length === 0) return;
+          const last = pts[pts.length - 1];
+          const val = chart.data.datasets[0].data[pts.length - 1];
+          if (!last || val == null) return;
+          const c = chart.ctx, area = chart.chartArea;
+          c.save();
+          c.beginPath(); c.arc(last.x, last.y, 6, 0, Math.PI * 2);
+          c.fillStyle = dbVar('--sf-elevated'); c.fill();
+          c.lineWidth = 3; c.strokeStyle = dbVar('--stroke-curve'); c.stroke();
+          const text = fmtBadge(val);
+          c.font = '700 11px ' + dbVar('--font-ui');
+          const w = c.measureText(text).width + 18, h = 22;
+          const x = Math.min(Math.max(last.x - w / 2, area.left), area.right - w);
+          const y = Math.max(last.y - h - 12, area.top - 4);
+          c.beginPath();
+          if (c.roundRect) c.roundRect(x, y, w, h, 11); else c.rect(x, y, w, h);
+          c.fillStyle = '#F5C451'; c.fill();
+          c.fillStyle = '#141413'; c.textAlign = 'center'; c.textBaseline = 'middle';
+          c.fillText(text, x + w / 2, y + h / 2 + 0.5);
+          c.restore();
         }
-      }
+      };
 
       mmkChartInstance = new Chart(ctx, {
         type: 'line',
+        plugins: [endBadgePlugin],
         data: {
           labels: [],
           datasets: [
             {
               label: 'Old Standard (1.873)',
               data: [],
-              borderColor: '#f59e0b',
-              backgroundColor: goldGrad,
-              borderWidth: 2.5,
-              pointRadius: 3,
-              pointBackgroundColor: '#f59e0b',
+              borderColor: () => dbVar('--stroke-curve'),
+              backgroundColor: (c) => {
+                const a = c.chart.chartArea;
+                if (!a) return 'rgba(245,196,81,0.12)';
+                const g = c.chart.ctx.createLinearGradient(0, a.top, 0, a.bottom);
+                g.addColorStop(0, 'rgba(245,196,81,0.22)');
+                g.addColorStop(1, 'rgba(245,196,81,0)');
+                return g;
+              },
+              borderWidth: 2.75,
+              borderCapStyle: 'round',
+              borderJoinStyle: 'round',
+              pointRadius: 0,
+              pointHoverRadius: 6,
+              pointHoverBorderWidth: 3,
+              pointHoverBackgroundColor: () => dbVar('--sf-elevated'),
+              pointHoverBorderColor: () => dbVar('--stroke-curve'),
               fill: true,
-              tension: 0.35
+              tension: 0.4
             },
             {
               label: 'New Standard (1.9047)',
               data: [],
-              borderColor: '#38bdf8',
-              borderDash: [5, 5],
+              borderColor: () => dbVar('--gold-text'),
+              borderDash: [4, 4],
               borderWidth: 2,
-              pointRadius: 2,
+              borderCapStyle: 'round',
+              pointRadius: 0,
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: () => dbVar('--sf-elevated'),
+              pointHoverBorderColor: () => dbVar('--gold-text'),
+              pointHoverBorderWidth: 2.5,
               fill: false,
-              tension: 0.35
+              tension: 0.4
             }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          layout: { padding: { top: 26, right: 6 } },
           plugins: {
-            legend: { labels: { color: '#cbd5e1', font: { size: 11 } } }
+            legend: {
+              position: 'bottom',
+              labels: {
+                usePointStyle: true, pointStyle: 'circle', boxWidth: 7, boxHeight: 7, padding: 16,
+                color: dbVar('--mu'), font: { size: 11, weight: '600' }
+              }
+            },
+            tooltip: {
+              backgroundColor: () => dbVar('--tx'),
+              titleColor: () => dbVar('--bg-shell'),
+              bodyColor: () => dbVar('--bg-shell'),
+              cornerRadius: 12, padding: 10, displayColors: false,
+              titleFont: { size: 11, weight: '600' }, bodyFont: { size: 12, weight: '700' },
+              callbacks: {
+                label: (item) => item.dataset.label.split(' ')[0] + ': ' + fmtBadge(item.parsed.y)
+              }
+            }
           },
           scales: {
-            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(148,163,184,0.06)' } },
+            x: {
+              ticks: { color: () => dbVar('--mu'), font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 7 },
+              grid: { display: false },
+              border: { display: false }
+            },
             y: {
-              ticks: {
-                color: '#94a3b8',
-                font: { size: 10 },
-                callback: (val) => {
-                  const curr = document.getElementById('chartCurrencySelect').value;
-                  return curr === 'MMK' ? (val / 1000000).toFixed(1) + 'M Ks' : '$' + formatNumber(val, 0);
-                }
-              },
-              grid: { color: 'rgba(148,163,184,0.08)' }
+              ticks: { color: () => dbVar('--mu'), font: { size: 10 }, callback: fmtAxis },
+              grid: { color: () => dbVar('--bd'), borderDash: [4, 4] },
+              border: { display: false }
             }
           }
         }
       });
+
+      // Follow light/dark switches (system setting or data-theme) without a reload
+      const dbRefreshTheme = () => {
+        if (mmkChartInstance) {
+          mmkChartInstance.options.plugins.legend.labels.color = dbVar('--mu');
+          mmkChartInstance.update('none');
+        }
+        syncTvTheme();
+      };
+      if (window.matchMedia) {
+        const mq = window.matchMedia('(prefers-color-scheme: dark)');
+        (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(dbRefreshTheme);
+      }
+      new MutationObserver(dbRefreshTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      syncTvTheme();
 
       updateMmkGoldChart();
     }
