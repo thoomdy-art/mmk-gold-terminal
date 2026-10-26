@@ -251,22 +251,26 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 @media (max-width: 639px) {
   body { padding: .5rem !important; }
   body > header.sticky {
-    top: .25rem !important; margin-bottom: .65rem !important;
-    padding: .55rem .7rem !important; gap: .45rem !important;
-    border-radius: 1rem !important;
+    position: sticky !important; top: .2rem !important; margin-bottom: .55rem !important;
+    padding: .5rem .6rem !important; gap: 0 !important; min-height: 0 !important;
+    border-radius: .9rem !important; flex-direction: row !important; align-items: center !important;
   }
-  body > header .logo-scale-group { width: 2.35rem !important; height: 2.35rem !important; border-radius: .75rem !important; }
-  body > header .logo-scale-group svg { width: 1.55rem !important; height: 1.55rem !important; }
-  body > header > div:first-child { gap: .55rem !important; min-width: 0; }
-  body > header #mainTitle { font-size: 1rem !important; line-height: 1.2 !important; }
-  body > header #liveDateTime { font-size: 9px !important; line-height: 1.2 !important; }
-  body > header > div:nth-child(2) { width: 100%; justify-content: flex-end !important; gap: .4rem !important; }
+  body > header .logo-scale-group { width: 2rem !important; height: 2rem !important; border-radius: .65rem !important; }
+  body > header .logo-scale-group svg { width: 1.3rem !important; height: 1.3rem !important; }
+  body > header > div:first-child { gap: .45rem !important; min-width: 0; flex: 1 1 auto; padding-right: 5.4rem; }
+  body > header #mainTitle { font-size: .88rem !important; line-height: 1.1 !important; white-space: nowrap; }
+  body > header #statusDot { width: .4rem !important; height: .4rem !important; }
+  body > header #liveDateTime { font-size: 8px !important; line-height: 1.15 !important; }
+  body > header > div:nth-child(2) { position: absolute !important; right: .55rem !important; top: 50% !important; transform: translateY(-50%) !important; width: auto !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; gap: .3rem !important; }
+  body > header > div:nth-child(2) nav { display: none !important; }
   body > header button[onclick="toggleLanguage()"] {
-    padding: .38rem .55rem !important; border-radius: .65rem !important;
-    font-size: 10px !important; gap: .25rem !important; box-shadow: none !important;
+    padding: .3rem .38rem !important; border-radius: .55rem !important;
+    font-size: 0 !important; line-height: 1 !important; gap: 0 !important; box-shadow: none !important;
+    width: 1.8rem !important; height: 1.8rem !important; justify-content: center !important;
   }
-  body > header button.theme-toggle[class] { width: 1.9rem !important; height: 1.9rem !important; }
-  body > header button.theme-toggle[class] svg { width: 1rem !important; height: 1rem !important; }
+  body > header button[onclick="toggleLanguage()"] #langBtnText { display: none !important; }
+  body > header button.theme-toggle[class] { width: 1.8rem !important; height: 1.8rem !important; }
+  body > header button.theme-toggle[class] svg { width: .95rem !important; height: .95rem !important; }
   #introText { font-size: .78rem !important; line-height: 1.35 !important; }
 }
 /* The chart sits immediately after the gold-price table, before the converters. */
