@@ -286,3 +286,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 .theme-toggle svg{display:block}
 :root[data-theme="dark"] .theme-toggle .ico-moon{display:none}
 :root:not([data-theme="dark"]) .theme-toggle .ico-sun{display:none}
+
+.chart-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:1rem;
+  color:var(--mu);font-size:.85rem;font-weight:600;pointer-events:none}
+.chart-empty.hidden{display:none}

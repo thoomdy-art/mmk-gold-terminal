@@ -27,6 +27,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
   <link rel="stylesheet" href="tailwind.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>window.Chart || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"><\/script>');</script>
 <style>
     :root {
       --bg-app: #090d16;
@@ -355,6 +356,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 
           <div id="mmkChartContainer" class="chart-box w-full relative">
             <canvas id="mmkGoldChart"></canvas>
+            <div id="chartEmpty" class="chart-empty hidden">Loading daily gold prices…</div>
           </div>
 
           <div id="oandaTvContainer" class="chart-box w-full hidden rounded-xl overflow-hidden border border-slate-800">
@@ -886,7 +888,23 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     function initMmkGoldChart() {
       const ctx = document.getElementById('mmkGoldChart').getContext('2d');
       // --- DayBook-style chart: ink curve, soft gold area, dashed grid, gold value badge ---
-      const dbVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+      // Reads a theme colour from CSS; falls back to built-in values so the chart still draws
+      // even if premium.css is cached / outdated (an empty colour would make Chart.js throw).
+      const DB_FALLBACK = {
+        dark:  { '--gold-line-old': '#F5C451', '--gold-line-new': '#FFE08A', '--gold-fill-top': 'rgba(245,196,81,0.30)',
+                 '--sf-elevated': '#292925', '--mu': '#949087', '--bd': '#2E2D29', '--tx': '#F5F3EE', '--bg-shell': '#181816',
+                 '--font-ui': 'system-ui, sans-serif' },
+        light: { '--gold-line-old': '#B9820A', '--gold-line-new': '#E0B13A', '--gold-fill-top': 'rgba(201,145,10,0.28)',
+                 '--sf-elevated': '#FFFFFF', '--mu': '#6E6A63', '--bd': '#E2DDD3', '--tx': '#111111', '--bg-shell': '#F7F5F0',
+                 '--font-ui': 'system-ui, sans-serif' }
+      };
+      const dbVar = (n) => {
+        let v = '';
+        try { v = getComputedStyle(document.documentElement).getPropertyValue(n).trim(); } catch (e) {}
+        if (v) return v;
+        const t = DB_FALLBACK[dbIsDark() ? 'dark' : 'light'];
+        return t[n] || '#F5C451';
+      };
       const fmtAxis = (val) => {
         const curr = document.getElementById('chartCurrencySelect').value;
         return curr === 'MMK' ? (val / 1000000).toFixed(1) + 'M Ks' : '$' + formatNumber(val, 0);
@@ -1037,7 +1055,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     }
 
     function updateMmkGoldChart() {
-      if (!mmkChartInstance) return;
       const tier = document.getElementById('chartRateTier').value;
       const currency = document.getElementById('chartCurrencySelect').value;
       const mmkRate = tier === 'bank' ? state.bankBuy : state.walletBuy;
@@ -1057,10 +1074,22 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
         newStdSeries = state.dailyGoldUsdCandles.map(c => +(c.close / 1.9047).toFixed(2));
       }
 
-      mmkChartInstance.data.labels = labels;
-      mmkChartInstance.data.datasets[0].data = oldStdSeries;
-      mmkChartInstance.data.datasets[1].data = newStdSeries;
-      mmkChartInstance.update();
+      if (mmkChartInstance) {
+        mmkChartInstance.data.labels = labels;
+        mmkChartInstance.data.datasets[0].data = oldStdSeries;
+        mmkChartInstance.data.datasets[1].data = newStdSeries;
+        mmkChartInstance.update();
+      }
+
+      const emptyEl = document.getElementById('chartEmpty');
+      if (emptyEl) {
+        const noLib = !mmkChartInstance;                    // Chart.js failed to load
+        const noData = state.dailyGoldUsdCandles.length === 0;
+        emptyEl.classList.toggle('hidden', !noLib && !noData);
+        emptyEl.textContent = noLib
+          ? (currentLang === 'my' ? 'ဂရပ်ကို ဖွင့်၍မရပါ။ စာမျက်နှာကို ပြန်လည်ဖွင့်ပါ။' : 'Chart could not load. Please refresh the page.')
+          : (currentLang === 'my' ? 'နေ့စဉ်ရွှေဈေး ဒေတာ ရယူနေသည်…' : 'Loading daily gold prices…');
+      }
 
       // Price chips above the chart: latest Old + New standard price for the chosen tier / currency
       const my = currentLang === 'my';
@@ -1215,15 +1244,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
           document.getElementById('paxgAsk').textContent = '$' + formatNumber(state.paxgAsk, 2);
         }
 
-        const klineRes = await fetch('https://api.binance.com/api/v3/klines?symbol=PAXGUSDT&interval=1d&limit=15');
-        if (klineRes.ok) {
-          const klines = await klineRes.json();
-          state.dailyGoldUsdCandles = klines.map(k => ({
-            date: new Date(k[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            close: parseFloat(k[4])
-          }));
-        }
-
         document.getElementById('lastSyncTime').textContent = 'Synced: ' + new Date().toLocaleTimeString();
         recalculateAll();
       } catch (err) {
@@ -1232,21 +1252,55 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       }
     }
 
+    // --- Daily candles for the chart: independent of the other fetches, tries 2 Binance hosts,
+    //     and remembers the last good data so the chart still draws if the network is blocked. ---
+    const CANDLE_URLS = [
+      'https://api.binance.com/api/v3/klines?symbol=PAXGUSDT&interval=1d&limit=15',
+      'https://data-api.binance.vision/api/v3/klines?symbol=PAXGUSDT&interval=1d&limit=15'
+    ];
+    function loadCachedCandles() {
+      try {
+        const c = JSON.parse(localStorage.getItem('goldCandles') || 'null');
+        if (Array.isArray(c) && c.length && !state.dailyGoldUsdCandles.length) state.dailyGoldUsdCandles = c;
+      } catch (e) {}
+    }
+    async function loadGoldCandles() {
+      for (const url of CANDLE_URLS) {
+        try {
+          const r = await fetch(url);
+          if (!r.ok) continue;
+          const k = await r.json();
+          if (!Array.isArray(k) || !k.length) continue;
+          state.dailyGoldUsdCandles = k.map(x => ({
+            date: new Date(x[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            close: parseFloat(x[4])
+          })).filter(c => Number.isFinite(c.close));
+          try { localStorage.setItem('goldCandles', JSON.stringify(state.dailyGoldUsdCandles)); } catch (e) {}
+          return true;
+        } catch (e) { /* try next host */ }
+      }
+      return false;
+    }
+
     // --- TIMERS ---
     window.addEventListener('DOMContentLoaded', () => {
       let saved = 'en';
       try { saved = localStorage.getItem('lang') || 'en'; } catch (e) {}
-      convertGoldWeight('oz');
-      initMmkGoldChart();
-      recalculateAll();
-      if (saved === 'my') toggleLanguage();
-      
-      refreshAllData();
-      refreshP2PData();
+      const safe = (fn) => { try { return fn(); } catch (e) { console.warn('Startup step failed:', e); } };
+      safe(() => convertGoldWeight('oz'));
+      safe(loadCachedCandles);
+      safe(initMmkGoldChart);          // if Chart.js could not load, the rest of the page still works
+      safe(recalculateAll);
+      if (saved === 'my') safe(toggleLanguage);
+
+      safe(() => loadGoldCandles().then(() => updateMmkGoldChart()).catch(() => {}));
+      safe(refreshAllData);
+      safe(refreshP2PData);
 
       updateDateTime();
       setInterval(updateDateTime, 1000);
       setInterval(refreshAllData, 60000);
+      setInterval(() => loadGoldCandles().then(() => updateMmkGoldChart()), 10 * 60 * 1000);
       setInterval(setP2PTags, 60000);
     });
   </script>
