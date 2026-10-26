@@ -247,35 +247,48 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 
 
 <style id="mobile-header-layout-fix">
-/* Compact mobile header without changing desktop navigation or price data. */
+/* Mobile header: readable controls, balanced typography, and a slightly larger brand. */
 @media (max-width: 639px) {
   body { padding: .5rem !important; }
   body > header.sticky {
     position: sticky !important; top: .2rem !important; margin-bottom: .55rem !important;
-    padding: .5rem .6rem !important; gap: 0 !important; min-height: 0 !important;
+    padding: .65rem .7rem !important; gap: 0 !important; min-height: 0 !important;
     border-radius: .9rem !important; flex-direction: row !important; align-items: center !important;
   }
-  body > header .logo-scale-group { width: 2rem !important; height: 2rem !important; border-radius: .65rem !important; }
-  body > header .logo-scale-group svg { width: 1.3rem !important; height: 1.3rem !important; }
-  body > header > div:first-child { gap: .45rem !important; min-width: 0; flex: 1 1 auto; padding-right: 5.4rem; }
-  body > header #mainTitle { font-size: .88rem !important; line-height: 1.1 !important; white-space: nowrap; }
+  body > header .logo-scale-group { width: 2.55rem !important; height: 2.55rem !important; border-radius: .75rem !important; }
+  body > header .logo-scale-group svg { width: 1.7rem !important; height: 1.7rem !important; }
+  body > header > div:first-child { gap: .6rem !important; min-width: 0; flex: 1 1 auto; padding-right: 7.2rem; }
+  body > header #mainTitle { font-size: 1rem !important; line-height: 1.18 !important; white-space: nowrap; letter-spacing: -.02em; }
   body > header #statusDot { width: .4rem !important; height: .4rem !important; }
-  body > header #liveDateTime { font-size: 8px !important; line-height: 1.15 !important; }
-  body > header > div:nth-child(2) { position: absolute !important; right: .55rem !important; top: 50% !important; transform: translateY(-50%) !important; width: auto !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; gap: .3rem !important; }
+  body > header #liveDateTime { font-size: 9px !important; line-height: 1.25 !important; }
+  body > header > div:nth-child(2) { position: absolute !important; right: .55rem !important; top: 50% !important; transform: translateY(-50%) !important; width: auto !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; gap: .35rem !important; }
   body > header > div:nth-child(2) nav { display: none !important; }
   body > header button[onclick="toggleLanguage()"] {
-    padding: .3rem .38rem !important; border-radius: .55rem !important;
-    font-size: 0 !important; line-height: 1 !important; gap: 0 !important; box-shadow: none !important;
-    width: 1.8rem !important; height: 1.8rem !important; justify-content: center !important;
+    padding: .42rem .55rem !important; border-radius: .65rem !important;
+    font-size: .68rem !important; line-height: 1.1 !important; gap: .25rem !important;
+    background: #f5c451 !important; color: #171717 !important; border: 1px solid #ffe08a !important;
+    box-shadow: 0 2px 8px rgba(245,196,81,.22) !important;
+    width: auto !important; min-width: 4.15rem !important; height: 2.15rem !important; justify-content: center !important;
   }
-  body > header button[onclick="toggleLanguage()"] #langBtnText { display: none !important; }
-  body > header button.theme-toggle[class] { width: 1.8rem !important; height: 1.8rem !important; }
-  body > header button.theme-toggle[class] svg { width: .95rem !important; height: .95rem !important; }
-  #introText { font-size: .78rem !important; line-height: 1.35 !important; }
+  body > header button[onclick="toggleLanguage()"] #langBtnText { display: inline !important; font-size: .68rem !important; color: #171717 !important; }
+  body > header button.theme-toggle[class] { width: 2.15rem !important; height: 2.15rem !important; }
+  body > header button.theme-toggle[class] svg { width: 1.05rem !important; height: 1.05rem !important; }
+  #introText { font-size: .9rem !important; line-height: 1.55 !important; }
 }
 /* The chart sits immediately after the gold-price table, before the converters. */
 #secChart { min-width: 0; }
 @media (max-width: 1023px) { #secChart { padding: .8rem !important; } }
+
+/* Consistent readable type scale across dashboard sections. */
+:root { --font-body: 0.9375rem; }
+body { font-size: var(--font-body); line-height: 1.55; }
+.prose-lite p, #introText { font-size: .9375rem; line-height: 1.65; }
+main h2, main h3, section h2, section h3 { line-height: 1.3; }
+@media (max-width: 639px) {
+  body { font-size: .9375rem; }
+  main h2, section h2 { font-size: 1.05rem; }
+  main h3, section h3 { font-size: .98rem; }
+}
 </style>
 
 </head>
@@ -315,7 +328,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
         <a href="usdtusdc.html" class="text-xs font-semibold text-slate-300 hover:text-amber-300 transition">USDT vs USDC</a>
       </nav>
       <button onclick="toggleLanguage()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs font-extrabold transition flex items-center gap-1.5 shadow-md whitespace-nowrap flex-shrink-0">
-        🌐 <span id="langBtnText">English / မြန်မာ</span>
+        <span aria-hidden="true">🇲🇲</span><span id="langBtnText">မြန်မာ / EN</span>
       </button>
     </div>
   </header>
@@ -917,7 +930,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       document.getElementById('legendNewText').textContent = currentLang === 'my' ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)';
       document.getElementById('legendPaxgText').textContent = currentLang === 'my' ? 'PAXG ဒစ်ဂျစ်တယ်ရွှေ' : 'PAXG Digital Gold';
       
-      document.getElementById('langBtnText').textContent = currentLang === 'my' ? 'မြန်မာ / English' : 'English / မြန်မာ';
+      document.getElementById('langBtnText').textContent = currentLang === 'my' ? '🇬🇧 EN' : '🇲🇲 မြန်မာ';
       document.getElementById('goldTableTitle').textContent = currentLang === 'my' ? 'မြန်မာရွှေ ၁ ကျပ်သား' : 'Myanmar Gold per 1 Kyat-thar (၁ ကျပ်သား)';
       document.getElementById('converterTitle').textContent = currentLang === 'my' ? 'အောင်စ မှ ကျပ် - ပဲ - ရွှေး တွက်ရန်' : '⚖️ Oz & Kyat - Pae - Yway Converter';
       document.getElementById('calcKpyTitle').textContent = currentLang === 'my' ? 'ကျပ် - ပဲ - ရွှေး တန်ဖိုး တွက်ချက်ရန်' : 'Kyat - Pae - Yway Calculator';
