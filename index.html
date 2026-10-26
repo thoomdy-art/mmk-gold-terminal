@@ -2,7 +2,8 @@
 <html lang="en" data-lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#090d16" />
   <title id="pageTitle">Myanmar Gold Price Today: Kyat, Pae & Yway Calculator and USDT P2P Rates | မြန်မာ့ ရွှေဈေး</title>
   <meta name="description" content="Live gold price per kyat-thar in Myanmar (old 1.873 and new 1.9047 standards), kyat-pae-yway calculator, USDT/MMK P2P rates from OKX and Bybit, in English and Burmese." />
   <link rel="canonical" href="https://wemanage.space/" />
@@ -11,77 +12,180 @@
   <meta property="og:title" content="Myanmar Gold Price Today | မြန်မာ့ ရွှေဈေး" />
   <meta property="og:description" content="Gold price per kyat-thar, calculators and USDT/MMK P2P rates in English and Burmese." />
   <meta property="og:url" content="https://wemanage.space/" />
+
+  <!-- Logo #2 Favicon (Kyat-Pae-Yway Precision Scale) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' fill='none'%3E%3Crect width='48' height='48' rx='12' fill='%23090d16' stroke='%23f59e0b' stroke-width='2'/%3E%3Cpath d='M24 10V38M16 38H32' stroke='%23f59e0b' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M10 16H38' stroke='%23fcd34d' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M10 16L6 26H14L10 16Z' fill='%23f59e0b' stroke='%23fde68a' stroke-width='1.2'/%3E%3Cpath d='M38 16L34 26H42L38 16Z' fill='%2310b981' stroke='%236ee7b7' stroke-width='1.2'/%3E%3Ccircle cx='24' cy='16' r='2.5' fill='%23fef3c7'/%3E%3C/svg%3E" />
+
   <script>
 (function(){var l='en';try{l=localStorage.getItem('lang')||'en';}catch(e){}
 if(l!=='my')l='en';var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l==='my'?'my':'en');
 window.setLang=function(x){try{localStorage.setItem('lang',x);}catch(e){}d.setAttribute('data-lang',x);d.setAttribute('lang',x==='my'?'my':'en');};
 window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='en'?'my':'en');};})();
-</script>
+  </script>
+
   <link rel="stylesheet" href="tailwind.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    body { font-family: 'Inter', 'Padauk', sans-serif; background-color: #0b0f17; color: #e2e8f0; }
-    .mono { font-family: 'JetBrains Mono', monospace; }
-    .card { background: #131b2e; border: 1px solid #1e293b; border-radius: 0.75rem; }
-    .gold-gradient { background: linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(19,27,46,1) 100%); border-color: rgba(245,158,11,0.35); }
+    :root {
+      --bg-app: #090d16;
+      --bg-surface: #111827;
+      --bg-elevated: #1a2336;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --accent-gold: #f59e0b;
+      --accent-emerald: #10b981;
+      --accent-sky: #38bdf8;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', 'Padauk', sans-serif;
+      background-color: var(--bg-app);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.09) 0px, transparent 45%),
+        radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.07) 0px, transparent 45%);
+      color: #f1f5f9;
+      padding-bottom: 5rem;
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: "tnum" on, "lnum" on; }
+
+    /* App-Style Glassmorphic Surface Cards */
+    .card {
+      background: rgba(17, 24, 39, 0.86);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1.15rem;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover { border-color: rgba(255, 255, 255, 0.14); }
+
+    .gold-gradient {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(17, 24, 39, 0.94) 65%, rgba(16, 185, 129, 0.08) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.38);
+      box-shadow: 0 16px 40px -12px rgba(245, 158, 11, 0.16);
+    }
+
+    .app-input {
+      background: #0b101b;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    .app-input:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+      outline: none;
+    }
+
     html[data-lang="en"] .my { display: none !important; }
     html[data-lang="my"] .en { display: none !important; }
-    .my { font-family: 'Padauk', 'Inter', sans-serif; line-height: 1.9; }
-    .prose-lite p { color:#cbd5e1; font-size:.9rem; line-height:1.75; }
+    .my { font-family: 'Padauk', 'Plus Jakarta Sans', sans-serif; line-height: 1.9; }
+    .prose-lite p { color: #94a3b8; font-size: 0.875rem; line-height: 1.7; }
+
+    /* Logo #2 Interactive Hover Physics (Kyat-Pae-Yway Scale) */
+    .svg-part { transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .logo-scale-group:hover .scale-beam { transform: rotate(-9deg); transform-origin: 24px 16px; }
+    .logo-scale-group:hover .scale-pan-l { transform: translateY(3px); }
+    .logo-scale-group:hover .scale-pan-r { transform: translateY(-3px); }
+
+    /* FAQ Accordion */
+    details.faq {
+      background: rgba(11, 16, 27, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.85rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.65rem;
+    }
+    details.faq summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #f8fafc;
+      font-size: 0.9rem;
+    }
+    details.faq p {
+      margin-top: 0.6rem;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      line-height: 1.65;
+    }
+    .guide-strip {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+    .guide-strip a { color: #38bdf8; text-decoration: underline; }
   </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298"
-     crossorigin="anonymous"></script>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="premium.css">
 </head>
 <body class="min-h-screen p-3 sm:p-4 md:p-6">
 
-  <!-- TOP HEADER -->
-  <header class="max-w-7xl mx-auto mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-    <div>
-      <div class="flex items-center gap-2.5">
-        <span id="statusDot" class="h-3 w-3 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
-        <h1 id="mainTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-white leading-snug">
-          Myanmar Gold Price
-        </h1>
+  <!-- STICKY APP HEADER WITH LOGO #2 (KYAT-PAE-YWAY PRECISION SCALE) -->
+  <header class="sticky top-2 z-40 max-w-7xl mx-auto mb-6 card px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-slate-800/90">
+    <div class="flex items-center gap-3.5">
+      <a href="index.html" aria-label="Myanmar Gold Price Home" class="logo-scale-group w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 via-slate-900 to-emerald-500/15 border border-amber-500/40 hover:border-amber-400 flex items-center justify-center shadow-lg transition flex-shrink-0">
+        <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none">
+          <path d="M24 10V38M16 38H32" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+          <g class="svg-part scale-beam">
+            <path d="M10 16H38" stroke="#fcd34d" stroke-width="2.5" stroke-linecap="round"/>
+            <path class="svg-part scale-pan-l" d="M10 16L6 26H14L10 16Z" fill="#f59e0b" stroke="#fde68a" stroke-width="1.2"/>
+            <path class="svg-part scale-pan-r" d="M38 16L34 26H42L38 16Z" fill="#10b981" stroke="#6ee7b7" stroke-width="1.2"/>
+          </g>
+          <circle cx="24" cy="16" r="2.5" fill="#fef3c7"/>
+        </svg>
+      </a>
+      <div>
+        <div class="flex items-center gap-2.5">
+          <span id="statusDot" class="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
+          <h1 id="mainTitle" class="text-lg sm:text-2xl font-extrabold tracking-tight text-white leading-snug">
+            Myanmar Gold Price
+          </h1>
+        </div>
+        <div id="liveDateTime" class="text-[11px] text-amber-300/90 mono mt-0.5 font-semibold"></div>
       </div>
-      <div id="liveDateTime" class="text-xs text-amber-300/90 mono mt-1 font-semibold"></div>
     </div>
 
-    <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-      <div class="flex flex-wrap items-center justify-end gap-3 sm:gap-4">
-        <a href="guides.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">Guides</a>
-        <a href="about.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">About</a>
-        <a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">Contact</a>
-        <a href="paxg.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">PAXG Guide</a>
-        <a href="usdtusdc.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline">USDT vs USDC</a>
-      </div>
-      <button onclick="toggleLanguage()" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow whitespace-nowrap flex-shrink-0">
+    <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+      <nav class="hidden md:flex flex-wrap items-center justify-end gap-4">
+        <a href="guides.html" class="text-xs font-semibold text-slate-300 hover:text-amber-300 transition">Guides</a>
+        <a href="about.html" class="text-xs font-semibold text-slate-300 hover:text-amber-300 transition">About</a>
+        <a href="contact.html" class="text-xs font-semibold text-slate-300 hover:text-amber-300 transition">Contact</a>
+        <a href="paxg.html" class="text-xs font-semibold text-slate-300 hover:text-amber-300 transition">PAXG Guide</a>
+        <a href="usdtusdc.html" class="text-xs font-semibold text-slate-300 hover:text-amber-300 transition">USDT vs USDC</a>
+      </nav>
+      <button onclick="toggleLanguage()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs font-extrabold transition flex items-center gap-1.5 shadow-md whitespace-nowrap flex-shrink-0">
         🌐 <span id="langBtnText">English / မြန်မာ</span>
       </button>
     </div>
   </header>
 
-  <section class="max-w-7xl mx-auto mb-4 prose-lite">
+  <section class="max-w-7xl mx-auto mb-4 px-1 prose-lite">
     <p id="introText">Live reference price of gold per kyat-thar (ကျပ်သား) in Myanmar, calculated from the international spot price (OANDA XAU/USD) and the USDT/MMK peer-to-peer rate. Use the converter and calculator to work with ounces, grams, kyat, pae and yway, and read our <a href="guides.html" class="text-sky-400 underline">guides</a> to see how the numbers are built.</p>
   </section>
 
   <main class="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
     <!-- ROW 1: OANDA SPOT GOLD -->
-    <section class="grid grid-cols-1 gap-4">
+    <section id="secSpot" class="grid grid-cols-1 gap-4">
       <div class="card gold-gradient p-4 sm:p-5">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <span class="text-xs uppercase tracking-wider font-semibold text-amber-300" id="labelPriority1">OANDA Spot Gold</span>
-          <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 mono">OANDA:XAUUSD</span>
+          <span class="text-xs uppercase tracking-wider font-bold text-amber-300" id="labelPriority1">OANDA Spot Gold</span>
+          <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/30 mono">OANDA:XAUUSD</span>
         </div>
         <div class="mt-3 flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
           <div>
             <div class="text-xs text-slate-400" id="labelOandaRef">OANDA Live Reference Price</div>
-            <div class="text-2xl sm:text-3xl font-bold text-amber-300 mono mt-1" id="displayOandaPrice">$4,091.81</div>
+            <div class="text-3xl sm:text-4xl font-extrabold text-amber-300 mono mt-1 tracking-tight" id="displayOandaPrice">$4,091.81</div>
           </div>
-          <div class="flex sm:flex-col justify-between sm:text-right space-y-0 sm:space-y-1 text-xs mono border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-800">
+          <div class="flex sm:flex-col justify-between sm:text-right space-y-0 sm:space-y-1 text-xs mono border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-800/80">
             <div><span class="text-slate-400" id="labelHigh">Day high:</span> <span id="oandaHigh" class="text-emerald-400 font-bold">—</span></div>
             <div><span class="text-slate-400" id="labelLow">Day low:</span> <span id="oandaLow" class="text-rose-400 font-bold">—</span></div>
           </div>
@@ -94,8 +198,8 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
       
       <!-- LEFT COL: GOLD TABLE & CONVERTERS -->
-      <div class="lg:col-span-5 space-y-4 flex flex-col">
-        <div class="card p-4">
+      <div id="secCalc" class="lg:col-span-5 space-y-4 flex flex-col">
+        <div class="card p-4 sm:p-5">
           <div class="flex items-center justify-between mb-3">
             <h3 id="goldTableTitle" class="font-bold text-white text-base">Myanmar Gold per 1 Kyat-thar (၁ ကျပ်သား)</h3>
           </div>
@@ -139,28 +243,28 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
         </div>
 
         <!-- 1. OZ TO KYAT CONVERTER -->
-        <div class="card p-4 border border-amber-500/35">
-          <div class="flex items-center justify-between mb-2">
+        <div class="card p-4 sm:p-5 border border-amber-500/35">
+          <div class="flex items-center justify-between mb-2.5">
             <h3 id="converterTitle" class="font-bold text-amber-300 text-sm">⚖️ Oz & Kyat - Pae - Yway Converter</h3>
-            <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded" id="labelEditable">Editable</span>
+            <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-semibold" id="labelEditable">Editable</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
               <label class="text-slate-400 block mb-1">Troy Ounces (Oz)</label>
               <input id="convOz" type="text" value="1" oninput="convertGoldWeight('oz')"
-                class="w-full bg-slate-900 border border-amber-500/40 rounded px-2.5 py-2 text-white mono font-bold focus:outline-none" />
+                class="app-input w-full px-3 py-2 text-white mono font-bold" />
             </div>
             <div>
               <label class="text-slate-400 block mb-1">Grams (g)</label>
               <input id="convGram" type="text" value="31.1035" oninput="convertGoldWeight('gram')"
-                class="w-full bg-slate-900 border border-amber-500/40 rounded px-2.5 py-2 text-white mono font-bold focus:outline-none" />
+                class="app-input w-full px-3 py-2 text-white mono font-bold" />
             </div>
-            <div class="p-2.5 rounded bg-amber-500/10 border border-amber-500/30">
+            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
               <div class="text-amber-300 font-semibold" id="labelOldStd">Old Std</div>
               <div id="convOldKyatText" class="mono text-sm font-bold text-white mt-1">1 Kyat 13 Pae 7.7 Yway</div>
               <div id="convOldKPY" class="text-[11px] text-slate-300 mt-0.5">1.8730 Kyat (Old)</div>
             </div>
-            <div class="p-2.5 rounded bg-sky-500/10 border border-sky-500/30">
+            <div class="p-3 rounded-xl bg-sky-500/10 border border-sky-500/30">
               <div class="text-sky-300 font-semibold" id="labelNewStd">New Std</div>
               <div id="convNewKyatText" class="mono text-sm font-bold text-white mt-1">1 Kyat 14 Pae 3.8 Yway</div>
               <div id="convNewKPY" class="text-[11px] text-slate-300 mt-0.5">1.9048 Kyat (New)</div>
@@ -169,89 +273,89 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
         </div>
 
         <!-- 2. KYAT - PAE - YWAY CALCULATOR -->
-        <div class="card p-4 border border-emerald-500/35">
-          <div class="flex items-center justify-between mb-2">
+        <div class="card p-4 sm:p-5 border border-emerald-500/35">
+          <div class="flex items-center justify-between mb-2.5">
             <h3 id="calcKpyTitle" class="font-bold text-emerald-300 text-sm">Kyat - Pae - Yway Calculator</h3>
-            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">Calculator</span>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-semibold">Calculator</span>
           </div>
           <div class="grid grid-cols-3 gap-2 text-xs mb-3">
             <div>
               <label class="text-slate-400 block mb-1">ကျပ် (Kyat)</label>
               <input id="calcKyat" type="text" value="1" oninput="calculateKpyToMmk()"
-                class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-white mono font-bold text-center focus:outline-none" />
+                class="app-input w-full px-2 py-2 text-white mono font-bold text-center" />
             </div>
             <div>
               <label class="text-slate-400 block mb-1">ပဲ (Pae)</label>
               <input id="calcPae" type="text" value="0" oninput="calculateKpyToMmk()"
-                class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-white mono font-bold text-center focus:outline-none" />
+                class="app-input w-full px-2 py-2 text-white mono font-bold text-center" />
             </div>
             <div>
               <label class="text-slate-400 block mb-1">ရွှေး (Yway)</label>
               <input id="calcYway" type="text" value="0" oninput="calculateKpyToMmk()"
-                class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-white mono font-bold text-center focus:outline-none" />
+                class="app-input w-full px-2 py-2 text-white mono font-bold text-center" />
             </div>
           </div>
           <div class="flex items-center justify-between mb-3 text-xs">
             <span class="text-slate-400" id="labelCalcBasis">Basis Rate:</span>
-            <select id="calcRateSource" onchange="calculateKpyToMmk()" class="bg-slate-900 border border-slate-700 text-emerald-400 font-semibold rounded px-2 py-1">
+            <select id="calcRateSource" onchange="calculateKpyToMmk()" class="app-input text-emerald-400 font-semibold px-2.5 py-1.5">
               <option value="bank">Bank (Max)</option>
               <option value="wallet">Wallet (Mid)</option>
             </select>
           </div>
-          <div class="p-3 rounded bg-emerald-500/10 border border-emerald-500/30 text-center">
+          <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center">
             <div class="text-slate-400 text-xs" id="labelTotalValue">Total Value (MMK):</div>
-            <div id="calcTotalMmkResult" class="mono text-lg font-bold text-emerald-400 mt-1">0 Ks</div>
+            <div id="calcTotalMmkResult" class="mono text-xl font-extrabold text-emerald-400 mt-1">0 Ks</div>
           </div>
         </div>
 
       </div>
 
       <!-- RIGHT 7 COLS: LINE CHARTS -->
-      <div class="lg:col-span-7 card p-4 flex flex-col justify-between">
+      <div id="secChart" class="lg:col-span-7 card p-4 sm:p-5 flex flex-col justify-between">
         <div>
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-            <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-slate-800 overflow-x-auto">
               <button id="tabMmkChart" onclick="switchChartTab('mmk')"
-                class="px-3 py-1.5 rounded text-xs font-semibold bg-amber-500 text-slate-950 flex-shrink-0">
+                class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition flex-shrink-0">
                 Daily Gold Chart
               </button>
               <button id="tabOandaChart" onclick="switchChartTab('oanda')"
-                class="px-3 py-1.5 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 flex-shrink-0">
+                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex-shrink-0">
                 📈 OANDA TradingView
               </button>
             </div>
             <div class="flex items-center gap-2 text-xs">
-              <select id="chartCurrencySelect" onchange="updateMmkGoldChart()" class="bg-slate-900 border border-amber-500/50 text-amber-300 font-semibold rounded px-2 py-1">
+              <select id="chartCurrencySelect" onchange="updateMmkGoldChart()" class="app-input text-amber-300 font-semibold px-2.5 py-1.5">
                 <option value="MMK">🇲🇲 Kyats (MMK)</option>
                 <option value="USD">🇺🇸 USD</option>
               </select>
-              <select id="chartRateTier" onchange="updateMmkGoldChart()" class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-slate-200">
+              <select id="chartRateTier" onchange="updateMmkGoldChart()" class="app-input px-2.5 py-1.5 text-slate-200">
                 <option value="wallet">Wallet</option>
                 <option value="bank">Bank</option>
               </select>
             </div>
           </div>
 
-          <div id="mmkChartContainer" class="h-64 sm:h-72 w-full relative">
+          <div id="mmkChartContainer" class="h-64 sm:h-80 w-full relative">
             <canvas id="mmkGoldChart"></canvas>
           </div>
 
-          <div id="oandaTvContainer" class="h-64 sm:h-72 w-full hidden rounded overflow-hidden border border-slate-800">
+          <div id="oandaTvContainer" class="h-64 sm:h-80 w-full hidden rounded-xl overflow-hidden border border-slate-800">
             <iframe
               src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_oanda&symbol=OANDA%3AXAUUSD&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FYangon"
               class="w-full h-full border-0" allowfullscreen></iframe>
           </div>
         </div>
 
-        <div class="mt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[11px] text-slate-400">
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[11px] text-slate-400">
           <span id="chartFooterNote">Daily Gold Price Line Chart in Myanmar Kyats.</span>
-          <span id="lastSyncTime" class="mono">Synced: Just now</span>
+          <span id="lastSyncTime" class="mono text-emerald-400">Synced: Just now</span>
         </div>
       </div>
     </section>
 
     <!-- ADSENSE MID-PAGE BANNER -->
-    <div class="max-w-7xl mx-auto my-4 text-center overflow-hidden border border-slate-800 p-2 rounded bg-slate-900">
+    <div class="max-w-7xl mx-auto my-4 text-center overflow-hidden border border-slate-800/80 p-2 rounded-xl bg-slate-900/60">
       <ins class="adsbygoogle"
            style="display:block"
            data-ad-client="ca-pub-7869394911229298"
@@ -264,18 +368,18 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     </div>
 
     <!-- ROW 3: CRYPTO GOLD (PAXG) & MEAN P2P USDT RATES -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <div class="card p-4 border-l-4 border-l-amber-500 bg-amber-500/5">
+    <section id="secP2P" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div class="card p-4 border-l-4 border-l-amber-500">
         <div class="flex items-center justify-between mb-3">
           <h3 id="cryptoGoldTitle" class="font-bold text-amber-300 text-sm">Crypto Gold (PAXG/USDT)</h3>
-          <button onclick="refreshAllData(); refreshP2PData();" class="px-2 py-0.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold transition text-xs">↻</button>
+          <button onclick="refreshAllData(); refreshP2PData();" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition text-xs">↻</button>
         </div>
         <div class="space-y-2 text-xs mono">
-          <div class="flex justify-between bg-slate-900/80 p-2 rounded">
+          <div class="flex justify-between bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
             <span class="text-slate-400" id="labelCryptoBuy">BUY:</span>
             <span id="paxgAsk" class="font-bold text-emerald-400">$4,103.40</span>
           </div>
-          <div class="flex justify-between bg-slate-900/80 p-2 rounded">
+          <div class="flex justify-between bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
             <span class="text-slate-400" id="labelCryptoSell">SELL:</span>
             <span id="paxgBid" class="font-bold text-rose-400">$4,103.39</span>
           </div>
@@ -285,16 +389,16 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       <div class="card p-4 border-l-4 border-l-emerald-500">
         <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-xs sm:text-sm font-semibold text-white truncate">KBZ Bank • CB • AYA • Yoma</h2>
+            <h2 class="text-xs sm:text-sm font-bold text-white truncate">KBZ Bank • CB • AYA • Yoma</h2>
           </div>
-          <span id="bankSourceTag" class="text-[10px] sm:text-[11px] bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded mono">Live Mean</span>
+          <span id="bankSourceTag" class="text-[10px] sm:text-[11px] bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded-full mono">Live Mean</span>
         </div>
         <div class="grid grid-cols-2 gap-3 mt-3">
-          <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
+          <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
             <div class="text-[11px] text-slate-400">P2P BUY USDT</div>
             <div id="displayBankBuy" class="mt-1 text-lg sm:text-xl font-bold text-emerald-400 mono">4,575 Ks</div>
           </div>
-          <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
+          <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
             <div class="text-[11px] text-slate-400">P2P SELL USDT</div>
             <div id="displayBankSell" class="mt-1 text-lg sm:text-xl font-bold text-rose-400 mono">4,535 Ks</div>
           </div>
@@ -304,16 +408,16 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       <div class="card p-4 border-l-4 border-l-sky-500 sm:col-span-2 md:col-span-1">
         <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-xs sm:text-sm font-semibold text-white truncate">KBZPay • WavePay • AYAPay</h2>
+            <h2 class="text-xs sm:text-sm font-bold text-white truncate">KBZPay • WavePay • AYAPay</h2>
           </div>
-          <span id="walletSourceTag" class="text-[10px] sm:text-[11px] bg-sky-500/15 text-sky-300 px-2 py-0.5 rounded mono">Live Mean</span>
+          <span id="walletSourceTag" class="text-[10px] sm:text-[11px] bg-sky-500/15 text-sky-300 px-2 py-0.5 rounded-full mono">Live Mean</span>
         </div>
         <div class="grid grid-cols-2 gap-3 mt-3">
-          <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
+          <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
             <div class="text-[11px] text-slate-400">P2P BUY USDT</div>
             <div id="displayWalletBuy" class="mt-1 text-lg sm:text-xl font-bold text-sky-400 mono">4,520 Ks</div>
           </div>
-          <div class="bg-slate-900/80 p-2.5 rounded border border-slate-800">
+          <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80">
             <div class="text-[11px] text-slate-400">P2P SELL USDT</div>
             <div id="displayWalletSell" class="mt-1 text-lg sm:text-xl font-bold text-rose-400 mono">4,485 Ks</div>
           </div>
@@ -329,14 +433,14 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
             <h2 class="text-sm font-bold text-white">OKX P2P · USDT/MMK</h2>
             <p class="text-[11px] text-slate-400 mt-0.5">Individual exchange quotes</p>
           </div>
-          <span id="okxSourceTag" class="text-[10px] px-2 py-1 rounded bg-violet-500/15 text-violet-300 mono">Waiting…</span>
+          <span id="okxSourceTag" class="text-[10px] px-2.5 py-1 rounded-full bg-violet-500/15 text-violet-300 mono">Waiting…</span>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+          <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
             <div class="text-[11px] text-slate-400">BUY USDT</div>
             <div id="displayOkxBuy" class="mt-1 text-lg sm:text-xl font-bold text-emerald-400 mono">—</div>
           </div>
-          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+          <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
             <div class="text-[11px] text-slate-400">SELL USDT</div>
             <div id="displayOkxSell" class="mt-1 text-lg sm:text-xl font-bold text-rose-400 mono">—</div>
           </div>
@@ -349,14 +453,14 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
             <h2 class="text-sm font-bold text-white">Bybit P2P · USDT/MMK</h2>
             <p class="text-[11px] text-slate-400 mt-0.5">Individual exchange quotes</p>
           </div>
-          <span id="bybitSourceTag" class="text-[10px] px-2 py-1 rounded bg-orange-500/15 text-orange-300 mono">Waiting…</span>
+          <span id="bybitSourceTag" class="text-[10px] px-2.5 py-1 rounded-full bg-orange-500/15 text-orange-300 mono">Waiting…</span>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+          <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
             <div class="text-[11px] text-slate-400">BUY USDT</div>
             <div id="displayBybitBuy" class="mt-1 text-lg sm:text-xl font-bold text-emerald-400 mono">—</div>
           </div>
-          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+          <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80">
             <div class="text-[11px] text-slate-400">SELL USDT</div>
             <div id="displayBybitSell" class="mt-1 text-lg sm:text-xl font-bold text-rose-400 mono">—</div>
           </div>
@@ -367,25 +471,25 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 
     <!-- ROW 4: GUIDES -->
     <section class="grid grid-cols-1 gap-6">
-      <div class="card p-4">
+      <div class="card p-4 sm:p-5">
         <div class="mb-3 flex items-center justify-between gap-2">
           <h3 class="font-bold text-white text-base"><span class="en">Guides: How Myanmar gold prices work</span><span class="my">လမ်းညွှန်များ - မြန်မာ့ရွှေဈေး ဘယ်လိုအလုပ်လုပ်သလဲ</span></h3>
           <a href="guides.html" class="text-xs text-sky-400 underline"><span class="en">All guides →</span><span class="my">အားလုံး →</span></a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <a href="kyat-pae-yway-guide.html" class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition block">
+          <a href="kyat-pae-yway-guide.html" class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-amber-500/50 transition block">
             <p class="text-sm font-semibold text-amber-300"><span class="en">Kyat, Pae and Yway: Myanmar Gold Weights Explained</span><span class="my">ကျပ်၊ ပဲ၊ ရွေး — မြန်မာ့ရွှေချိန်ခွင် ရှင်းလင်းချက်</span></p>
             <p class="text-xs text-slate-400 mt-1.5"><span class="en">The units, the old and new standards, and step-by-step conversions from ounces and grams.</span><span class="my">ရွှေချိန်ခွင်ယူနစ်များ၊ စနစ်ဟောင်း/စနစ်သစ်နှင့် အောင်စ၊ ဂရမ်မှ ပြောင်းလဲတွက်ချက်နည်း။</span></p>
           </a>
-          <a href="how-myanmar-gold-price-is-calculated.html" class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition block">
+          <a href="how-myanmar-gold-price-is-calculated.html" class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-amber-500/50 transition block">
             <p class="text-sm font-semibold text-amber-300"><span class="en">How the Myanmar Gold Price Is Calculated</span><span class="my">မြန်မာ့ရွှေဈေးကို ဘယ်လိုတွက်ချက်သလဲ</span></p>
             <p class="text-xs text-slate-400 mt-1.5"><span class="en">The formula behind the numbers: spot gold, the kyat exchange rate and the local weight standard.</span><span class="my">ဂဏန်းများနောက်ကွယ်က ဖော်မြူလာ - နိုင်ငံတကာရွှေဈေး၊ ကျပ်ငွေလဲနှုန်းနှင့် ဒေသတွင်းချိန်ခွင်စံနှုန်း။</span></p>
           </a>
-          <a href="p2p-usdt-mmk-rates-explained.html" class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition block">
+          <a href="p2p-usdt-mmk-rates-explained.html" class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-amber-500/50 transition block">
             <p class="text-sm font-semibold text-amber-300"><span class="en">USDT/MMK P2P Rates Explained</span><span class="my">USDT/MMK P2P နှုန်းများ ရှင်းလင်းချက်</span></p>
             <p class="text-xs text-slate-400 mt-1.5"><span class="en">Buy vs sell prices, why OKX and Bybit differ, how we calculate the quotes and how to trade safely.</span><span class="my">ဝယ်ဈေး၊ ရောင်းဈေး၊ OKX နှင့် Bybit ကွာခြားပုံ၊ တွက်ချက်ပုံနှင့် ဘေးကင်းစွာ ရောင်းဝယ်ပုံ။</span></p>
           </a>
-          <a href="gold-purity-pae-yay.html" class="p-3 rounded bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 transition block">
+          <a href="gold-purity-pae-yay.html" class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-amber-500/50 transition block">
             <p class="text-sm font-semibold text-amber-300"><span class="en">Gold Purity in Myanmar: Pae Yay vs Karat</span><span class="my">မြန်မာ့ရွှေရည် - ပဲရည်နှင့် ကရက် နှိုင်းယှဉ်ချက်</span></p>
             <p class="text-xs text-slate-400 mt-1.5"><span class="en">How 16, 15 and 14 pae yay map to karat, how purity changes the price and how to check before buying.</span><span class="my">၁၆၊ ၁၅၊ ၁၄ ပဲရည်များ ကရက်နှင့် ဘယ်လိုညီမျှသည်၊ ရွှေရည်က ဈေးကို ဘယ်လိုပြောင်းသည်၊ ဝယ်မီ ဘယ်လိုစစ်မလဲ။</span></p>
           </a>
@@ -394,8 +498,8 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     </section>
 
     <!-- ROW 5: FOREIGN EXCHANGE RATES -->
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-12 card p-4">
+    <section id="secFx" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-12 card p-4 sm:p-5">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div>
             <h3 id="fxSectionTitle" class="font-bold text-white text-base">Foreign Exchange Rates ↔ MMK</h3>
@@ -414,7 +518,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
               </tr>
             </thead>
             <tbody id="fxTableBody" class="divide-y divide-slate-800/70 mono">
-              
               <tr class="hover:bg-slate-800/40">
                 <td class="py-2.5 font-sans font-medium text-white">🇺🇸 US Dollar (1 USD)</td>
                 <td class="py-2.5 text-right text-slate-400">1.0000</td>
@@ -472,7 +575,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 
     <!-- ROW 6: METHODOLOGY -->
     <section class="grid grid-cols-1 gap-6 mb-4">
-      <div class="card p-5 sm:p-6 bg-slate-800/20 border border-slate-700/50">
+      <div class="card p-5 sm:p-6">
         <div class="en space-y-5 text-sm text-slate-300 leading-relaxed">
           <h3 class="font-bold text-white text-lg">About Myanmar Gold Standards &amp; Market Methodology</h3>
           <div><h4 class="font-semibold text-amber-300 mb-1">How are Myanmar gold prices calculated?</h4>
@@ -494,16 +597,44 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       </div>
     </section>
 
-  <section class="card p-6 sm:p-8" id="faq"><h2 class="text-xl sm:text-2xl font-bold text-amber-300 mb-4"><span class="en">Frequently asked questions</span><span class="my">မေးလေ့ရှိသော မေးခွန်းများ</span></h2><details class="faq"><summary><span class="en">How often does the price update?</span><span class="my">ဈေးနှုန်းကို ဘယ်လောက်ခဏခဏ update လုပ်သလဲ?</span></summary><p><span class="en">The dashboard refreshes its reference figures automatically while the page is open. P2P figures are collected by our server and cached for a short time to avoid overloading the exchanges, so they can lag the live market by a few minutes. If a source fails, the page marks the data as stale instead of presenting it as live.</span><span class="my">ဒက်ရှ်ဘုတ်ကို ဖွင့်ထားစဉ် ကိုးကားဂဏန်းများ အလိုအလျောက် refresh လုပ်ပါသည်။ P2P ဂဏန်းများကို ကျွန်ုပ်တို့ဆာဗာက စုဆောင်းပြီး exchange များကို မဝန်ပိစေရန် ခေတ္တသိမ်းထားသောကြောင့် တိုက်ရိုက်ဈေးကွက်ထက် မိနစ်အနည်းငယ် နောက်ကျနိုင်ပါသည်။ ရင်းမြစ်တစ်ခု ပျက်ကွက်လျှင် တိုက်ရိုက်ဟုမပြဘဲ ဒေတာဟောင်းဖြစ်ကြောင်း ဖော်ပြပါသည်။</span></p></details><details class="faq"><summary><span class="en">Is this the price I will pay at a gold shop?</span><span class="my">ရွှေဆိုင်မှာ ဝယ်မယ့်ဈေးက ဒီဈေးပဲလား?</span></summary><p><span class="en">No. It is a reference calculated from the international gold price and the exchange rate. Shops add their own margin, labour and purity adjustments, so always compare at least two shops and confirm the weight standard and purity before paying.</span><span class="my">မဟုတ်ပါ။ ၎င်းသည် နိုင်ငံတကာရွှေဈေးနှင့် ငွေလဲနှုန်းမှ တွက်ထားသော ကိုးကားဈေးဖြစ်ပါသည်။ ဆိုင်များက ကိုယ်ပိုင်အမြတ်၊ လက်ခ နှင့် ရွှေရည်ညှိနှိုင်းမှု ထပ်ထည့်တတ်သောကြောင့် ဆိုင်အနည်းဆုံး ၂ ဆိုင်နှိုင်းယှဉ်ပြီး ချိန်ခွင်စံနှုန်းနှင့် ရွှေရည်ကို အတည်ပြုပါ။</span></p></details><details class="faq"><summary><span class="en">What is the difference between the old and new kyat standard?</span><span class="my">စနစ်ဟောင်းနှင့် စနစ်သစ် ကွာခြားချက်က ဘာလဲ?</span></summary><p><span class="en">The old standard counts 1.873 kyat-thar per troy ounce and the new one counts 1.9047, so a kyat-thar weighs slightly differently under each. We show both so you can compare like with like. Our weights guide explains the conversion step by step.</span><span class="my">စနစ်ဟောင်းတွင် ထရိုင်အောင်စတစ်စလျှင် ၁.၈၇၃ ကျပ်သား၊ စနစ်သစ်တွင် ၁.၉၀၄၇ ကျပ်သားဖြစ်သောကြောင့် ကျပ်သားတစ်ကျပ်၏ အလေးချိန် အနည်းငယ်ကွာပါသည်။ နှစ်မျိုးလုံးပြထားသဖြင့် တူညီသောစံနှုန်းချင်း နှိုင်းယှဉ်နိုင်ပါသည်။ ချိန်ခွင်လမ်းညွှန်တွင် ပြောင်းလဲနည်းကို အဆင့်ဆင့် ရှင်းပြထားပါသည်။</span></p></details><details class="faq"><summary><span class="en">Why do USDT/MMK rates differ between platforms?</span><span class="my">ပလက်ဖောင်းအလိုက် USDT/MMK နှုန်း ဘာကြောင့်ကွာသလဲ?</span></summary><p><span class="en">P2P rates come from individual advertisers, so liquidity, payment method (bank or mobile wallet) and trader demand all move the price. Buy and sell sides also differ by a spread. See our P2P rates guide for how we calculate the quotes and how to trade more safely.</span><span class="my">P2P နှုန်းများသည် ကိုယ်စီကြော်ငြာသူများထံမှ လာသောကြောင့် ငွေလည်ပတ်မှု၊ ငွေပေးချေမှုနည်းလမ်း (ဘဏ် သို့မဟုတ် ဖုန်းပိုက်ဆံအိတ်) နှင့် ရောင်းဝယ်သူလိုအပ်ချက်တို့က ဈေးကို ရွှေ့ပါသည်။ ဝယ်ဈေးနှင့် ရောင်းဈေးလည်း spread ကွာပါသည်။ တွက်ပုံနှင့် ဘေးကင်းစွာရောင်းဝယ်ပုံကို P2P လမ်းညွှန်တွင် ကြည့်ပါ။</span></p></details><details class="faq"><summary><span class="en">Where should I keep USDT or PAXG safely?</span><span class="my">USDT သို့မဟုတ် PAXG ကို ဘယ်မှာ လုံခြုံစွာ သိမ်းသင့်သလဲ?</span></summary><p><span class="en">Keep only what you plan to trade on an exchange; for long-term holdings consider a wallet you control, ideally a hardware wallet with the seed phrase backed up offline. Our crypto wallet guide compares hot and cold options.</span><span class="my">ရောင်းဝယ်ရန် စီစဉ်ထားသည့်ပမာဏကိုသာ exchange ပေါ်ထားပါ။ ရေရှည်ကိုင်ဆောင်မည့်ငွေအတွက် ကိုယ်တိုင်ထိန်းသော ဝေါလက် (အကောင်းဆုံးမှာ seed phrase ကို အော့ဖ်လိုင်းအရန်ထားသော hardware ဝေါလက်) ကို စဉ်းစားပါ။ ဝေါလက်လမ်းညွှန်တွင် hot နှင့် cold ရွေးချယ်မှုများကို နှိုင်းယှဉ်ထားပါသည်။</span></p></details>
-<div class="guide-strip"><span class="en">Keep learning:</span><span class="my">ဆက်လေ့လာရန်:</span> <a href="kyat-pae-yway-guide.html">Kyat/Pae/Yway</a> · <a href="gold-purity-pae-yay.html">Gold purity</a> · <a href="p2p-usdt-mmk-rates-explained.html">P2P rates</a> · <a href="paxg.html">PAXG</a> · <a href="crypto-wallets-guide.html">Crypto wallets</a> · <a href="guides.html">All guides</a></div></section>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How often does the price update?", "acceptedAnswer": {"@type": "Answer", "text": "The dashboard refreshes its reference figures automatically while the page is open. P2P figures are collected by our server and cached for a short time to avoid overloading the exchanges, so they can lag the live market by a few minutes. If a source fails, the page marks the data as stale instead of presenting it as live."}}, {"@type": "Question", "name": "Is this the price I will pay at a gold shop?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is a reference calculated from the international gold price and the exchange rate. Shops add their own margin, labour and purity adjustments, so always compare at least two shops and confirm the weight standard and purity before paying."}}, {"@type": "Question", "name": "What is the difference between the old and new kyat standard?", "acceptedAnswer": {"@type": "Answer", "text": "The old standard counts 1.873 kyat-thar per troy ounce and the new one counts 1.9047, so a kyat-thar weighs slightly differently under each. We show both so you can compare like with like. Our weights guide explains the conversion step by step."}}, {"@type": "Question", "name": "Why do USDT/MMK rates differ between platforms?", "acceptedAnswer": {"@type": "Answer", "text": "P2P rates come from individual advertisers, so liquidity, payment method (bank or mobile wallet) and trader demand all move the price. Buy and sell sides also differ by a spread. See our P2P rates guide for how we calculate the quotes and how to trade more safely."}}, {"@type": "Question", "name": "Where should I keep USDT or PAXG safely?", "acceptedAnswer": {"@type": "Answer", "text": "Keep only what you plan to trade on an exchange; for long-term holdings consider a wallet you control, ideally a hardware wallet with the seed phrase backed up offline. Our crypto wallet guide compares hot and cold options."}}]}</script>
-</main>
+    <!-- FAQ -->
+    <section class="card p-6 sm:p-8" id="faq">
+      <h2 class="text-xl sm:text-2xl font-bold text-amber-300 mb-4"><span class="en">Frequently asked questions</span><span class="my">မေးလေ့ရှိသော မေးခွန်းများ</span></h2>
+      <details class="faq"><summary><span class="en">How often does the price update?</span><span class="my">ဈေးနှုန်းကို ဘယ်လောက်ခဏခဏ update လုပ်သလဲ?</span></summary><p><span class="en">The dashboard refreshes its reference figures automatically while the page is open. P2P figures are collected by our server and cached for a short time to avoid overloading the exchanges, so they can lag the live market by a few minutes. If a source fails, the page marks the data as stale instead of presenting it as live.</span><span class="my">ဒက်ရှ်ဘုတ်ကို ဖွင့်ထားစဉ် ကိုးကားဂဏန်းများ အလိုအလျောက် refresh လုပ်ပါသည်။ P2P ဂဏန်းများကို ကျွန်ုပ်တို့ဆာဗာက စုဆောင်းပြီး exchange များကို မဝန်ပိစေရန် ခေတ္တသိမ်းထားသောကြောင့် တိုက်ရိုက်ဈေးကွက်ထက် မိနစ်အနည်းငယ် နောက်ကျနိုင်ပါသည်။ ရင်းမြစ်တစ်ခု ပျက်ကွက်လျှင် တိုက်ရိုက်ဟုမပြဘဲ ဒေတာဟောင်းဖြစ်ကြောင်း ဖော်ပြပါသည်။</span></p></details>
+      <details class="faq"><summary><span class="en">Is this the price I will pay at a gold shop?</span><span class="my">ရွှေဆိုင်မှာ ဝယ်မယ့်ဈေးက ဒီဈေးပဲလား?</span></summary><p><span class="en">No. It is a reference calculated from the international gold price and the exchange rate. Shops add their own margin, labour and purity adjustments, so always compare at least two shops and confirm the weight standard and purity before paying.</span><span class="my">မဟုတ်ပါ။ ၎င်းသည် နိုင်ငံတကာရွှေဈေးနှင့် ငွေလဲနှုန်းမှ တွက်ထားသော ကိုးကားဈေးဖြစ်ပါသည်။ ဆိုင်များက ကိုယ်ပိုင်အမြတ်၊ လက်ခ နှင့် ရွှေရည်ညှိနှိုင်းမှု ထပ်ထည့်တတ်သောကြောင့် ဆိုင်အနည်းဆုံး ၂ ဆိုင်နှိုင်းယှဉ်ပြီး ချိန်ခွင်စံနှုန်းနှင့် ရွှေရည်ကို အတည်ပြုပါ။</span></p></details>
+      <details class="faq"><summary><span class="en">What is the difference between the old and new kyat standard?</span><span class="my">စနစ်ဟောင်းနှင့် စနစ်သစ် ကွာခြားချက်က ဘာလဲ?</span></summary><p><span class="en">The old standard counts 1.873 kyat-thar per troy ounce and the new one counts 1.9047, so a kyat-thar weighs slightly differently under each. We show both so you can compare like with like. Our weights guide explains the conversion step by step.</span><span class="my">စနစ်ဟောင်းတွင် ထရိုင်အောင်စတစ်စလျှင် ၁.၈၇၃ ကျပ်သား၊ စနစ်သစ်တွင် ၁.၉၀၄၇ ကျပ်သားဖြစ်သောကြောင့် ကျပ်သားတစ်ကျပ်၏ အလေးချိန် အနည်းငယ်ကွာပါသည်။ နှစ်မျိုးလုံးပြထားသဖြင့် တူညီသောစံနှုန်းချင်း နှိုင်းယှဉ်နိုင်ပါသည်။ ချိန်ခွင်လမ်းညွှန်တွင် ပြောင်းလဲနည်းကို အဆင့်ဆင့် ရှင်းပြထားပါသည်။</span></p></details>
+      <details class="faq"><summary><span class="en">Why do USDT/MMK rates differ between platforms?</span><span class="my">ပလက်ဖောင်းအလိုက် USDT/MMK နှုန်း ဘာကြောင့်ကွာသလဲ?</span></summary><p><span class="en">P2P rates come from individual advertisers, so liquidity, payment method (bank or mobile wallet) and trader demand all move the price. Buy and sell sides also differ by a spread. See our P2P rates guide for how we calculate the quotes and how to trade more safely.</span><span class="my">P2P နှုန်းများသည် ကိုယ်စီကြော်ငြာသူများထံမှ လာသောကြောင့် ငွေလည်ပတ်မှု၊ ငွေပေးချေမှုနည်းလမ်း (ဘဏ် သို့မဟုတ် ဖုန်းပိုက်ဆံအိတ်) နှင့် ရောင်းဝယ်သူလိုအပ်ချက်တို့က ဈေးကို ရွှေ့ပါသည်။ ဝယ်ဈေးနှင့် ရောင်းဈေးလည်း spread ကွာပါသည်။ တွက်ပုံနှင့် ဘေးကင်းစွာရောင်းဝယ်ပုံကို P2P လမ်းညွှန်တွင် ကြည့်ပါ။</span></p></details>
+      <details class="faq"><summary><span class="en">Where should I keep USDT or PAXG safely?</span><span class="my">USDT သို့မဟုတ် PAXG ကို ဘယ်မှာ လုံခြုံစွာ သိမ်းသင့်သလဲ?</span></summary><p><span class="en">Keep only what you plan to trade on an exchange; for long-term holdings consider a wallet you control, ideally a hardware wallet with the seed phrase backed up offline. Our crypto wallet guide compares hot and cold options.</span><span class="my">ရောင်းဝယ်ရန် စီစဉ်ထားသည့်ပမာဏကိုသာ exchange ပေါ်ထားပါ။ ရေရှည်ကိုင်ဆောင်မည့်ငွေအတွက် ကိုယ်တိုင်ထိန်းသော ဝေါလက် (အကောင်းဆုံးမှာ seed phrase ကို အော့ဖ်လိုင်းအရန်ထားသော hardware ဝေါလက်) ကို စဉ်းစားပါ။ ဝေါလက်လမ်းညွှန်တွင် hot နှင့် cold ရွေးချယ်မှုများကို နှိုင်းယှဉ်ထားပါသည်။</span></p></details>
+      <div class="guide-strip"><span class="en">Keep learning:</span><span class="my">ဆက်လေ့လာရန်:</span> <a href="kyat-pae-yway-guide.html">Kyat/Pae/Yway</a> · <a href="gold-purity-pae-yay.html">Gold purity</a> · <a href="p2p-usdt-mmk-rates-explained.html">P2P rates</a> · <a href="paxg.html">PAXG</a> · <a href="crypto-wallets-guide.html">Crypto wallets</a> · <a href="guides.html">All guides</a></div>
+    </section>
+
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How often does the price update?", "acceptedAnswer": {"@type": "Answer", "text": "The dashboard refreshes its reference figures automatically while the page is open. P2P figures are collected by our server and cached for a short time to avoid overloading the exchanges, so they can lag the live market by a few minutes. If a source fails, the page marks the data as stale instead of presenting it as live."}}, {"@type": "Question", "name": "Is this the price I will pay at a gold shop?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is a reference calculated from the international gold price and the exchange rate. Shops add their own margin, labour and purity adjustments, so always compare at least two shops and confirm the weight standard and purity before paying."}}, {"@type": "Question", "name": "What is the difference between the old and new kyat standard?", "acceptedAnswer": {"@type": "Answer", "text": "The old standard counts 1.873 kyat-thar per troy ounce and the new one counts 1.9047, so a kyat-thar weighs slightly differently under each. We show both so you can compare like with like. Our weights guide explains the conversion step by step."}}, {"@type": "Question", "name": "Why do USDT/MMK rates differ between platforms?", "acceptedAnswer": {"@type": "Answer", "text": "P2P rates come from individual advertisers, so liquidity, payment method (bank or mobile wallet) and trader demand all move the price. Buy and sell sides also differ by a spread. See our P2P rates guide for how we calculate the quotes and how to trade more safely."}}, {"@type": "Question", "name": "Where should I keep USDT or PAXG safely?", "acceptedAnswer": {"@type": "Answer", "text": "Keep only what you plan to trade on an exchange; for long-term holdings consider a wallet you control, ideally a hardware wallet with the seed phrase backed up offline. Our crypto wallet guide compares hot and cold options."}}]}</script>
+  </main>
 
   <footer class="max-w-7xl mx-auto mt-10 pt-6 border-t border-slate-800 text-xs text-slate-400 space-y-2 text-center">
     <div><a href="index.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မ</span></a> · <a href="guides.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a> · <a href="about.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">About</span><span class="my">ကျွန်ုပ်တို့အကြောင်း</span></a> · <a href="contact.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a> · <a href="privacy.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Privacy Policy</span><span class="my">ကိုယ်ရေးအချက်အလက် မူဝါဒ</span></a> · <a href="terms.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Terms & Disclaimer</span><span class="my">စည်းကမ်းချက်များ</span></a></div>
     <p class="en">Prices and calculators are for general information only and are not financial advice. © 2026 wemanage.space</p>
     <p class="my">ဈေးနှုန်းများနှင့် ဂဏန်းတွက်စက်များသည် အထွေထွေအချက်အလက်အတွက်သာ ဖြစ်ပြီး ငွေကြေးဆိုင်ရာ အကြံပေးချက် မဟုတ်ပါ။ © 2026 wemanage.space</p>
   </footer>
+
+  <!-- NATIVE MOBILE APP BOTTOM NAVIGATION BAR -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-slate-950/95 backdrop-blur-lg border-t border-slate-800/90 px-4 py-2 flex items-center justify-around text-[11px] font-semibold text-slate-400">
+    <a href="#secSpot" class="flex flex-col items-center gap-0.5 text-amber-400">
+      <span>⚖️</span><span>Gold</span>
+    </a>
+    <a href="#secCalc" class="flex flex-col items-center gap-0.5 hover:text-white">
+      <span>🧮</span><span>Calculator</span>
+    </a>
+    <a href="#secChart" class="flex flex-col items-center gap-0.5 hover:text-white">
+      <span>📈</span><span>Chart</span>
+    </a>
+    <a href="#secP2P" class="flex flex-col items-center gap-0.5 hover:text-white">
+      <span>💱</span><span>P2P USDT</span>
+    </a>
+    <a href="guides.html" class="flex flex-col items-center gap-0.5 hover:text-white">
+      <span>📘</span><span>Guides</span>
+    </a>
+  </nav>
 
   <script>
     let currentLang = 'en';
@@ -723,6 +854,10 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 
     function initMmkGoldChart() {
       const ctx = document.getElementById('mmkGoldChart').getContext('2d');
+      const goldGrad = ctx.createLinearGradient(0, 0, 0, 280);
+      goldGrad.addColorStop(0, 'rgba(245, 158, 11, 0.28)');
+      goldGrad.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
+
       if (state.dailyGoldUsdCandles.length === 0) {
         const today = new Date();
         for (let i = 13; i >= 0; i--) {
@@ -743,10 +878,12 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
               label: 'Old Standard (1.873)',
               data: [],
               borderColor: '#f59e0b',
-              backgroundColor: 'rgba(245, 158, 11, 0.12)',
+              backgroundColor: goldGrad,
               borderWidth: 2.5,
+              pointRadius: 3,
+              pointBackgroundColor: '#f59e0b',
               fill: true,
-              tension: 0.3
+              tension: 0.35
             },
             {
               label: 'New Standard (1.9047)',
@@ -754,8 +891,9 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
               borderColor: '#38bdf8',
               borderDash: [5, 5],
               borderWidth: 2,
+              pointRadius: 2,
               fill: false,
-              tension: 0.3
+              tension: 0.35
             }
           ]
         },
@@ -766,7 +904,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
             legend: { labels: { color: '#cbd5e1', font: { size: 11 } } }
           },
           scales: {
-            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(148,163,184,0.08)' } },
+            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(148,163,184,0.06)' } },
             y: {
               ticks: {
                 color: '#94a3b8',
@@ -776,7 +914,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
                   return curr === 'MMK' ? (val / 1000000).toFixed(1) + 'M Ks' : '$' + formatNumber(val, 0);
                 }
               },
-              grid: { color: 'rgba(148,163,184,0.1)' }
+              grid: { color: 'rgba(148,163,184,0.08)' }
             }
           }
         }
@@ -821,13 +959,13 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       if (tab === 'mmk') {
         mmkDiv.classList.remove('hidden');
         oandaDiv.classList.add('hidden');
-        btnMmk.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-amber-500 text-slate-950 flex-shrink-0';
-        btnOanda.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 flex-shrink-0';
+        btnMmk.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition flex-shrink-0';
+        btnOanda.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex-shrink-0';
       } else {
         mmkDiv.classList.add('hidden');
         oandaDiv.classList.remove('hidden');
-        btnOanda.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-amber-500 text-slate-950 flex-shrink-0';
-        btnMmk.className = 'px-3 py-1.5 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 flex-shrink-0';
+        btnOanda.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition flex-shrink-0';
+        btnMmk.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex-shrink-0';
       }
     }
 
@@ -896,9 +1034,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       document.getElementById('displayBybitBuy').textContent = bybitBuy == null ? '—' : formatNumber(bybitBuy) + ' Ks';
       document.getElementById('displayBybitSell').textContent = bybitSell == null ? '—' : formatNumber(bybitSell) + ' Ks';
 
-      // The central reference is the median of eligible ads pooled across both exchanges.
-      // Existing bank/wallet conversion formulas are retained; wallet retains its existing 25 Ks adjustment.
-      // Use the Bybit median rate. Fall back to the OKX/reference rate only when Bybit is unavailable.
       const useBuy = bybitBuy != null ? bybitBuy : (okxBuy != null ? okxBuy : refBuy);
       const useSell = bybitSell != null ? bybitSell : (okxSell != null ? okxSell : refSell);
       if (useBuy != null) {
@@ -927,8 +1062,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
         console.warn('P2P API fetch failed:', err);
         setP2PTags();
       }
-      // The backend collects fresh exchange advertisements every 15 minutes;
-      // the page polls its cached result once per minute for display/status.
       p2pTimer = setTimeout(refreshP2PData, 60000);
     }
 
@@ -966,7 +1099,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
         document.getElementById('lastSyncTime').textContent = 'Synced: ' + new Date().toLocaleTimeString();
         recalculateAll();
       } catch (err) {
-        document.getElementById('statusDot').className = 'h-3 w-3 rounded-full bg-amber-400';
+        document.getElementById('statusDot').className = 'h-2.5 w-2.5 rounded-full bg-amber-400';
         recalculateAll();
       }
     }
@@ -980,16 +1113,12 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       recalculateAll();
       if (saved === 'my') toggleLanguage();
       
-      refreshAllData(); // Initial load for OANDA
-      refreshP2PData(); // Initial load for OKX/Bybit
+      refreshAllData();
+      refreshP2PData();
 
       updateDateTime();
-      setInterval(updateDateTime, 1000); // Clock updates every 1 sec
-      
-      // Fast refresh for OANDA/PAXG (every 60 seconds)
+      setInterval(updateDateTime, 1000);
       setInterval(refreshAllData, 60000);
-      
-      // Update P2P ago tags
       setInterval(setP2PTags, 60000);
     });
   </script>
