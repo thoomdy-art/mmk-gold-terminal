@@ -147,6 +147,14 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 .chart-box{position:relative;width:100%;height:340px !important;min-width:0;overflow:hidden}
 @media (min-width:640px){.chart-box{height:440px !important}}
 @media (min-width:1024px){.chart-box{height:clamp(520px,68vh,680px) !important}}
+/* Compact chart legend: labels only, no price cards */
+.chart-line-legend{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem 1rem;margin:-.35rem 0 .75rem;padding:.55rem .7rem;border:1px solid var(--bd);border-radius:var(--radius-sub);background:var(--sf-elevated)}
+.chart-legend-item{display:inline-flex;align-items:center;gap:.45rem;font-size:.72rem;font-weight:650;color:var(--tx);white-space:nowrap}
+.chart-legend-swatch{display:inline-block;width:1.35rem;height:0;border-top:3px solid var(--gold-line-old);border-radius:99px;flex:0 0 auto}
+.chart-legend-swatch.new{border-top:3px dashed var(--gold-line-new)}
+.chart-legend-swatch.paxg{border-top:3px dotted var(--paxg-line)}
+@media(max-width:520px){.chart-line-legend{gap:.5rem .8rem;padding:.55rem}.chart-legend-item{font-size:.68rem}}
+
 
 /* Old / New standard price chips above the chart */
 .chart-price-strip{display:flex;flex-wrap:wrap;align-items:stretch;gap:.6rem;margin-bottom:.9rem}
@@ -469,6 +477,12 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
                 <option value="wallet">Wallet</option>
               </select>
             </div>
+          </div>
+
+          <div id="chartLineLegend" class="chart-line-legend" aria-label="Gold chart legend">
+            <span class="chart-legend-item"><span class="chart-legend-swatch"></span><span id="legendOldText">Old Standard (1.873)</span></span>
+            <span class="chart-legend-item"><span class="chart-legend-swatch new"></span><span id="legendNewText">New Standard (1.9047)</span></span>
+            <span class="chart-legend-item"><span class="chart-legend-swatch paxg"></span><span id="legendPaxgText">PAXG Digital Gold</span></span>
           </div>
 
           <div id="mmkChartContainer" class="chart-box w-full relative">
@@ -866,6 +880,9 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
         mmkChartInstance.data.datasets[1].label = currentLang === 'my' ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)';
         mmkChartInstance.data.datasets[2].label = currentLang === 'my' ? 'PAXG ဒစ်ဂျစ်တယ်ရွှေ (1.873)' : 'PAXG Digital Gold (1.873)';
       }
+      document.getElementById('legendOldText').textContent = currentLang === 'my' ? 'စနစ်ဟောင်း (1.873)' : 'Old Standard (1.873)';
+      document.getElementById('legendNewText').textContent = currentLang === 'my' ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)';
+      document.getElementById('legendPaxgText').textContent = currentLang === 'my' ? 'PAXG ဒစ်ဂျစ်တယ်ရွှေ' : 'PAXG Digital Gold';
       
       document.getElementById('langBtnText').textContent = currentLang === 'my' ? 'မြန်မာ / English' : 'English / မြန်မာ';
       document.getElementById('goldTableTitle').textContent = currentLang === 'my' ? 'မြန်မာရွှေ ၁ ကျပ်သား' : 'Myanmar Gold per 1 Kyat-thar (၁ ကျပ်သား)';
@@ -1226,6 +1243,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
           layout: { padding: { top: 34, right: 10, bottom: 6 } },
           plugins: {
             legend: {
+              display: false,
               position: 'bottom',
               labels: {
                 usePointStyle: true, pointStyle: 'circle', boxWidth: 7, boxHeight: 7, padding: 16,
