@@ -3,6 +3,7 @@
    - Default = follow the visitor's system setting until they press the toggle.
    - The choice is saved in localStorage and shared by every page. */
 (function () {
+ try {
   var root = document.documentElement;
   var KEY = 'theme';
 
@@ -74,4 +75,5 @@
     apply(root.getAttribute('data-theme'), false); // sync aria/title
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inject); else inject();
+ } catch (e) { /* theme switch is optional; never break the page */ }
 })();
