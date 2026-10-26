@@ -291,6 +291,14 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
 }
 </style>
 
+
+<style id="premium-live-gold">
+.lv.live{color:#d6a52f!important;background:rgba(214,165,47,.13)!important;border-color:rgba(214,165,47,.42)!important}
+.lv.live .lv-dot{background:#e5b93f!important;box-shadow:0 0 0 3px rgba(214,165,47,.13)}
+.lv-tag.live::before{color:#e5b93f!important}
+:root[data-theme="dark"] .lv.live{color:#f5cf68!important}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .lv.live{color:#f5cf68!important}}
+</style>
 </head>
 <body class="min-h-screen p-3 sm:p-4 md:p-6">
 
@@ -328,16 +336,12 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
         <a href="usdtusdc.html" class="text-xs font-semibold text-slate-300 hover:text-amber-300 transition">USDT vs USDC</a>
       </nav>
       <button onclick="toggleLanguage()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 text-xs font-extrabold transition flex items-center gap-1.5 shadow-md whitespace-nowrap flex-shrink-0">
-        <span aria-hidden="true">🇲🇲</span><span id="langBtnText">မြန်မာ / EN</span>
+        <span id="langBtnText">EN</span>
       </button>
     </div>
   </header>
 
-  <section class="max-w-7xl mx-auto mb-4 px-1 prose-lite">
-    <p id="introText">Live reference price of gold per kyat-thar (ကျပ်သား) in Myanmar, calculated from the international spot price (OANDA XAU/USD) and the USDT/MMK peer-to-peer rate. Use the converter and calculator to work with ounces, grams, kyat, pae and yway, and read our <a href="guides.html" class="text-sky-400 underline">guides</a> to see how the numbers are built.</p>
-  </section>
-
-  <main class="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+<main class="max-w-7xl mx-auto space-y-4 sm:space-y-6">
 
     <!-- ROW 1: OANDA SPOT GOLD -->
     <section id="secSpot" class="grid grid-cols-1 gap-4">
@@ -497,6 +501,9 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
           </div>
         </div>
 
+        <section class="px-1 prose-lite mt-1">
+          <p id="introText">Live reference price of gold per kyat-thar (ကျပ်သား) in Myanmar, calculated from the international spot price (OANDA XAU/USD) and the USDT/MMK peer-to-peer rate. Use the converter and calculator to work with ounces, grams, kyat, pae and yway, and read our <a href="guides.html" class="text-sky-400 underline">guides</a> to see how the numbers are built.</p>
+        </section>
       </div>
 
       <!-- RIGHT 7 COLS: LINE CHARTS -->
@@ -819,8 +826,8 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
   <!-- NATIVE MOBILE APP BOTTOM NAVIGATION BAR -->
   <nav id="mobileBottomNav" aria-label="Mobile section navigation" class="md:hidden fixed bottom-0 inset-x-0 z-50 flex items-stretch text-[11px] font-semibold">
     <a data-nav-target="secSpot" href="#secSpot" class="mobile-nav-item" aria-current="location"><span class="mobile-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v17M5 20h14M4 8h16M6 8l-3 7h6L6 8Zm12 0-3 7h6l-3-7Z"/></svg></span><span>Gold</span></a>
-    <a data-nav-target="secConverter" href="#secConverter" class="mobile-nav-item"><span class="mobile-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8 7h8M8 11h1m3 0h1m3 0h.01M8 15h1m3 0h1m3 0h.01M8 18h1m3 0h1"/></svg></span><span>Calculator</span></a>
     <a data-nav-target="secChart" href="#secChart" class="mobile-nav-item"><span class="mobile-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m6 15 4-5 4 3 5-7"/><path d="M16 6h3v3"/></svg></span><span>Chart</span></a>
+    <a data-nav-target="secConverter" href="#secConverter" class="mobile-nav-item"><span class="mobile-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8 7h8M8 11h1m3 0h1m3 0h.01M8 15h1m3 0h1m3 0h.01M8 18h1m3 0h1"/></svg></span><span>Calculator</span></a>
     <a data-nav-target="secP2P" href="#secP2P" class="mobile-nav-item"><span class="mobile-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 7h11l-3-3M17 17H6l3 3"/><path d="M18 7a6 6 0 0 1 0 10M6 17A6 6 0 0 1 6 7"/></svg></span><span>P2P USDT</span></a>
     <a data-nav-target="secGuides" href="#secGuides" class="mobile-nav-item"><span class="mobile-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 1 4 17.5v-12Z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20M8 7h8M8 10h6"/></svg></span><span>Guides</span></a>
   </nav>
@@ -953,7 +960,7 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
       const formatted = now.toLocaleString('en-US', options);
       const dateTimeEl = document.getElementById('liveDateTime');
       if (dateTimeEl) {
-        dateTimeEl.textContent = `📅 ${formatted} (MMT)`;
+        dateTimeEl.textContent = `${formatted} (MMT)`;
       }
     }
 
@@ -974,7 +981,7 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
       document.getElementById('legendNewText').textContent = currentLang === 'my' ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)';
       document.getElementById('legendPaxgText').textContent = currentLang === 'my' ? 'PAXG ဒစ်ဂျစ်တယ်ရွှေ' : 'PAXG Digital Gold';
       
-      document.getElementById('langBtnText').textContent = currentLang === 'my' ? '🇬🇧 EN' : '🇲🇲 မြန်မာ';
+      document.getElementById('langBtnText').textContent = currentLang === 'my' ? 'EN' : 'မြန်မာ';
       document.getElementById('goldTableTitle').textContent = currentLang === 'my' ? 'မြန်မာရွှေ ၁ ကျပ်သား' : 'Myanmar Gold per 1 Kyat-thar (၁ ကျပ်သား)';
       document.getElementById('converterTitle').textContent = currentLang === 'my' ? 'အောင်စ မှ ကျပ် - ပဲ - ရွှေး တွက်ရန်' : '⚖️ Oz & Kyat - Pae - Yway Converter';
       document.getElementById('calcKpyTitle').textContent = currentLang === 'my' ? 'ကျပ် - ပဲ - ရွှေး တန်ဖိုး တွက်ချက်ရန်' : 'Kyat - Pae - Yway Calculator';
