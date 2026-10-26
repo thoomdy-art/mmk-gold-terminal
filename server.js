@@ -386,6 +386,97 @@ app.get('/api/p2p-status', (req, res) => {
 });
 
 
+// Canonical gold-price snapshot for the website and any external consumer (including ChatGPT).
+// Keep the formula here identical to index.html so every client can read the same calculation.
+app.get('/api/gold-reference', async (req, res) => {
+  try {
+    let metrics = null, hasBidAsk = false;
+    try {
+      metrics = await tvScan(['close', 'open', 'high', 'low', 'change', 'bid', 'ask']);
+      hasBidAsk = !!metrics;
+    } catch (_) {}
+    if (!metrics) metrics = await tvScan(['close', 'open', 'high', 'low', 'change']);
+    if (!metrics || !(Number(metrics[0]) > 0)) {
+      return res.status(503).json({ error: 'OANDA gold price unavailable' });
+    }
+
+    // Reuse the same cached P2P snapshot and source priority as the website: Bybit, then OKX, then reference.
+    const p2pAge = p2pCache ? Date.now() - p2pUpdatedAt : Infinity;
+    const p2pTtl = p2pLastErrors.length ? 2 * 60 * 1000 : P2P_CACHE_TTL;
+    if (!p2pCache || p2pAge >= p2pTtl) {
+      if (!p2pInFlight) {
+        p2pInFlight = collectP2P().then(data => {
+          p2pCache = data;
+          p2pUpdatedAt = Date.now();
+          p2pLastErrors = data.errors || [];
+        }).catch(err => { p2pLastErrors = [err.message]; })
+          .finally(() => { p2pInFlight = null; });
+      }
+      await p2pInFlight;
+    }
+    if (!p2pCache) return res.status(503).json({ error: 'P2P rates unavailable', errors: p2pLastErrors });
+
+    const positive = v => Number.isFinite(Number(v)) && Number(v) > 0 ? Number(v) : null;
+    const buyRate = positive(p2pCache.bybit?.buy) ?? positive(p2pCache.okx?.buy) ?? positive(p2pCache.reference?.buy);
+    const sellRate = positive(p2pCache.bybit?.sell) ?? positive(p2pCache.okx?.sell) ?? positive(p2pCache.reference?.sell);
+    if (!buyRate || !sellRate) {
+      return res.status(503).json({ error: 'A usable USDT/MMK buy and sell rate is unavailable', errors: p2pLastErrors });
+    }
+
+    let paxgBid = null, paxgAsk = null, paxgError = null;
+    try {
+      const r = await fetch('https://api.binance.com/api/v3/ticker/bookTicker?symbol=PAXGUSDT', { signal: AbortSignal.timeout(10000) });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const q = await r.json();
+      paxgBid = positive(q.bidPrice);
+      paxgAsk = positive(q.askPrice);
+      if (!paxgBid || !paxgAsk) throw new Error('No valid PAXG bid/ask');
+    } catch (err) { paxgError = err.message; }
+
+    const close = Number(metrics[0]);
+    const bid = hasBidAsk ? positive(metrics[5]) : null;
+    const ask = hasBidAsk ? positive(metrics[6]) : null;
+    const xauBuy = ask ?? close;
+    const xauSell = bid ?? close;
+    const row = (buyUsd, sellUsd, divisor) => {
+      const buy = buyUsd * buyRate / divisor;
+      const sell = sellUsd * sellRate / divisor;
+      return { buy, sell, spread: buy - sell, spreadPct: buy > 0 ? (buy - sell) / buy * 100 : 0 };
+    };
+    const oldStandard = row(xauBuy, xauSell, 1.873);
+    const newStandard = row(xauBuy, xauSell, 1.9047);
+    const pae15 = { buy: oldStandard.buy * 15 / 16, sell: oldStandard.sell * 15 / 16 };
+    pae15.spread = pae15.buy - pae15.sell;
+    pae15.spreadPct = pae15.buy > 0 ? pae15.spread / pae15.buy * 100 : 0;
+    const paxg = paxgBid && paxgAsk ? row(paxgAsk, paxgBid, 1.873) : null;
+
+    res.set('Cache-Control', 'no-store');
+    res.json({
+      timestamp: new Date().toISOString(),
+      sources: { gold: 'OANDA:XAUUSD', usdtMmk: 'OKX + Bybit P2P', paxg: 'Binance PAXGUSDT' },
+      inputs: {
+        xauUsd: { close, bid, ask, high: positive(metrics[2]), low: positive(metrics[3]) },
+        usdtMmk: { buy: buyRate, sell: sellRate, selectedBuySource: positive(p2pCache.bybit?.buy) ? 'Bybit' : positive(p2pCache.okx?.buy) ? 'OKX' : 'reference', selectedSellSource: positive(p2pCache.bybit?.sell) ? 'Bybit' : positive(p2pCache.okx?.sell) ? 'OKX' : 'reference' },
+        paxgUsd: { bid: paxgBid, ask: paxgAsk }
+      },
+      formula: {
+        oldStandard: 'OANDA ask × USDT/MMK buy ÷ 1.873; sell = OANDA bid × USDT/MMK sell ÷ 1.873',
+        newStandard: 'OANDA ask × USDT/MMK buy ÷ 1.9047; sell = OANDA bid × USDT/MMK sell ÷ 1.9047',
+        pae15: 'Old-standard price × 15 ÷ 16',
+        paxg: 'Binance PAXG ask/bid × USDT/MMK buy/sell ÷ 1.873'
+      },
+      prices: { oldStandard, newStandard, pae15, paxg },
+      p2pUpdatedAt: p2pUpdatedAt ? new Date(p2pUpdatedAt).toISOString() : null,
+      p2pAgeSec: p2pUpdatedAt ? Math.round((Date.now() - p2pUpdatedAt) / 1000) : null,
+      p2pErrors: p2pLastErrors,
+      paxgError
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 module.exports = { fetchAll };
 
 if (require.main === module) {

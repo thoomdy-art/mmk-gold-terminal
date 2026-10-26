@@ -815,6 +815,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       walletBuy: 4520,
       walletSell: 4485,
       p2pUpdatedAt: null,
+      goldReference: null,
       oandaAt: null, paxgAt: null, candlesAt: null,
       oandaErr: false, paxgErr: false, candlesErr: false, p2pErr: false,
       counts: { oanda: 0, paxg: 0, p2p: 0, candles: 0 },
@@ -1007,6 +1008,22 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       // PAXG digital gold: Binance PAXG ask/bid (USDT) x the same bank USDT/MMK rates, old standard
       if (state.paxgAsk > 0 && state.paxgBid > 0) {
         fillRow('goldPaxg', (state.paxgAsk * state.bankBuy) / 1.873, (state.paxgBid * state.bankSell) / 1.873);
+      }
+
+      // Canonical server snapshot: the main table uses the exact same calculated values
+      // exposed to external readers at /api/gold-reference (including ChatGPT lookups).
+      if (state.goldReference) {
+        const fillCanonicalRow = (id, row) => {
+          if (!row || !Number.isFinite(Number(row.buy)) || !Number.isFinite(Number(row.sell))) return;
+          document.getElementById(id + 'Buy').textContent = formatNumber(row.buy, 0);
+          document.getElementById(id + 'Sell').textContent = formatNumber(row.sell, 0);
+          document.getElementById(id + 'Spread').innerHTML =
+            formatNumber(row.spread, 0) + '<div class="text-[10px] font-normal text-slate-400">' + Number(row.spreadPct).toFixed(2) + '%</div>';
+        };
+        fillCanonicalRow('goldOld', state.goldReference.oldStandard);
+        fillCanonicalRow('goldNew', state.goldReference.newStandard);
+        fillCanonicalRow('gold15Pae', state.goldReference.pae15);
+        fillCanonicalRow('goldPaxg', state.goldReference.paxg);
       }
 
       renderFxTable();
@@ -1523,6 +1540,26 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 
     // --- MAIN DATA FUNCTION FOR OANDA & PAXG ---
     async function refreshAllData() {
+      // The main gold table and ChatGPT/API consumers share this single calculated snapshot.
+      try {
+        const refRes = await fetch('https://mmk-gold-terminal.onrender.com/api/gold-reference', { cache: 'no-store' });
+        const refData = await refRes.json();
+        if (!refRes.ok || !refData.prices) throw new Error(refData.error || 'Gold reference unavailable');
+        state.goldReference = refData.prices;
+        if (refData.inputs?.xauUsd?.close > 0) {
+          state.oandaUsd = Number(refData.inputs.xauUsd.close);
+          state.oandaBid = Number(refData.inputs.xauUsd.bid) > 0 ? Number(refData.inputs.xauUsd.bid) : null;
+          state.oandaAsk = Number(refData.inputs.xauUsd.ask) > 0 ? Number(refData.inputs.xauUsd.ask) : null;
+          state.oandaHigh = Number(refData.inputs.xauUsd.high) > 0 ? Number(refData.inputs.xauUsd.high) : null;
+          state.oandaLow = Number(refData.inputs.xauUsd.low) > 0 ? Number(refData.inputs.xauUsd.low) : null;
+        }
+        if (refData.inputs?.paxgUsd?.bid > 0) state.paxgBid = Number(refData.inputs.paxgUsd.bid);
+        if (refData.inputs?.paxgUsd?.ask > 0) state.paxgAsk = Number(refData.inputs.paxgUsd.ask);
+        state.goldReferenceAt = refData.timestamp || new Date().toISOString();
+      } catch (err) {
+        console.warn('Canonical gold reference fetch failed; using individual feed calculations:', err);
+      }
+
       // Each feed has its own try/catch so one failing source cannot freeze the other.
       try {
         const oandaRes = await fetch('https://mmk-gold-terminal.onrender.com/api/oanda-gold');
