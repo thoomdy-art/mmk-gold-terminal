@@ -123,8 +123,67 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     .guide-strip a { color: #38bdf8; text-decoration: underline; }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298" crossorigin="anonymous"></script>
-<script src="theme.js"></script>
-<link rel="stylesheet" href="premium.css">
+<style id="gold-ui">
+/* Gold line colours (Chart.js reads these through getComputedStyle, so they follow the theme) */
+:root{
+  --gold-line-old:#B9820A;      /* rich gold, solid line */
+  --gold-line-new:#E0B13A;      /* lighter champagne gold, dashed line */
+  --gold-fill-top:rgba(201,145,10,.28);
+}
+:root[data-theme="dark"]{
+  --gold-line-old:#F5C451;
+  --gold-line-new:#FFE08A;
+  --gold-fill-top:rgba(245,196,81,.30);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --gold-line-old:#F5C451;
+    --gold-line-new:#FFE08A;
+    --gold-fill-top:rgba(245,196,81,.30);
+  }
+}
+
+/* Bigger chart: fixed responsive heights (no flex tricks, so Chart.js can never feed back into the layout) */
+.chart-box{position:relative;width:100%;height:340px !important;min-width:0;overflow:hidden}
+@media (min-width:640px){.chart-box{height:440px !important}}
+@media (min-width:1024px){.chart-box{height:clamp(520px,68vh,680px) !important}}
+
+/* Old / New standard price chips above the chart */
+.chart-price-strip{display:flex;flex-wrap:wrap;align-items:stretch;gap:.6rem;margin-bottom:.9rem}
+.chart-price-strip.hidden{display:none}
+.price-chip{display:flex;align-items:center;gap:.65rem;flex:1 1 200px;min-width:0;
+  padding:.65rem .9rem;border-radius:var(--radius-sub);
+  background:var(--sf-elevated);border:1px solid var(--bd)}
+.price-chip .chip-dot{flex:0 0 auto;width:.8rem;height:.8rem;border-radius:50%}
+.price-chip.old .chip-dot{background:var(--gold-line-old);box-shadow:0 0 0 3px rgba(245,196,81,.25)}
+.price-chip.new .chip-dot{background:transparent;border:2.5px dashed var(--gold-line-new)}
+.price-chip .chip-label{font-size:.7rem;font-weight:600;color:var(--mu);letter-spacing:.01em}
+.price-chip .chip-value{font-size:1.15rem;font-weight:800;line-height:1.25;color:var(--tx);white-space:nowrap}
+.price-chip.old .chip-value{color:var(--gold-text)}
+.price-chip.new .chip-value{color:var(--gold-text)}
+.chip-tier{align-self:center;flex:0 0 auto;font-size:.7rem;font-weight:700;padding:.3rem .75rem;border-radius:var(--radius-pill);
+  color:var(--gold-text);border:1px solid var(--bd-strong);background:var(--sf-elevated)}
+
+/* Light / dark toggle in the header (injected by theme.js) */
+html body>header button.theme-toggle[class]{
+  display:inline-grid;place-items:center;flex:0 0 auto;width:2.4rem;height:2.4rem;padding:0 !important;cursor:pointer;
+  background:var(--sf-elevated) !important;border:1px solid var(--bd-strong) !important;border-radius:9999px !important;
+  color:var(--gold-text) !important;box-shadow:none !important;
+}
+html body>header button.theme-toggle[class] *{color:var(--gold-text) !important}
+html body>header button.theme-toggle[class]:hover{background:rgba(245,196,81,.2) !important;transform:none}
+html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.theme-toggle svg{display:block}
+:root[data-theme="dark"] .theme-toggle .ico-moon{display:none}
+:root:not([data-theme="dark"]) .theme-toggle .ico-sun{display:none}
+
+.chart-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:1rem;
+  color:var(--mu);font-size:.85rem;font-weight:600;pointer-events:none}
+.chart-empty.hidden{display:none}
+
+</style>
+<script src="theme.js?v=3"></script>
+<link rel="stylesheet" href="premium.css?v=3">
 </head>
 <body class="min-h-screen p-3 sm:p-4 md:p-6">
 
@@ -209,8 +268,9 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
               <thead>
                 <tr class="border-b border-slate-800 text-slate-400">
                   <th class="py-2" id="thStandard">Standard</th>
-                  <th class="py-2 text-right text-sky-400">Wallet</th>
-                  <th class="py-2 text-right text-emerald-400">Bank</th>
+                  <th class="py-2 text-right text-emerald-400" id="thBuy">Buy</th>
+                  <th class="py-2 text-right text-rose-400" id="thSell">Sell</th>
+                  <th class="py-2 text-right text-amber-300" id="thSpread">Spread</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/70 mono">
@@ -219,26 +279,30 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
                     <div id="oldStdTitle" class="font-semibold text-amber-300">Old Standard</div>
                     <div class="text-[11px] text-slate-400">1 Oz = 1.873 Kyat (16.606g)</div>
                   </td>
-                  <td id="goldOldWallet" class="py-3 text-right text-sm sm:text-base font-bold text-white">9,874,523 Ks</td>
-                  <td id="goldOldBank" class="py-3 text-right text-sm sm:text-base font-bold text-emerald-400">9,994,677 Ks</td>
+                  <td id="goldOldBuy" class="py-3 text-right text-xs sm:text-sm font-bold text-emerald-400">—</td>
+                  <td id="goldOldSell" class="py-3 text-right text-xs sm:text-sm font-bold text-rose-400">—</td>
+                  <td id="goldOldSpread" class="py-3 text-right text-xs sm:text-sm font-bold text-amber-300">—</td>
                 </tr>
                 <tr>
                   <td class="py-3 font-sans">
                     <div id="newStdTitle" class="font-semibold text-sky-300">New Standard</div>
                     <div class="text-[11px] text-slate-400">1 Oz = 1.9047 Kyat (16.329g)</div>
                   </td>
-                  <td id="goldNewWallet" class="py-3 text-right text-sm sm:text-base font-bold text-white">9,710,181 Ks</td>
-                  <td id="goldNewBank" class="py-3 text-right text-sm sm:text-base font-bold text-emerald-400">9,828,336 Ks</td>
+                  <td id="goldNewBuy" class="py-3 text-right text-xs sm:text-sm font-bold text-emerald-400">—</td>
+                  <td id="goldNewSell" class="py-3 text-right text-xs sm:text-sm font-bold text-rose-400">—</td>
+                  <td id="goldNewSpread" class="py-3 text-right text-xs sm:text-sm font-bold text-amber-300">—</td>
                 </tr>
                 <tr>
                   <td class="py-2.5 font-sans">
                     <div id="pae15Title" class="font-medium text-slate-300">15 Pae Yay</div>
                   </td>
-                  <td id="gold15PaeWallet" class="py-2.5 text-right font-semibold text-slate-300">9,257,365 Ks</td>
-                  <td id="gold15PaeBank" class="py-2.5 text-right font-semibold text-slate-300">9,370,010 Ks</td>
+                  <td id="gold15PaeBuy" class="py-2.5 text-right text-xs sm:text-sm font-semibold text-slate-300">—</td>
+                  <td id="gold15PaeSell" class="py-2.5 text-right text-xs sm:text-sm font-semibold text-slate-300">—</td>
+                  <td id="gold15PaeSpread" class="py-2.5 text-right text-xs sm:text-sm font-semibold text-slate-300">—</td>
                 </tr>
               </tbody>
             </table>
+            <p id="goldSpreadNote" class="mt-2 text-[11px] text-slate-400">Reference prices in Ks: OANDA XAU/USD ask × USDT/MMK buy rate (Buy), bid × sell rate (Sell), ÷ standard. Not a gold shop price.</p>
           </div>
         </div>
 
@@ -351,7 +415,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
                 <div class="chip-value mono" id="chartPriceNew">—</div>
               </div>
             </div>
-            <div class="chip-tier mono" id="chipTier">Bank rate</div>
           </div>
 
           <div id="mmkChartContainer" class="chart-box w-full relative">
@@ -361,7 +424,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 
           <div id="oandaTvContainer" class="chart-box w-full hidden rounded-xl overflow-hidden border border-slate-800">
             <iframe
-              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_oanda&symbol=OANDA%3AXAUUSD&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FYangon"
+              data-src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_oanda&symbol=OANDA%3AXAUUSD&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FYangon"
               class="w-full h-full border-0" allowfullscreen></iframe>
           </div>
         </div>
@@ -662,6 +725,8 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       oandaUsd: 4091.81,
       oandaHigh: null,
       oandaLow: null,
+      oandaBid: null,
+      oandaAsk: null,
       paxgBid: 4103.39,
       paxgAsk: 4103.40,
       bankBuy: 4575,
@@ -763,6 +828,12 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       document.getElementById('labelNewStd').textContent = currentLang === 'my' ? 'စနစ်သစ်' : 'New Std';
 
       document.getElementById('thStandard').textContent = currentLang === 'my' ? 'စနစ်' : 'Standard';
+      document.getElementById('thBuy').textContent = currentLang === 'my' ? 'ဝယ်ဈေး (ကျပ်)' : 'Buy (Ks)';
+      document.getElementById('thSell').textContent = currentLang === 'my' ? 'ရောင်းဈေး (ကျပ်)' : 'Sell (Ks)';
+      document.getElementById('thSpread').textContent = currentLang === 'my' ? 'ကွာဟချက်' : 'Spread';
+      document.getElementById('goldSpreadNote').textContent = currentLang === 'my'
+        ? 'ရည်ညွှန်းဈေး (ကျပ်) - OANDA XAU/USD ask × USDT/MMK ဝယ်နှုန်း (ဝယ်ဈေး)၊ bid × ရောင်းနှုန်း (ရောင်းဈေး)၊ စနစ်ဖြင့် စား။ ရွှေဆိုင်ဈေး မဟုတ်ပါ။'
+        : 'Reference prices in Ks: OANDA XAU/USD ask × USDT/MMK buy rate (Buy), bid × sell rate (Sell), ÷ standard. Not a gold shop price.';
       document.getElementById('thCurrency').textContent = currentLang === 'my' ? 'ငွေကြေး' : 'Market / Currency';
       document.getElementById('thCrossRate').textContent = currentLang === 'my' ? 'နှုန်းထား' : 'Cross Rate';
       document.getElementById('thEquals').textContent = currentLang === 'my' ? '100k MMK Equals' : '100k MMK Equals';
@@ -818,18 +889,25 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       document.getElementById('displayWalletBuy').textContent = formatNumber(state.walletBuy, 0) + ' Ks';
       document.getElementById('displayWalletSell').textContent = formatNumber(state.walletSell, 0) + ' Ks';
 
-      const oldWallet = (state.oandaUsd * state.walletBuy) / 1.873;
-      const oldBank = (state.oandaUsd * state.bankBuy) / 1.873;
-      const newWallet = (state.oandaUsd * state.walletBuy) / 1.9047;
-      const newBank = (state.oandaUsd * state.bankBuy) / 1.9047;
-
-      document.getElementById('goldOldWallet').textContent = formatNumber(oldWallet, 0) + (currentLang === 'my' ? ' ကျပ်' : ' Ks');
-      document.getElementById('goldOldBank').textContent = formatNumber(oldBank, 0) + (currentLang === 'my' ? ' ကျပ်' : ' Ks');
-      document.getElementById('goldNewWallet').textContent = formatNumber(newWallet, 0) + (currentLang === 'my' ? ' ကျပ်' : ' Ks');
-      document.getElementById('goldNewBank').textContent = formatNumber(newBank, 0) + (currentLang === 'my' ? ' ကျပ်' : ' Ks');
-
-      document.getElementById('gold15PaeWallet').textContent = formatNumber((oldWallet * 15) / 16, 0) + (currentLang === 'my' ? ' ကျပ်' : ' Ks');
-      document.getElementById('gold15PaeBank').textContent = formatNumber((oldBank * 15) / 16, 0) + (currentLang === 'my' ? ' ကျပ်' : ' Ks');
+      // Buy (you pay)  = XAU ask  x USDT buy rate  / standard
+      // Sell (you get) = XAU bid  x USDT sell rate / standard
+      // If the feed has no bid/ask, the single OANDA price is used for both sides.
+      const ask = state.oandaAsk > 0 ? state.oandaAsk : state.oandaUsd;
+      const bid = state.oandaBid > 0 ? state.oandaBid : state.oandaUsd;
+      const ks = currentLang === 'my' ? ' ကျပ်' : ' Ks';
+      const fillRow = (id, buy, sell) => {
+        const spread = buy - sell;
+        const pct = buy > 0 ? (spread / buy) * 100 : 0;
+        document.getElementById(id + 'Buy').textContent = formatNumber(buy, 0);
+        document.getElementById(id + 'Sell').textContent = formatNumber(sell, 0);
+        document.getElementById(id + 'Spread').innerHTML =
+          formatNumber(spread, 0) + '<div class="text-[10px] font-normal text-slate-400">' + pct.toFixed(2) + '%</div>';
+      };
+      const oldBuy = (ask * state.bankBuy) / 1.873, oldSell = (bid * state.bankSell) / 1.873;
+      const newBuy = (ask * state.bankBuy) / 1.9047, newSell = (bid * state.bankSell) / 1.9047;
+      fillRow('goldOld', oldBuy, oldSell);
+      fillRow('goldNew', newBuy, newSell);
+      fillRow('gold15Pae', (oldBuy * 15) / 16, (oldSell * 15) / 16);
 
       renderFxTable();
       updateMmkGoldChart();
@@ -879,10 +957,11 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     function syncTvTheme() {
       const f = document.querySelector('#oandaTvContainer iframe');
       if (!f) return;
-      const cur = f.getAttribute('src') || '';
+      const attr = f.hasAttribute('src') ? 'src' : 'data-src';   // not loaded yet -> only update data-src
+      const cur = f.getAttribute(attr) || '';
       const next = cur.replace(/theme=(dark|light)/, 'theme=' + (dbIsDark() ? 'dark' : 'light'))
                       .replace(/toolbarbg=[0-9a-fA-F]+/, 'toolbarbg=' + (dbIsDark() ? '181816' : 'f7f5f0'));
-      if (next !== cur) f.setAttribute('src', next);
+      if (next !== cur) f.setAttribute(attr, next);
     }
 
     function initMmkGoldChart() {
@@ -1028,6 +1107,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
               border: { display: false }
             },
             y: {
+              grace: '6%',
               ticks: { color: () => dbVar('--mu'), font: { size: 11 }, callback: fmtAxis },
               grid: { color: () => dbVar('--bd'), borderDash: [4, 4] },
               border: { display: false }
@@ -1102,7 +1182,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       setText('chartPriceNew', fmtFull(lastNew));
       setText('chipOldLabel', my ? 'စနစ်ဟောင်း (1.873)' : 'Old Standard (1.873)');
       setText('chipNewLabel', my ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)');
-      setText('chipTier', tier === 'bank' ? (my ? 'ဘဏ်နှုန်း' : 'Bank rate') : (my ? 'ဝေါ်လက်နှုန်း' : 'Wallet rate'));
     }
 
     function switchChartTab(tab) {
@@ -1121,6 +1200,8 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       } else {
         mmkDiv.classList.add('hidden');
         oandaDiv.classList.remove('hidden');
+        const tvFrame = oandaDiv.querySelector('iframe');
+        if (tvFrame && !tvFrame.hasAttribute('src')) { syncTvTheme(); tvFrame.setAttribute('src', tvFrame.getAttribute('data-src')); }
         btnOanda.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition flex-shrink-0';
         btnMmk.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex-shrink-0';
       }
@@ -1233,6 +1314,8 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
           }
           state.oandaHigh = Number(oandaData.high) > 0 ? Number(oandaData.high) : null;
           state.oandaLow = Number(oandaData.low) > 0 ? Number(oandaData.low) : null;
+          state.oandaBid = Number(oandaData.bid) > 0 ? Number(oandaData.bid) : null;
+          state.oandaAsk = Number(oandaData.ask) > 0 ? Number(oandaData.ask) : null;
         }
 
         const bookRes = await fetch('https://api.binance.com/api/v3/ticker/bookTicker?symbol=PAXGUSDT');

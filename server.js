@@ -5,26 +5,33 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ---------- OANDA:XAUUSD (unchanged) ----------
+// ---------- OANDA:XAUUSD (now also returns bid / ask when TradingView provides them) ----------
+async function tvScan(columns) {
+  const response = await fetch("https://scanner.tradingview.com/cfd/scan", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ symbols: { tickers: ["OANDA:XAUUSD"] }, columns }),
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const data = await response.json();
+  return data && data.data && data.data.length > 0 ? data.data[0].d : null;
+}
+
 app.get("/api/oanda-gold", async (req, res) => {
   try {
-    const response = await fetch("https://scanner.tradingview.com/cfd/scan", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        symbols: { tickers: ["OANDA:XAUUSD"] },
-        columns: ["close", "open", "high", "low", "change"]
-      })
+    let metrics = null, hasBidAsk = false;
+    try {
+      metrics = await tvScan(["close", "open", "high", "low", "change", "bid", "ask"]);
+      hasBidAsk = !!metrics;
+    } catch (e) { /* bid/ask columns not accepted: fall back to the original columns below */ }
+    if (!metrics) metrics = await tvScan(["close", "open", "high", "low", "change"]);
+    if (!metrics) return res.status(404).json({ error: "Symbol not found" });
+    res.json({
+      close: metrics[0], open: metrics[1], high: metrics[2], low: metrics[3], change: metrics[4],
+      bid: hasBidAsk ? metrics[5] : null,
+      ask: hasBidAsk ? metrics[6] : null,
     });
-    const data = await response.json();
-    if (data && data.data && data.data.length > 0) {
-      const metrics = data.data[0].d;
-      res.json({
-        close: metrics[0], open: metrics[1], high: metrics[2], low: metrics[3], change: metrics[4]
-      });
-    } else {
-      res.status(404).json({ error: "Symbol not found" });
-    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

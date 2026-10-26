@@ -50,7 +50,25 @@
     if (mq.addEventListener) mq.addEventListener('change', onSys); else if (mq.addListener) mq.addListener(onSys);
   }
 
+
+  // Toggle button styles live here too, so the button looks right even if premium.css is cached/old.
+  function injectCss() {
+    if (document.getElementById('theme-toggle-css')) return;
+    var st = document.createElement('style');
+    st.id = 'theme-toggle-css';
+    st.textContent =
+      'html body>header button.theme-toggle[class]{display:inline-grid;place-items:center;flex:0 0 auto;width:2.4rem;height:2.4rem;padding:0 !important;cursor:pointer;' +
+      'background:var(--sf-elevated,#292925) !important;border:1px solid var(--bd-strong,#45433D) !important;border-radius:9999px !important;color:var(--gold-text,#F5C451) !important;box-shadow:none !important;transform:none !important}' +
+      'html body>header button.theme-toggle[class] *{color:var(--gold-text,#F5C451) !important}' +
+      'html body>header button.theme-toggle[class]:hover{background:rgba(245,196,81,.2) !important}' +
+      '.theme-toggle svg{display:block}' +
+      ':root[data-theme="dark"] .theme-toggle .ico-moon{display:none}' +
+      ':root:not([data-theme="dark"]) .theme-toggle .ico-sun{display:none}';
+    document.head.appendChild(st);
+  }
+
   function inject() {
+    try { injectCss(); } catch (e) {}
     paintMeta(root.getAttribute('data-theme'));
     if (document.getElementById('themeToggle')) return;
     var header = document.querySelector('body > header');
