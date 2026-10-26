@@ -471,30 +471,6 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
             </div>
           </div>
 
-          <div id="chartPriceStrip" class="chart-price-strip">
-            <div class="price-chip old">
-              <span class="chip-dot"></span>
-              <div>
-                <div class="chip-label" id="chipOldLabel">Old Standard (1.873)</div>
-                <div class="chip-value mono" id="chartPriceOld">—</div>
-              </div>
-            </div>
-            <div class="price-chip new">
-              <span class="chip-dot"></span>
-              <div>
-                <div class="chip-label" id="chipNewLabel">New Standard (1.9047)</div>
-                <div class="chip-value mono" id="chartPriceNew">—</div>
-              </div>
-            </div>
-            <div class="price-chip paxg">
-              <span class="chip-dot"></span>
-              <div>
-                <div class="chip-label" id="chipPaxgLabel">PAXG Digital Gold</div>
-                <div class="chip-value mono" id="chartPricePaxg">—</div>
-              </div>
-            </div>
-          </div>
-
           <div id="mmkChartContainer" class="chart-box w-full relative">
             <canvas id="mmkGoldChart"></canvas>
             <div id="chartEmpty" class="chart-empty hidden">Loading daily gold prices…</div>
@@ -1345,19 +1321,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
           : (currentLang === 'my' ? 'နေ့စဉ်ရွှေဈေး ဒေတာ ရယူနေသည်…' : 'Loading daily gold prices…');
       }
 
-      // Price chips above the chart: latest Old + New standard price for the chosen tier / currency
-      const my = currentLang === 'my';
-      const lastOld = oldStdSeries[oldStdSeries.length - 1];
-      const lastNew = newStdSeries[newStdSeries.length - 1];
-      const fmtFull = (v) => v == null ? '—'
-        : currency === 'MMK' ? formatNumber(v, 0) + (my ? ' ကျပ်' : ' Ks') : '$' + formatNumber(v, 2);
-      const setText = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
-      setText('chartPriceOld', fmtFull(lastOld));
-      setText('chartPriceNew', fmtFull(lastNew));
-      setText('chartPricePaxg', fmtFull(paxgSeries[paxgSeries.length - 1]));
-      setText('chipPaxgLabel', my ? 'PAXG ဒစ်ဂျစ်တယ်ရွှေ' : 'PAXG Digital Gold');
-      setText('chipOldLabel', my ? 'စနစ်ဟောင်း (1.873)' : 'Old Standard (1.873)');
-      setText('chipNewLabel', my ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)');
+
     }
 
     function switchChartTab(tab) {
@@ -1366,8 +1330,6 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       const btnMmk = document.getElementById('tabMmkChart');
       const btnOanda = document.getElementById('tabOandaChart');
 
-      const strip = document.getElementById('chartPriceStrip');
-      if (strip) strip.classList.toggle('hidden', tab !== 'mmk');
       if (tab === 'mmk') {
         mmkDiv.classList.remove('hidden');
         oandaDiv.classList.add('hidden');
