@@ -184,9 +184,16 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 </style>
 <script src="theme.js?v=3"></script>
 <link rel="stylesheet" href="premium.css?v=3">
+<style id="paxg-line">
+:root{--paxg-line:#0891b2}
+:root[data-theme="dark"]{--paxg-line:#22d3ee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paxg-line:#22d3ee}}
+.price-chip.paxg .chip-dot{background:var(--paxg-line);box-shadow:0 0 0 3px rgba(34,211,238,.22)}
+.price-chip.paxg .chip-value{color:var(--paxg-line)}
+</style>
 <style id="aligned-tables">
 .tbl-aligned{width:100%;table-layout:fixed;border-collapse:collapse}
-.tbl-gold{min-width:27rem}.tbl-fx{min-width:37rem}
+.tbl-gold{min-width:0}.tbl-gold th{white-space:normal}.tbl-gold td:first-child,.tbl-gold th:first-child{overflow-wrap:anywhere;word-break:break-word}.tbl-fx{min-width:37rem}
 .tbl-aligned th,.tbl-aligned td{vertical-align:middle;text-align:right;white-space:nowrap;line-height:1.6;
   padding:.7rem .5rem;font-variant-numeric:tabular-nums}
 .tbl-aligned th{padding-top:.55rem;padding-bottom:.55rem;font-weight:700}
@@ -195,6 +202,8 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 .tbl-aligned td>div{line-height:1.45}
 .tbl-aligned td .text-\[10px\]{display:block;margin-top:.1rem}
 .tbl-gold td{font-size:.8125rem;font-weight:700}
+@media (max-width:520px){.tbl-gold th,.tbl-gold td{padding:.55rem .2rem;font-size:.7rem}.tbl-gold th{font-size:.62rem}.tbl-gold td:first-child{font-size:.75rem}}
+@media (max-width:360px){.tbl-gold th,.tbl-gold td{padding:.5rem .1rem;font-size:.58rem}.tbl-gold th{font-size:.54rem}.tbl-gold td:first-child{font-size:.62rem}.tbl-gold col:nth-child(1){width:22%!important}.tbl-gold col:nth-child(2),.tbl-gold col:nth-child(3){width:27%!important}.tbl-gold col:nth-child(4){width:24%!important}}
 </style>
 
 <style id="live-badges">
@@ -295,7 +304,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 
           <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
             <table class="tbl-aligned tbl-gold text-xs">
-              <colgroup><col style="width:34%"><col style="width:22%"><col style="width:22%"><col style="width:22%"></colgroup>
+              <colgroup><col style="width:29%"><col style="width:24%"><col style="width:24%"><col style="width:23%"></colgroup>
               <thead>
                 <tr class="border-b border-slate-800 text-slate-400">
                   <th id="thStandard">Standard</th>
@@ -331,9 +340,19 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
                   <td id="gold15PaeSell" class="py-2.5 text-right text-xs sm:text-sm font-semibold text-slate-300">—</td>
                   <td id="gold15PaeSpread" class="py-2.5 text-right text-xs sm:text-sm font-semibold text-slate-300">—</td>
                 </tr>
+                <tr>
+                  <td class="font-sans">
+                    <div id="paxgRowTitle" class="font-semibold" style="color:var(--paxg-line,#22d3ee)">PAXG Digital Gold</div>
+                    <div id="paxgRowSub" class="text-[11px] text-slate-400">1 Oz PAXG = 1.873 Kyat</div>
+                  </td>
+                  <td id="goldPaxgBuy" class="text-emerald-400">—</td>
+                  <td id="goldPaxgSell" class="text-rose-400">—</td>
+                  <td id="goldPaxgSpread" class="text-amber-300">—</td>
+                </tr>
               </tbody>
             </table>
-            <p id="goldSpreadNote" class="mt-2 text-[11px] text-slate-400">Reference prices in Ks: OANDA XAU/USD ask × USDT/MMK buy rate (Buy), bid × sell rate (Sell), ÷ standard. Not a gold shop price.</p>
+            <p id="goldSpreadNote" class="mt-2 text-[11px] text-slate-400">Reference prices in Ks: OANDA XAU/USD ask × USDT/MMK buy rate (Buy), bid × sell rate (Sell), ÷ standard. PAXG row: Binance PAXG ask/bid × USDT/MMK. Not a gold shop price.</p>
+            <div class="mt-1 text-[11px] text-right"><span id="goldSyncTime" class="mono text-emerald-400">Synced: —</span></div>
           </div>
         </div>
 
@@ -453,6 +472,13 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
                 <div class="chip-value mono" id="chartPriceNew">—</div>
               </div>
             </div>
+            <div class="price-chip paxg">
+              <span class="chip-dot"></span>
+              <div>
+                <div class="chip-label" id="chipPaxgLabel">PAXG Digital Gold (1.873)</div>
+                <div class="chip-value mono" id="chartPricePaxg">—</div>
+              </div>
+            </div>
           </div>
 
           <div id="mmkChartContainer" class="chart-box w-full relative">
@@ -470,7 +496,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
         </div>
 
         <div class="mt-4 pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[11px] text-slate-400">
-          <span class="flex items-center gap-2 flex-wrap"><span id="chartFooterNote">Daily Gold Price Line Chart in Myanmar Kyats.</span><span class="lv wait" data-src="candles"><i class="lv-dot"></i><b class="lv-txt">…</b></span></span>
+          <span class="flex items-center gap-2 flex-wrap"><span id="chartFooterNote">Daily Gold Price Line Chart in Myanmar Kyats.</span><span class="lv wait" data-src="gold"><i class="lv-dot"></i><b class="lv-txt">…</b></span></span>
           <span id="lastSyncTime" class="mono text-emerald-400">Synced: Just now</span>
         </div>
       </div>
@@ -847,6 +873,7 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       if (mmkChartInstance) {
         mmkChartInstance.data.datasets[0].label = currentLang === 'my' ? 'စနစ်ဟောင်း (1.873)' : 'Old Standard (1.873)';
         mmkChartInstance.data.datasets[1].label = currentLang === 'my' ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)';
+        mmkChartInstance.data.datasets[2].label = currentLang === 'my' ? 'PAXG ဒစ်ဂျစ်တယ်ရွှေ (1.873)' : 'PAXG Digital Gold (1.873)';
       }
       
       document.getElementById('langBtnText').textContent = currentLang === 'my' ? 'မြန်မာ / English' : 'English / မြန်မာ';
@@ -873,13 +900,15 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       document.getElementById('labelOldStd').textContent = currentLang === 'my' ? 'စနစ်ဟောင်း' : 'Old Std';
       document.getElementById('labelNewStd').textContent = currentLang === 'my' ? 'စနစ်သစ်' : 'New Std';
 
+      document.getElementById('paxgRowTitle').textContent = currentLang === 'my' ? 'PAXG ဒစ်ဂျစ်တယ်ရွှေ' : 'PAXG Digital Gold';
+      document.getElementById('paxgRowSub').textContent = currentLang === 'my' ? '1 Oz PAXG = 1.873 ကျပ်သား' : '1 Oz PAXG = 1.873 Kyat';
       document.getElementById('thStandard').textContent = currentLang === 'my' ? 'စနစ်' : 'Standard';
       document.getElementById('thBuy').textContent = currentLang === 'my' ? 'ဝယ်ဈေး (ကျပ်)' : 'Buy (Ks)';
       document.getElementById('thSell').textContent = currentLang === 'my' ? 'ရောင်းဈေး (ကျပ်)' : 'Sell (Ks)';
       document.getElementById('thSpread').textContent = currentLang === 'my' ? 'ကွာဟချက်' : 'Spread';
       document.getElementById('goldSpreadNote').textContent = currentLang === 'my'
-        ? 'ရည်ညွှန်းဈေး (ကျပ်) - OANDA XAU/USD ask × USDT/MMK ဝယ်နှုန်း (ဝယ်ဈေး)၊ bid × ရောင်းနှုန်း (ရောင်းဈေး)၊ စနစ်ဖြင့် စား။ ရွှေဆိုင်ဈေး မဟုတ်ပါ။'
-        : 'Reference prices in Ks: OANDA XAU/USD ask × USDT/MMK buy rate (Buy), bid × sell rate (Sell), ÷ standard. Not a gold shop price.';
+        ? 'ရည်ညွှန်းဈေး (ကျပ်) - OANDA XAU/USD ask × USDT/MMK ဝယ်နှုန်း (ဝယ်ဈေး)၊ bid × ရောင်းနှုန်း (ရောင်းဈေး)၊ စနစ်ဖြင့် စား။ PAXG အတန်း - Binance PAXG ask/bid × USDT/MMK။ ရွှေဆိုင်ဈေး မဟုတ်ပါ။'
+        : 'Reference prices in Ks: OANDA XAU/USD ask × USDT/MMK buy rate (Buy), bid × sell rate (Sell), ÷ standard. PAXG row: Binance PAXG ask/bid × USDT/MMK. Not a gold shop price.';
       document.getElementById('thCurrency').textContent = currentLang === 'my' ? 'ငွေကြေး' : 'Market / Currency';
       document.getElementById('thCrossRate').textContent = currentLang === 'my' ? 'နှုန်းထား' : 'Cross Rate';
       document.getElementById('thEquals').textContent = currentLang === 'my' ? '100k MMK Equals' : '100k MMK Equals';
@@ -961,6 +990,10 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       fillRow('goldOld', oldBuy, oldSell);
       fillRow('goldNew', newBuy, newSell);
       fillRow('gold15Pae', (oldBuy * 15) / 16, (oldSell * 15) / 16);
+      // PAXG digital gold: Binance PAXG ask/bid (USDT) x the same bank USDT/MMK rates, old standard
+      if (state.paxgAsk > 0 && state.paxgBid > 0) {
+        fillRow('goldPaxg', (state.paxgAsk * state.bankBuy) / 1.873, (state.paxgBid * state.bankSell) / 1.873);
+      }
 
       renderFxTable();
       updateMmkGoldChart();
@@ -1048,10 +1081,10 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       // Reads a theme colour from CSS; falls back to built-in values so the chart still draws
       // even if premium.css is cached / outdated (an empty colour would make Chart.js throw).
       const DB_FALLBACK = {
-        dark:  { '--gold-line-old': '#F5C451', '--gold-line-new': '#FFE08A', '--gold-fill-top': 'rgba(245,196,81,0.30)',
+        dark:  { '--paxg-line': '#22d3ee', '--gold-line-old': '#F5C451', '--gold-line-new': '#FFE08A', '--gold-fill-top': 'rgba(245,196,81,0.30)',
                  '--sf-elevated': '#292925', '--mu': '#949087', '--bd': '#2E2D29', '--tx': '#F5F3EE', '--bg-shell': '#181816',
                  '--font-ui': 'system-ui, sans-serif' },
-        light: { '--gold-line-old': '#B9820A', '--gold-line-new': '#E0B13A', '--gold-fill-top': 'rgba(201,145,10,0.28)',
+        light: { '--paxg-line': '#0891b2', '--gold-line-old': '#B9820A', '--gold-line-new': '#E0B13A', '--gold-fill-top': 'rgba(201,145,10,0.28)',
                  '--sf-elevated': '#FFFFFF', '--mu': '#6E6A63', '--bd': '#E2DDD3', '--tx': '#111111', '--bg-shell': '#F7F5F0',
                  '--font-ui': 'system-ui, sans-serif' }
       };
@@ -1079,7 +1112,8 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
         afterDatasetsDraw(chart) {
           const area = chart.chartArea;
           const c = chart.ctx;
-          [[0, '--gold-line-old', 'above'], [1, '--gold-line-new', 'below']].forEach(([i, colorVar, where]) => {
+          const placed = [];   // pill rectangles already drawn, so the PAXG pill can step out of the way
+          [[0, '--gold-line-old', 'above'], [1, '--gold-line-new', 'below'], [2, '--paxg-line', 'below']].forEach(([i, colorVar, where]) => {
             const meta = chart.getDatasetMeta(i);
             const pts = meta && meta.data;
             const data = chart.data.datasets[i].data;
@@ -1098,6 +1132,14 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
             const x = Math.min(Math.max(last.x - w / 2, area.left), area.right - w);
             let y = where === 'above' ? last.y - h - 12 : last.y + 12;
             y = Math.min(Math.max(y, area.top - 6), area.bottom - h + 4);
+            // collision: move down past any pill we overlap; if that falls off the chart, go above instead
+            const hit = (yy) => placed.some(r => yy < r.y + h + 4 && yy + h + 4 > r.y && x < r.x + r.w && x + w > r.x);
+            for (let k = 0; k < 4 && hit(y); k++) {
+              const blocker = placed.find(r => y < r.y + h + 4 && y + h + 4 > r.y && x < r.x + r.w && x + w > r.x);
+              y = blocker.y + h + 4;
+            }
+            if (y > area.bottom - h + 4) { y = Math.min(...placed.map(r => r.y), last.y) - h - 8; }
+            placed.push({ x, y, w });
             c.beginPath();
             if (c.roundRect) c.roundRect(x, y, w, h, 12); else c.rect(x, y, w, h);
             c.fillStyle = col; c.fill();
@@ -1148,6 +1190,22 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
               pointHoverRadius: 6,
               pointHoverBackgroundColor: () => dbVar('--sf-elevated'),
               pointHoverBorderColor: () => dbVar('--gold-line-new'),
+              pointHoverBorderWidth: 3,
+              fill: false,
+              tension: 0.4
+            },
+            {
+              label: 'PAXG Digital Gold (1.873)',
+              data: [],
+              order: -1,                                   // draw on top of the two standard lines
+              borderColor: () => dbVar('--paxg-line'),
+              borderDash: [2, 5],
+              borderWidth: 3,
+              borderCapStyle: 'round',
+              pointRadius: 0,
+              pointHoverRadius: 6,
+              pointHoverBackgroundColor: () => dbVar('--sf-elevated'),
+              pointHoverBorderColor: () => dbVar('--paxg-line'),
               pointHoverBorderWidth: 3,
               fill: false,
               tension: 0.4
@@ -1222,20 +1280,27 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       }
 
       const labels = state.dailyGoldUsdCandles.map(c => c.date);
-      let oldStdSeries, newStdSeries;
+      let oldStdSeries, newStdSeries, paxgSeries;
+      // PAXG digital gold: Binance PAXG price (live mid on the last day) converted exactly like the Old Standard line
+      const nC = state.dailyGoldUsdCandles.length;
+      const livePaxg = (state.paxgAt && state.paxgBid > 0 && state.paxgAsk > 0) ? (state.paxgBid + state.paxgAsk) / 2 : null;
+      const paxgUsd = state.dailyGoldUsdCandles.map((c, i) => (i === nC - 1 && livePaxg) ? livePaxg : (c.paxg > 0 ? c.paxg : c.close));
 
       if (currency === 'MMK') {
         oldStdSeries = state.dailyGoldUsdCandles.map(c => Math.round((c.close * mmkRate) / 1.873));
         newStdSeries = state.dailyGoldUsdCandles.map(c => Math.round((c.close * mmkRate) / 1.9047));
+        paxgSeries = paxgUsd.map(v => Math.round((v * mmkRate) / 1.873));
       } else {
         oldStdSeries = state.dailyGoldUsdCandles.map(c => +(c.close / 1.873).toFixed(2));
         newStdSeries = state.dailyGoldUsdCandles.map(c => +(c.close / 1.9047).toFixed(2));
+        paxgSeries = paxgUsd.map(v => +(v / 1.873).toFixed(2));
       }
 
       if (mmkChartInstance) {
         mmkChartInstance.data.labels = labels;
         mmkChartInstance.data.datasets[0].data = oldStdSeries;
         mmkChartInstance.data.datasets[1].data = newStdSeries;
+        mmkChartInstance.data.datasets[2].data = paxgSeries;
         mmkChartInstance.update();
       }
 
@@ -1258,6 +1323,8 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       const setText = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
       setText('chartPriceOld', fmtFull(lastOld));
       setText('chartPriceNew', fmtFull(lastNew));
+      setText('chartPricePaxg', fmtFull(paxgSeries[paxgSeries.length - 1]));
+      setText('chipPaxgLabel', my ? 'PAXG ဒစ်ဂျစ်တယ်ရွှေ (1.873)' : 'PAXG Digital Gold (1.873)');
       setText('chipOldLabel', my ? 'စနစ်ဟောင်း (1.873)' : 'Old Standard (1.873)');
       setText('chipNewLabel', my ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)');
     }
@@ -1298,10 +1365,10 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
     function lvState(key) {
       if (key === 'fx') return { cls: 'static', txt: 'STATIC', tip: 'Cross rates (SGD, THB, JPY, MYR, CNY, AED) are fixed numbers in the page code and are never refreshed.' };
       if (key === 'gold') {
-        const a = lvState('oanda'), b = lvState('p2p');
         const rank = { off: 3, wait: 2, stale: 1, live: 0 };
-        const w = rank[a.cls] !== rank[b.cls] ? (rank[a.cls] > rank[b.cls] ? a : b) : ((state.oandaAt || 0) <= (state.p2pUpdatedAt || 0) ? a : b);
-        return { cls: w.cls, txt: w.txt, tip: 'Kyat-thar price = OANDA gold × P2P USDT rate. Status follows the weaker of the two sources.' };
+        const parts = [['oanda', state.oandaAt], ['p2p', state.p2pUpdatedAt], ['paxg', state.paxgAt]].map(([k, at]) => ({ r: lvState(k), at: at || 0 }));
+        const w = parts.reduce((x, y) => (rank[y.r.cls] > rank[x.r.cls] || (rank[y.r.cls] === rank[x.r.cls] && y.at < x.at)) ? y : x).r;
+        return { cls: w.cls, txt: w.txt, tip: 'Gold table + chart = OANDA gold, Binance PAXG and the P2P USDT rate. Status follows the weakest of the three.' };
       }
       const d = LV[key], at = d.at();
       const tip = d.name + ' · refresh ' + d.every + ' · ' + d.n() + ' successful updates this visit';
@@ -1311,7 +1378,16 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       if (age <= d.max && !d.err()) return { cls: 'live', txt: 'LIVE · ' + ago, tip };
       return { cls: 'stale', txt: 'STALE · ' + ago, tip };
     }
+    // One sync time for the gold table AND the chart: both are OANDA price x P2P rate,
+    // so they are only as fresh as the older of those two inputs.
+    function renderSyncTime() {
+      const ts = [state.oandaAt, state.p2pUpdatedAt, state.paxgAt].filter(Boolean);
+      const stamp = ts.length ? Math.min(...ts) : null;
+      const txt = (currentLang === 'my' ? 'အပ်ဒိတ်: ' : 'Synced: ') + (stamp ? new Date(stamp).toLocaleTimeString() : '—');
+      ['goldSyncTime', 'lastSyncTime'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = txt; });
+    }
     function renderLiveBadges() {
+      renderSyncTime();
       document.querySelectorAll('.lv[data-src]').forEach(el => {
         const r = lvState(el.dataset.src);
         el.className = 'lv ' + r.cls;
@@ -1459,9 +1535,6 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
         state.paxgAt = Date.now(); state.paxgErr = false; state.counts.paxg++;
       } catch (err) { state.paxgErr = true; console.warn('PAXG fetch failed:', err); }
 
-      if (state.oandaAt || state.paxgAt) {
-        document.getElementById('lastSyncTime').textContent = 'Synced: ' + new Date(Math.max(state.oandaAt || 0, state.paxgAt || 0)).toLocaleTimeString();
-      }
       recalculateAll();
       renderLiveBadges();
     }
@@ -1487,7 +1560,8 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
           if (!Array.isArray(k) || !k.length) continue;
           state.dailyGoldUsdCandles = k.map(x => ({
             date: new Date(x[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            close: parseFloat(x[4])
+            close: parseFloat(x[4]),
+            paxg: parseFloat(x[4])           // untouched PAXG close (close gets the live OANDA price on the last day)
           })).filter(c => Number.isFinite(c.close));
           try { localStorage.setItem('goldCandles', JSON.stringify(state.dailyGoldUsdCandles)); } catch (e) {}
           state.candlesAt = Date.now(); state.candlesErr = false; state.counts.candles++;
