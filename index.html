@@ -122,7 +122,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     .guide-strip a { color: #38bdf8; text-decoration: underline; }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298" crossorigin="anonymous"></script>
-<script src="theme.js"></script>
 <link rel="stylesheet" href="premium.css">
 </head>
 <body class="min-h-screen p-3 sm:p-4 md:p-6">
@@ -329,35 +328,17 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
                 <option value="USD">🇺🇸 USD</option>
               </select>
               <select id="chartRateTier" onchange="updateMmkGoldChart()" class="app-input px-2.5 py-1.5 text-slate-200">
-                <option value="bank" selected>Bank</option>
                 <option value="wallet">Wallet</option>
+                <option value="bank">Bank</option>
               </select>
             </div>
           </div>
 
-          <div id="chartPriceStrip" class="chart-price-strip">
-            <div class="price-chip old">
-              <span class="chip-dot"></span>
-              <div>
-                <div class="chip-label" id="chipOldLabel">Old Standard (1.873)</div>
-                <div class="chip-value mono" id="chartPriceOld">—</div>
-              </div>
-            </div>
-            <div class="price-chip new">
-              <span class="chip-dot"></span>
-              <div>
-                <div class="chip-label" id="chipNewLabel">New Standard (1.9047)</div>
-                <div class="chip-value mono" id="chartPriceNew">—</div>
-              </div>
-            </div>
-            <div class="chip-tier mono" id="chipTier">Bank rate</div>
-          </div>
-
-          <div id="mmkChartContainer" class="chart-box w-full relative">
+          <div id="mmkChartContainer" class="h-64 sm:h-80 w-full relative">
             <canvas id="mmkGoldChart"></canvas>
           </div>
 
-          <div id="oandaTvContainer" class="chart-box w-full hidden rounded-xl overflow-hidden border border-slate-800">
+          <div id="oandaTvContainer" class="h-64 sm:h-80 w-full hidden rounded-xl overflow-hidden border border-slate-800">
             <iframe
               src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_oanda&symbol=OANDA%3AXAUUSD&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=1&timezone=Asia%2FYangon"
               class="w-full h-full border-0" allowfullscreen></iframe>
@@ -896,40 +877,32 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
         return curr === 'MMK' ? (val / 1000000).toFixed(2) + 'M Ks' : '$' + formatNumber(val, 2);
       };
 
-      // Hollow end-point marker + gold pill with the latest value, for BOTH standards.
-      // Old standard pill sits above its point, new standard pill sits below its point,
-      // so the two never overlap even though the prices are close together.
+      // Hollow end-point marker + gold pill with the latest value (same as DayBook's curve chart)
       const endBadgePlugin = {
         id: 'dbEndBadge',
         afterDatasetsDraw(chart) {
-          const area = chart.chartArea;
-          const c = chart.ctx;
-          [[0, '--gold-line-old', 'above'], [1, '--gold-line-new', 'below']].forEach(([i, colorVar, where]) => {
-            const meta = chart.getDatasetMeta(i);
-            const pts = meta && meta.data;
-            const data = chart.data.datasets[i].data;
-            if (!pts || !pts.length || !data.length) return;
-            const last = pts[pts.length - 1];
-            const val = data[pts.length - 1];
-            if (!last || val == null) return;
-            const col = dbVar(colorVar);
-            c.save();
-            c.beginPath(); c.arc(last.x, last.y, 6, 0, Math.PI * 2);
-            c.fillStyle = dbVar('--sf-elevated'); c.fill();
-            c.lineWidth = 3; c.strokeStyle = col; c.stroke();
-            const text = fmtBadge(val);
-            c.font = '700 12px ' + dbVar('--font-ui');
-            const w = c.measureText(text).width + 20, h = 24;
-            const x = Math.min(Math.max(last.x - w / 2, area.left), area.right - w);
-            let y = where === 'above' ? last.y - h - 12 : last.y + 12;
-            y = Math.min(Math.max(y, area.top - 6), area.bottom - h + 4);
-            c.beginPath();
-            if (c.roundRect) c.roundRect(x, y, w, h, 12); else c.rect(x, y, w, h);
-            c.fillStyle = col; c.fill();
-            c.fillStyle = '#141413'; c.textAlign = 'center'; c.textBaseline = 'middle';
-            c.fillText(text, x + w / 2, y + h / 2 + 0.5);
-            c.restore();
-          });
+          const meta = chart.getDatasetMeta(0);
+          const pts = meta && meta.data;
+          if (!pts || !pts.length || chart.data.datasets[0].data.length === 0) return;
+          const last = pts[pts.length - 1];
+          const val = chart.data.datasets[0].data[pts.length - 1];
+          if (!last || val == null) return;
+          const c = chart.ctx, area = chart.chartArea;
+          c.save();
+          c.beginPath(); c.arc(last.x, last.y, 6, 0, Math.PI * 2);
+          c.fillStyle = dbVar('--sf-elevated'); c.fill();
+          c.lineWidth = 3; c.strokeStyle = dbVar('--stroke-curve'); c.stroke();
+          const text = fmtBadge(val);
+          c.font = '700 11px ' + dbVar('--font-ui');
+          const w = c.measureText(text).width + 18, h = 22;
+          const x = Math.min(Math.max(last.x - w / 2, area.left), area.right - w);
+          const y = Math.max(last.y - h - 12, area.top - 4);
+          c.beginPath();
+          if (c.roundRect) c.roundRect(x, y, w, h, 11); else c.rect(x, y, w, h);
+          c.fillStyle = '#F5C451'; c.fill();
+          c.fillStyle = '#141413'; c.textAlign = 'center'; c.textBaseline = 'middle';
+          c.fillText(text, x + w / 2, y + h / 2 + 0.5);
+          c.restore();
         }
       };
 
@@ -942,38 +915,38 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
             {
               label: 'Old Standard (1.873)',
               data: [],
-              borderColor: () => dbVar('--gold-line-old'),
+              borderColor: () => dbVar('--stroke-curve'),
               backgroundColor: (c) => {
                 const a = c.chart.chartArea;
                 if (!a) return 'rgba(245,196,81,0.12)';
                 const g = c.chart.ctx.createLinearGradient(0, a.top, 0, a.bottom);
-                g.addColorStop(0, dbVar('--gold-fill-top'));
+                g.addColorStop(0, 'rgba(245,196,81,0.22)');
                 g.addColorStop(1, 'rgba(245,196,81,0)');
                 return g;
               },
-              borderWidth: 3.25,
+              borderWidth: 2.75,
               borderCapStyle: 'round',
               borderJoinStyle: 'round',
               pointRadius: 0,
               pointHoverRadius: 6,
               pointHoverBorderWidth: 3,
               pointHoverBackgroundColor: () => dbVar('--sf-elevated'),
-              pointHoverBorderColor: () => dbVar('--gold-line-old'),
+              pointHoverBorderColor: () => dbVar('--stroke-curve'),
               fill: true,
               tension: 0.4
             },
             {
               label: 'New Standard (1.9047)',
               data: [],
-              borderColor: () => dbVar('--gold-line-new'),
-              borderDash: [7, 5],
-              borderWidth: 2.75,
+              borderColor: () => dbVar('--gold-text'),
+              borderDash: [4, 4],
+              borderWidth: 2,
               borderCapStyle: 'round',
               pointRadius: 0,
-              pointHoverRadius: 6,
+              pointHoverRadius: 5,
               pointHoverBackgroundColor: () => dbVar('--sf-elevated'),
-              pointHoverBorderColor: () => dbVar('--gold-line-new'),
-              pointHoverBorderWidth: 3,
+              pointHoverBorderColor: () => dbVar('--gold-text'),
+              pointHoverBorderWidth: 2.5,
               fill: false,
               tension: 0.4
             }
@@ -983,21 +956,21 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
           responsive: true,
           maintainAspectRatio: false,
           interaction: { mode: 'index', intersect: false },
-          layout: { padding: { top: 34, right: 10, bottom: 6 } },
+          layout: { padding: { top: 26, right: 6 } },
           plugins: {
             legend: {
               position: 'bottom',
               labels: {
                 usePointStyle: true, pointStyle: 'circle', boxWidth: 7, boxHeight: 7, padding: 16,
-                color: dbVar('--mu'), font: { size: 12, weight: '600' }
+                color: dbVar('--mu'), font: { size: 11, weight: '600' }
               }
             },
             tooltip: {
               backgroundColor: () => dbVar('--tx'),
               titleColor: () => dbVar('--bg-shell'),
               bodyColor: () => dbVar('--bg-shell'),
-              cornerRadius: 12, padding: 12, displayColors: false,
-              titleFont: { size: 12, weight: '600' }, bodyFont: { size: 13, weight: '700' },
+              cornerRadius: 12, padding: 10, displayColors: false,
+              titleFont: { size: 11, weight: '600' }, bodyFont: { size: 12, weight: '700' },
               callbacks: {
                 label: (item) => item.dataset.label.split(' ')[0] + ': ' + fmtBadge(item.parsed.y)
               }
@@ -1005,12 +978,12 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
           },
           scales: {
             x: {
-              ticks: { color: () => dbVar('--mu'), font: { size: 11 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 7 },
+              ticks: { color: () => dbVar('--mu'), font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 7 },
               grid: { display: false },
               border: { display: false }
             },
             y: {
-              ticks: { color: () => dbVar('--mu'), font: { size: 11 }, callback: fmtAxis },
+              ticks: { color: () => dbVar('--mu'), font: { size: 10 }, callback: fmtAxis },
               grid: { color: () => dbVar('--bd'), borderDash: [4, 4] },
               border: { display: false }
             }
@@ -1061,19 +1034,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       mmkChartInstance.data.datasets[0].data = oldStdSeries;
       mmkChartInstance.data.datasets[1].data = newStdSeries;
       mmkChartInstance.update();
-
-      // Price chips above the chart: latest Old + New standard price for the chosen tier / currency
-      const my = currentLang === 'my';
-      const lastOld = oldStdSeries[oldStdSeries.length - 1];
-      const lastNew = newStdSeries[newStdSeries.length - 1];
-      const fmtFull = (v) => v == null ? '—'
-        : currency === 'MMK' ? formatNumber(v, 0) + (my ? ' ကျပ်' : ' Ks') : '$' + formatNumber(v, 2);
-      const setText = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
-      setText('chartPriceOld', fmtFull(lastOld));
-      setText('chartPriceNew', fmtFull(lastNew));
-      setText('chipOldLabel', my ? 'စနစ်ဟောင်း (1.873)' : 'Old Standard (1.873)');
-      setText('chipNewLabel', my ? 'စနစ်သစ် (1.9047)' : 'New Standard (1.9047)');
-      setText('chipTier', tier === 'bank' ? (my ? 'ဘဏ်နှုန်း' : 'Bank rate') : (my ? 'ဝေါ်လက်နှုန်း' : 'Wallet rate'));
     }
 
     function switchChartTab(tab) {
@@ -1082,8 +1042,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       const btnMmk = document.getElementById('tabMmkChart');
       const btnOanda = document.getElementById('tabOandaChart');
 
-      const strip = document.getElementById('chartPriceStrip');
-      if (strip) strip.classList.toggle('hidden', tab !== 'mmk');
       if (tab === 'mmk') {
         mmkDiv.classList.remove('hidden');
         oandaDiv.classList.add('hidden');
