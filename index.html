@@ -245,6 +245,35 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lv.live{color:#4ade80}:root:not([data-theme="light"]) .lv.stale{color:#fbbf24}:root:not([data-theme="light"]) .lv.off{color:#f87171}:root:not([data-theme="light"]) .lv.static,:root:not([data-theme="light"]) .lv.wait{color:#94a3b8}}
 </style>
 
+
+<style id="mobile-header-layout-fix">
+/* Compact mobile header without changing desktop navigation or price data. */
+@media (max-width: 639px) {
+  body { padding: .5rem !important; }
+  body > header.sticky {
+    top: .25rem !important; margin-bottom: .65rem !important;
+    padding: .55rem .7rem !important; gap: .45rem !important;
+    border-radius: 1rem !important;
+  }
+  body > header .logo-scale-group { width: 2.35rem !important; height: 2.35rem !important; border-radius: .75rem !important; }
+  body > header .logo-scale-group svg { width: 1.55rem !important; height: 1.55rem !important; }
+  body > header > div:first-child { gap: .55rem !important; min-width: 0; }
+  body > header #mainTitle { font-size: 1rem !important; line-height: 1.2 !important; }
+  body > header #liveDateTime { font-size: 9px !important; line-height: 1.2 !important; }
+  body > header > div:nth-child(2) { width: 100%; justify-content: flex-end !important; gap: .4rem !important; }
+  body > header button[onclick="toggleLanguage()"] {
+    padding: .38rem .55rem !important; border-radius: .65rem !important;
+    font-size: 10px !important; gap: .25rem !important; box-shadow: none !important;
+  }
+  body > header button.theme-toggle[class] { width: 1.9rem !important; height: 1.9rem !important; }
+  body > header button.theme-toggle[class] svg { width: 1rem !important; height: 1rem !important; }
+  #introText { font-size: .78rem !important; line-height: 1.35 !important; }
+}
+/* The chart sits immediately after the gold-price table, before the converters. */
+#secChart { min-width: 0; }
+@media (max-width: 1023px) { #secChart { padding: .8rem !important; } }
+</style>
+
 </head>
 <body class="min-h-screen p-3 sm:p-4 md:p-6">
 
@@ -1627,5 +1656,22 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
       setInterval(renderLiveBadges, 1000);   // keeps the "LIVE · 12s" ages ticking and flips to STALE on time
     });
   </script>
+
+<script id="place-chart-after-gold-table">
+(function(){
+  function placeChart(){
+    var calc=document.getElementById('secCalc');
+    var chart=document.getElementById('secChart');
+    if(!calc||!chart||chart.dataset.repositioned==='1') return;
+    var tableCard=calc.firstElementChild;
+    if(tableCard){ tableCard.insertAdjacentElement('afterend',chart); chart.classList.remove('lg:col-span-7'); chart.classList.add('w-full'); chart.dataset.repositioned='1'; }
+    var grid=calc.parentElement;
+    if(grid){ grid.classList.remove('lg:grid-cols-12'); grid.classList.add('grid-cols-1'); }
+    calc.classList.remove('lg:col-span-5');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',placeChart); else placeChart();
+})();
+</script>
+
 </body>
 </html>
