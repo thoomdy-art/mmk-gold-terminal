@@ -817,23 +817,53 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
   </footer>
 
   <!-- NATIVE MOBILE APP BOTTOM NAVIGATION BAR -->
-  <nav class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-slate-950/95 backdrop-blur-lg border-t border-slate-800/90 px-4 py-2 flex items-center justify-around text-[11px] font-semibold text-slate-400">
-    <a href="#secSpot" class="flex flex-col items-center gap-0.5 text-amber-400">
-      <span>⚖️</span><span>Gold</span>
-    </a>
-    <a href="#secCalc" class="flex flex-col items-center gap-0.5 hover:text-white">
-      <span>🧮</span><span>Calculator</span>
-    </a>
-    <a href="#secChart" class="flex flex-col items-center gap-0.5 hover:text-white">
-      <span>📈</span><span>Chart</span>
-    </a>
-    <a href="#secP2P" class="flex flex-col items-center gap-0.5 hover:text-white">
-      <span>💱</span><span>P2P USDT</span>
-    </a>
-    <a href="guides.html" class="flex flex-col items-center gap-0.5 hover:text-white">
-      <span>📘</span><span>Guides</span>
-    </a>
+  <nav id="mobileBottomNav" aria-label="Mobile section navigation" class="md:hidden fixed bottom-0 inset-x-0 z-50 flex items-stretch text-[11px] font-semibold" style="padding:7px 8px calc(7px + env(safe-area-inset-bottom));">
+    <a data-nav-target="secSpot" href="#secSpot" class="mobile-nav-item" aria-current="location"><span class="mobile-nav-icon">⚖️</span><span>Gold</span></a>
+    <a data-nav-target="secCalc" href="#secCalc" class="mobile-nav-item"><span class="mobile-nav-icon">🧮</span><span>Calculator</span></a>
+    <a data-nav-target="secChart" href="#secChart" class="mobile-nav-item"><span class="mobile-nav-icon">📈</span><span>Chart</span></a>
+    <a data-nav-target="secP2P" href="#secP2P" class="mobile-nav-item"><span class="mobile-nav-icon">💱</span><span>P2P USDT</span></a>
+    <a href="guides.html" class="mobile-nav-item"><span class="mobile-nav-icon">📘</span><span>Guides</span></a>
   </nav>
+  <style>
+    /* Compact bottom navigation styled to match the site's warm gold / stone theme. */
+    #mobileBottomNav{gap:4px;background:rgba(20,19,17,.96);border:1px solid rgba(212,175,55,.22);border-bottom:0;border-radius:18px 18px 0 0;box-shadow:0 -8px 28px rgba(0,0,0,.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    :root[data-theme="light"] #mobileBottomNav{background:rgba(250,248,242,.97);border-color:rgba(130,100,30,.2);box-shadow:0 -8px 24px rgba(70,55,20,.10)}
+    #mobileBottomNav .mobile-nav-item{flex:1 1 20%;min-width:0;min-height:51px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:5px 2px;color:#aaa59a;text-decoration:none;white-space:nowrap;line-height:1.15;text-align:center;border:1px solid transparent;border-radius:12px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background .16s ease,color .16s ease,border-color .16s ease}
+    :root[data-theme="light"] #mobileBottomNav .mobile-nav-item{color:#706b60}
+    #mobileBottomNav .mobile-nav-item>span:last-child{font-size:clamp(10px,2.7vw,12px);font-weight:600;letter-spacing:-.01em}
+    #mobileBottomNav .mobile-nav-icon{font-size:19px;line-height:1.1;filter:saturate(.82)}
+    #mobileBottomNav .mobile-nav-item.active{color:#f5c451;background:rgba(245,196,81,.12);border-color:rgba(245,196,81,.22)}
+    :root[data-theme="light"] #mobileBottomNav .mobile-nav-item.active{color:#795b0a;background:rgba(205,158,34,.13);border-color:rgba(160,120,20,.25)}
+    #mobileBottomNav .mobile-nav-item:active{transform:scale(.97)}
+    #mobileBottomNav .mobile-nav-item:focus-visible{outline:2px solid #d6aa3b;outline-offset:-2px}
+    #secSpot,#secCalc,#secChart,#secP2P{scroll-margin-top:105px}
+    body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+    @media(min-width:768px){#mobileBottomNav{display:none!important}}
+  </style>
+  <script>
+    (() => {
+      const nav = document.getElementById('mobileBottomNav');
+      if (!nav) return;
+      const links = [...nav.querySelectorAll('[data-nav-target]')];
+      links.forEach(link => link.addEventListener('click', event => {
+        const target = document.getElementById(link.dataset.navTarget);
+        if (!target) return;
+        event.preventDefault();
+        links.forEach(item => { item.classList.toggle('active', item === link); if (item === link) item.setAttribute('aria-current','location'); else item.removeAttribute('aria-current'); });
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+        history.replaceState(null, '', '#' + link.dataset.navTarget);
+      }));
+      const targets = links.map(link => ({link, el:document.getElementById(link.dataset.navTarget)}).el ? ({link, el:document.getElementById(link.dataset.navTarget)}) : null).filter(Boolean);
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+          const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0];
+          if (!visible) return;
+          links.forEach(link => { const active = link.dataset.navTarget === visible.target.id; link.classList.toggle('active',active); if(active) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current'); });
+        }, {rootMargin:'-18% 0px -62% 0px',threshold:[0,.1,.25,.5]});
+        targets.forEach(item => observer.observe(item.el));
+      }
+    })();
+  </script>
 
   <script>
     let currentLang = 'en';
