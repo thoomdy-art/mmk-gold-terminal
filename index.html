@@ -898,15 +898,18 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 
       // The central reference is the median of eligible ads pooled across both exchanges.
       // Existing bank/wallet conversion formulas are retained; wallet retains its existing 25 Ks adjustment.
-      if (refBuy != null) {
-        state.bankBuy = refBuy;
-        state.walletBuy = refBuy - 25;
+      // Use the Bybit median rate. Fall back to the OKX/reference rate only when Bybit is unavailable.
+      const useBuy = bybitBuy != null ? bybitBuy : (okxBuy != null ? okxBuy : refBuy);
+      const useSell = bybitSell != null ? bybitSell : (okxSell != null ? okxSell : refSell);
+      if (useBuy != null) {
+        state.bankBuy = useBuy;
+        state.walletBuy = useBuy - 25;
       }
-      if (refSell != null) {
-        state.bankSell = refSell;
-        state.walletSell = refSell - 25;
+      if (useSell != null) {
+        state.bankSell = useSell;
+        state.walletSell = useSell - 25;
       }
-      if (refBuy != null || refSell != null) state.p2pUpdatedAt = updatedAt;
+      if (useBuy != null || useSell != null) state.p2pUpdatedAt = updatedAt;
 
       if (Array.isArray(data.errors) && data.errors.length) {
         console.warn('P2P API partial errors:', data.errors);
