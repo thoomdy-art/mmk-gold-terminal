@@ -61,6 +61,29 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     .hdrFx,.hdrG{font-weight:800;font-size:1.05em;padding:0 .2em;border-radius:.3em}
     .hdrFx{color:var(--gold-text);background:rgba(245,158,11,.14)}
     .hdrG{color:rgb(var(--blue));background:rgba(59,130,246,.14)}
+
+    /* --- responsive helpers (these utility classes are not in the compiled tailwind.css) --- */
+    .absolute{position:absolute} .inset-0{top:0;right:0;bottom:0;left:0}
+    .items-baseline{align-items:baseline} .justify-center{justify-content:center}
+    .gap-5{gap:1.25rem} .my-1{margin-top:.25rem;margin-bottom:.25rem} .pr-2{padding-right:.5rem}
+    html,body{max-width:100%;overflow-x:hidden}
+    .prose{min-width:0;overflow-wrap:anywhere}
+    .prose img,.prose canvas{max-width:100%}
+    .sim-charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:.75rem;margin-top:.75rem}
+    .sim-charts>*{min-width:0}
+    .chart-sm{height:190px;position:relative;width:100%}
+    #dxyMsg{text-align:center;overflow-wrap:anywhere;font-size:.8rem;background:var(--sf-elevated)}
+    .prose .metric,.prose .grid>*{min-width:0}
+    .prose table{min-width:0}
+    @media (max-width:639px){
+      article.prose{padding:1rem !important}
+      #resultPct{font-size:2rem}
+      .metric{padding:12px}
+      .prose .metric table th,.prose .metric table td{padding:.4rem .3rem;font-size:.78rem}
+      .chart-sm{height:170px}
+      #dxyChart{max-height:180px}
+      .rng{padding:.3rem .7rem}
+    }
     .sim-stack > * + * { margin-top: .75rem; }
     #resultPct { font-size: 2.5rem; font-weight: 800; line-height: 1.15; letter-spacing: -.03em; }
     .prose .sm-note { font-size: .78rem; color: var(--mu); line-height: 1.6; margin: .4rem 0 0; }
@@ -107,7 +130,7 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 <div class="flex gap-2" id="dxyRanges" role="group" aria-label="DXY range"><button type="button" class="rng" data-range="1m">1M</button><button type="button" class="rng on" data-range="3m">3M</button><button type="button" class="rng" data-range="6m">6M</button><button type="button" class="rng" data-range="1y">1Y</button></div>
 </div>
 <div class="flex items-baseline gap-3 mt-2"><b id="dxyLast" class="num text-xl gold">—</b><span id="dxyChg" class="num text-sm">—</span></div>
-<div style="height:200px;position:relative" class="mt-2"><canvas id="dxyChart" aria-label="DXY chart"></canvas><div id="dxyMsg" class="muted text-sm absolute inset-0 flex items-center justify-center text-center px-3">Loading…</div></div>
+<div class="chart-sm mt-2" style="height:200px"><canvas id="dxyChart" aria-label="DXY chart"></canvas><div id="dxyMsg" class="muted text-sm absolute inset-0 flex items-center justify-center text-center px-3">Loading…</div></div>
 <p class="sm-note"><span class="en">Daily close from Yahoo Finance. The vertical axis does not start at zero. DXY is context only and is not used in the Myanmar gold formula.</span><span class="my">Yahoo Finance မှ နေ့စဉ်ပိတ်ဈေး။ ဒေါင်လိုက်ဝင်ရိုးကို သုံညမှ မစတင်ပါ။ DXY သည် နောက်ခံအချက်အလက်သာဖြစ်ပြီး မြန်မာ့ရွှေဈေးတွက်ချက်ပုံသေနည်းတွင် မပါဝင်ပါ။</span></p>
 </div>
 <div class="note"><p>Important: DXY is a context indicator, not a direct input in the Myanmar gold conversion formula. Real gold prices also respond to real yields, central-bank demand, risk sentiment, positioning and supply/demand.</p></div>
@@ -115,6 +138,16 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 
 <h2><span class="en">2. Try the Myanmar gold price simulator</span><span class="my">၂။ မြန်မာ့ရွှေဈေး တွက်ချက်မှုကို အောက်တွင် ကိုယ်တိုင်စမ်းတွက်ကြည့်နိုင်ပါသည်</span></h2>
 <p><span class="en">Type a world gold price and a P2P USD price, or move the sliders below. Both start at today's live values. The calculator shows the implied kyat-thar price under the old and new gold standards.</span><span class="my">ကမ္ဘာ့ရွှေဈေးနှင့် P2P ဒေါ်လာဈေးကို ကိုယ်တိုင်ရိုက်ထည့်ပါ၊ သို့မဟုတ် အောက်ရှိ slider များကို ရွှေ့ကြည့်ပါ။ စတင်တန်ဖိုးနှစ်ခုစလုံးသည် ယခုလက်ရှိဈေးဖြစ်သည်။ စံနှုန်းဟောင်းနှင့် စံနှုန်းသစ် နှစ်မျိုးလုံးအတွက် ကျပ်သားဈေးကို တွက်ပြပါမည်။</span></p>
+<div class="metric mt-4">
+<div class="text-xs muted mb-2"><span class="en">Implied price · MMK / kyat-thar</span><span class="my">ကျပ်သားဈေး (ကျပ်)</span></div>
+<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead><tr><th class="py-1 pr-2"></th>
+<th class="py-1 pr-2"><span class="en">Current price</span><span class="my">ယခုဖြစ်နေသောဈေး</span></th>
+<th class="py-1 pr-2"><span class="en">If only the P2P USD price (<b class="hdrFx">—</b> MMK) changes</span><span class="my">P2P ဒေါ်လာဈေးသာ (<b class="hdrFx">—</b> ကျပ်) ဖြစ်ပါက</span></th>
+<th class="py-1"><span class="en">If world gold ($<b class="hdrG">—</b>) and P2P (<b class="hdrFx">—</b> MMK) both change</span><span class="my">ကမ္ဘာ့ရွှေဈေး ($<b class="hdrG">—</b>) နှင့် P2P ဒေါ်လာဈေး (<b class="hdrFx">—</b> ကျပ်) နှစ်ခုလုံး ပြောင်းလဲပါက</span></th></tr></thead><tbody class="divide-y divide-slate-700">
+<tr><td class="py-2 pr-2"><span class="en">Old standard</span><span class="my">စံနှုန်းဟောင်း</span><div class="text-xs muted">1.873</div></td><td class="num font-bold pr-2" id="curOld">—</td><td class="num font-bold pr-2" id="pOld">—</td><td class="num font-bold gold" id="allOld">—</td></tr>
+<tr><td class="py-2 pr-2"><span class="en">New standard</span><span class="my">စံနှုန်းသစ်</span><div class="text-xs muted">1.9047</div></td><td class="num font-bold pr-2" id="curNew">—</td><td class="num font-bold pr-2" id="pNew">—</td><td class="num font-bold gold" id="allNew">—</td></tr>
+</tbody></table></div></div>
+
 <div class="grid sm:grid-cols-2 gap-3 mt-4">
 <div class="metric"><div class="text-xs muted"><span class="en">Current World Gold (OANDA XAU/USD)</span><span class="my">ယခုလက်ရှိကမ္ဘာ့ရွှေဈေး (OANDA XAU/USD)</span></div><div id="liveGold" class="num text-lg font-bold gold">Loading…</div></div>
 <div class="metric"><div class="text-xs muted"><span class="en">Current P2P USD Price (Bank)</span><span class="my">ယခုလက်ရှိ P2P ဒေါ်လာဈေး (Bank)</span></div><div id="liveFx" class="num text-lg font-bold gold">Loading…</div></div>
@@ -139,23 +172,14 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 <p class="mt-3"><button class="btn btn-sm" id="reset" type="button"><span class="en">Reset to live prices</span><span class="my">လက်ရှိဈေးသို့ ပြန်ထားမည်</span></button></p>
 <div class="metric mt-4"><div class="text-xs muted"><span class="en">Combined implied Myanmar gold price change</span><span class="my">မြန်မာ့ရွှေဈေး စုပေါင်းပြောင်းလဲမှု</span></div><div id="resultPct" class="gold num">—</div><div id="resultText" class="text-sm mt-1"></div></div>
 <div class="metric mt-3">
-<div class="text-xs muted mb-2"><span class="en">Implied price · MMK / kyat-thar</span><span class="my">ကျပ်သားဈေး (ကျပ်)</span></div>
-<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead><tr><th class="py-1 pr-2"></th>
-<th class="py-1 pr-2"><span class="en">Current price</span><span class="my">ယခုဖြစ်နေသောဈေး</span></th>
-<th class="py-1 pr-2"><span class="en">If only the P2P USD price (<b class="hdrFx">—</b> MMK) changes</span><span class="my">P2P ဒေါ်လာဈေးသာ (<b class="hdrFx">—</b> ကျပ်) ဖြစ်ပါက</span></th>
-<th class="py-1"><span class="en">If world gold ($<b class="hdrG">—</b>) and P2P (<b class="hdrFx">—</b> MMK) both change</span><span class="my">ကမ္ဘာ့ရွှေဈေး ($<b class="hdrG">—</b>) နှင့် P2P ဒေါ်လာဈေး (<b class="hdrFx">—</b> ကျပ်) နှစ်ခုလုံး ပြောင်းလဲပါက</span></th></tr></thead><tbody class="divide-y divide-slate-700">
-<tr><td class="py-2 pr-2"><span class="en">Old standard</span><span class="my">စံနှုန်းဟောင်း</span><div class="text-xs muted">1.873</div></td><td class="num font-bold pr-2" id="curOld">—</td><td class="num font-bold pr-2" id="pOld">—</td><td class="num font-bold gold" id="allOld">—</td></tr>
-<tr><td class="py-2 pr-2"><span class="en">New standard</span><span class="my">စံနှုန်းသစ်</span><div class="text-xs muted">1.9047</div></td><td class="num font-bold pr-2" id="curNew">—</td><td class="num font-bold pr-2" id="pNew">—</td><td class="num font-bold gold" id="allNew">—</td></tr>
-</tbody></table></div></div>
-<div class="metric mt-3">
 <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
 <div class="text-xs muted"><span class="en">Why the price changed · MMK / kyat-thar</span><span class="my">ဈေးဘာကြောင့်ပြောင်းသွားသလဲ · ကျပ်သားတစ်ကျပ်သားလျှင် (ကျပ်)</span></div>
 <div class="flex gap-2" id="stdChoice" role="group" aria-label="Gold standard"><button type="button" class="rng on" data-std="new"><span class="en">New standard</span><span class="my">စံနှုန်းသစ်</span></button><button type="button" class="rng" data-std="old"><span class="en">Old standard</span><span class="my">စံနှုန်းဟောင်း</span></button></div>
 </div>
-<div class="grid sm:grid-cols-3 gap-3 mt-3">
-<div><div class="text-xs font-semibold mb-1"><span class="en">Myanmar gold: now vs scenario</span><span class="my">မြန်မာ့ရွှေ - ယခုဈေး နှင့် စမ်းသပ်ဈေး</span></div><div style="height:190px;position:relative"><canvas id="chartPrice" aria-label="Current and scenario price"></canvas></div><p class="sm-note num" id="capPrice"></p></div>
-<div><div class="text-xs font-semibold mb-1"><span class="en">World gold (XAU/USD, $/oz)</span><span class="my">ကမ္ဘာ့ရွှေဈေး (XAU/USD, $/oz)</span></div><div style="height:190px;position:relative"><canvas id="chartGold" aria-label="World gold effect"></canvas></div><p class="sm-note num" id="capGold"></p></div>
-<div><div class="text-xs font-semibold mb-1"><span class="en">P2P USD/MMK (Ks per $)</span><span class="my">P2P USD/MMK (ဒေါ်လာတစ်ဒေါ်လာလျှင် ကျပ်)</span></div><div style="height:190px;position:relative"><canvas id="chartFx" aria-label="P2P USD/MMK effect"></canvas></div><p class="sm-note num" id="capFx"></p></div>
+<div class="sim-charts">
+<div><div class="text-xs font-semibold mb-1"><span class="en">Myanmar gold: now vs scenario</span><span class="my">မြန်မာ့ရွှေ - ယခုဈေး နှင့် စမ်းသပ်ဈေး</span></div><div class="chart-sm"><canvas id="chartPrice" aria-label="Current and scenario price"></canvas></div><p class="sm-note num" id="capPrice"></p></div>
+<div><div class="text-xs font-semibold mb-1"><span class="en">World gold (XAU/USD, $/oz)</span><span class="my">ကမ္ဘာ့ရွှေဈေး (XAU/USD, $/oz)</span></div><div class="chart-sm"><canvas id="chartGold" aria-label="World gold effect"></canvas></div><p class="sm-note num" id="capGold"></p></div>
+<div><div class="text-xs font-semibold mb-1"><span class="en">P2P USD/MMK (Ks per $)</span><span class="my">P2P USD/MMK (ဒေါ်လာတစ်ဒေါ်လာလျှင် ကျပ်)</span></div><div class="chart-sm"><canvas id="chartFx" aria-label="P2P USD/MMK effect"></canvas></div><p class="sm-note num" id="capFx"></p></div>
 </div>
 <p class="sm-note"><span class="en">Green bars push the Myanmar gold price up and red bars pull it down. Each chart's vertical axis does not start at zero, so the changes are easier to see.</span><span class="my">အစိမ်းရောင်တိုင်သည် မြန်မာ့ရွှေဈေးကို မြင့်တက်စေပြီး အနီရောင်တိုင်သည် ကျဆင်းစေသည်။ ပြောင်းလဲမှုများကို ပိုမြင်သာစေရန် ဇယားတစ်ခုစီ၏ ဒေါင်လိုက်ဝင်ရိုးကို သုံညမှ မစတင်ပါ။</span></p>
 </div>
