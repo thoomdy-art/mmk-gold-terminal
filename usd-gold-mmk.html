@@ -84,6 +84,25 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
       #dxyChart{max-height:180px}
       .rng{padding:.3rem .7rem}
     }
+
+    /* implied-price table: 4 columns on wide screens, stacked rows with inline labels on phones */
+    .pt{display:block}
+    .pt-head,.pt-row{display:grid;grid-template-columns:minmax(5.5rem,.8fr) 1fr 1.2fr 1.4fr;gap:.5rem;align-items:start}
+    .pt-head{border-bottom:1px solid var(--bd);padding:.25rem 0 .5rem}
+    .pt-row{padding:.6rem 0;border-bottom:1px solid var(--bd)}
+    .pt-row:last-child{border-bottom:0}
+    .pt-lab{font-size:.78rem;color:var(--mu);line-height:1.6;overflow-wrap:anywhere}
+    .pt-lab-m{display:none}
+    .pt-std{font-size:.9rem;font-weight:600}
+    .pt-cell>.num{font-size:1rem}
+    @media (max-width:639px){
+      .pt-head{display:none}
+      .pt-row{grid-template-columns:1fr;gap:.35rem;padding:.8rem 0}
+      .pt-std{font-size:1rem;margin-bottom:.1rem}
+      .pt-cell{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.6rem;align-items:baseline;padding:.35rem 0;border-top:1px dashed var(--bd)}
+      .pt-lab-m{display:block}
+      .pt-cell>.num{font-size:1.05rem;text-align:right;white-space:nowrap}
+    }
     .sim-stack > * + * { margin-top: .75rem; }
     #resultPct { font-size: 2.5rem; font-weight: 800; line-height: 1.15; letter-spacing: -.03em; }
     .prose .sm-note { font-size: .78rem; color: var(--mu); line-height: 1.6; margin: .4rem 0 0; }
@@ -140,13 +159,17 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
 <p><span class="en">Type a world gold price and a P2P USD price, or move the sliders below. Both start at today's live values. The calculator shows the implied kyat-thar price under the old and new gold standards.</span><span class="my">ကမ္ဘာ့ရွှေဈေးနှင့် P2P ဒေါ်လာဈေးကို ကိုယ်တိုင်ရိုက်ထည့်ပါ၊ သို့မဟုတ် အောက်ရှိ slider များကို ရွှေ့ကြည့်ပါ။ စတင်တန်ဖိုးနှစ်ခုစလုံးသည် ယခုလက်ရှိဈေးဖြစ်သည်။ စံနှုန်းဟောင်းနှင့် စံနှုန်းသစ် နှစ်မျိုးလုံးအတွက် ကျပ်သားဈေးကို တွက်ပြပါမည်။</span></p>
 <div class="metric mt-4">
 <div class="text-xs muted mb-2"><span class="en">Implied price · MMK / kyat-thar</span><span class="my">ကျပ်သားဈေး (ကျပ်)</span></div>
-<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead><tr><th class="py-1 pr-2"></th>
-<th class="py-1 pr-2"><span class="en">Current price</span><span class="my">ယခုဖြစ်နေသောဈေး</span></th>
-<th class="py-1 pr-2"><span class="en">If only the P2P USD price (<b class="hdrFx">—</b> MMK) changes</span><span class="my">P2P ဒေါ်လာဈေးသာ (<b class="hdrFx">—</b> ကျပ်) ဖြစ်ပါက</span></th>
-<th class="py-1"><span class="en">If world gold ($<b class="hdrG">—</b>) and P2P (<b class="hdrFx">—</b> MMK) both change</span><span class="my">ကမ္ဘာ့ရွှေဈေး ($<b class="hdrG">—</b>) နှင့် P2P ဒေါ်လာဈေး (<b class="hdrFx">—</b> ကျပ်) နှစ်ခုလုံး ပြောင်းလဲပါက</span></th></tr></thead><tbody class="divide-y divide-slate-700">
-<tr><td class="py-2 pr-2"><span class="en">Old standard</span><span class="my">စံနှုန်းဟောင်း</span><div class="text-xs muted">1.873</div></td><td class="num font-bold pr-2" id="curOld">—</td><td class="num font-bold pr-2" id="pOld">—</td><td class="num font-bold gold" id="allOld">—</td></tr>
-<tr><td class="py-2 pr-2"><span class="en">New standard</span><span class="my">စံနှုန်းသစ်</span><div class="text-xs muted">1.9047</div></td><td class="num font-bold pr-2" id="curNew">—</td><td class="num font-bold pr-2" id="pNew">—</td><td class="num font-bold gold" id="allNew">—</td></tr>
-</tbody></table></div></div>
+<div class="pt">
+<div class="pt-head"><div></div><div class="pt-lab"><span class="en">Current price</span><span class="my">ယခုဖြစ်နေသောဈေး</span></div><div class="pt-lab"><span class="en">If only the P2P USD price (<b class="hdrFx">—</b> MMK) changes</span><span class="my">P2P ဒေါ်လာဈေးသာ (<b class="hdrFx">—</b> ကျပ်) ဖြစ်ပါက</span></div><div class="pt-lab"><span class="en">If world gold ($<b class="hdrG">—</b>) and P2P (<b class="hdrFx">—</b> MMK) both change</span><span class="my">ကမ္ဘာ့ရွှေဈေး ($<b class="hdrG">—</b>) နှင့် P2P ဒေါ်လာဈေး (<b class="hdrFx">—</b> ကျပ်) နှစ်ခုလုံး ပြောင်းလဲပါက</span></div></div>
+<div class="pt-row"><div class="pt-std"><span class="en">Old standard</span><span class="my">စံနှုန်းဟောင်း</span><span class="text-xs muted"> 1.873</span></div>
+<div class="pt-cell"><div class="pt-lab pt-lab-m"><span class="en">Current price</span><span class="my">ယခုဖြစ်နေသောဈေး</span></div><div class="num font-bold" id="curOld">—</div></div>
+<div class="pt-cell"><div class="pt-lab pt-lab-m"><span class="en">If only the P2P USD price (<b class="hdrFx">—</b> MMK) changes</span><span class="my">P2P ဒေါ်လာဈေးသာ (<b class="hdrFx">—</b> ကျပ်) ဖြစ်ပါက</span></div><div class="num font-bold" id="pOld">—</div></div>
+<div class="pt-cell"><div class="pt-lab pt-lab-m"><span class="en">If world gold ($<b class="hdrG">—</b>) and P2P (<b class="hdrFx">—</b> MMK) both change</span><span class="my">ကမ္ဘာ့ရွှေဈေး ($<b class="hdrG">—</b>) နှင့် P2P ဒေါ်လာဈေး (<b class="hdrFx">—</b> ကျပ်) နှစ်ခုလုံး ပြောင်းလဲပါက</span></div><div class="num font-bold gold" id="allOld">—</div></div></div>
+<div class="pt-row"><div class="pt-std"><span class="en">New standard</span><span class="my">စံနှုန်းသစ်</span><span class="text-xs muted"> 1.9047</span></div>
+<div class="pt-cell"><div class="pt-lab pt-lab-m"><span class="en">Current price</span><span class="my">ယခုဖြစ်နေသောဈေး</span></div><div class="num font-bold" id="curNew">—</div></div>
+<div class="pt-cell"><div class="pt-lab pt-lab-m"><span class="en">If only the P2P USD price (<b class="hdrFx">—</b> MMK) changes</span><span class="my">P2P ဒေါ်လာဈေးသာ (<b class="hdrFx">—</b> ကျပ်) ဖြစ်ပါက</span></div><div class="num font-bold" id="pNew">—</div></div>
+<div class="pt-cell"><div class="pt-lab pt-lab-m"><span class="en">If world gold ($<b class="hdrG">—</b>) and P2P (<b class="hdrFx">—</b> MMK) both change</span><span class="my">ကမ္ဘာ့ရွှေဈေး ($<b class="hdrG">—</b>) နှင့် P2P ဒေါ်လာဈေး (<b class="hdrFx">—</b> ကျပ်) နှစ်ခုလုံး ပြောင်းလဲပါက</span></div><div class="num font-bold gold" id="allNew">—</div></div></div>
+</div></div>
 
 <div class="grid sm:grid-cols-2 gap-3 mt-4">
 <div class="metric"><div class="text-xs muted"><span class="en">Current World Gold (OANDA XAU/USD)</span><span class="my">ယခုလက်ရှိကမ္ဘာ့ရွှေဈေး (OANDA XAU/USD)</span></div><div id="liveGold" class="num text-lg font-bold gold">Loading…</div></div>
