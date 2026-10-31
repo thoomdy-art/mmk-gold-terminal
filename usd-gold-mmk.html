@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="theme-color" content="#E5E1D8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why Gold Isn't Falling in Myanmar: DXY, XAU/USD & USD/MMK Simulator | မြန်မာ့ ရွှေဈေး</title>
+  <meta name="description" content="Interactive explanation of the US Dollar Index, international gold prices and USD/MMK exchange rates — and why Myanmar gold can rise while world gold falls." />
+  <link rel="canonical" href="https://wemanage.space/usd-gold-mmk.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Myanmar Gold Price | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:title" content="Why Gold Isn't Falling in Myanmar: DXY, XAU/USD & USD/MMK Simulator | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:description" content="Interactive explanation of the US Dollar Index, international gold prices and USD/MMK exchange rates — and why Myanmar gold can rise while world gold falls." />
+  <meta property="og:url" content="https://wemanage.space/usd-gold-mmk.html" />
+  <script>
+(function(){var l='en';try{l=localStorage.getItem('lang')||'en';}catch(e){}
+if(l!=='my')l='en';var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l==='my'?'my':'en');
+window.setLang=function(x){try{localStorage.setItem('lang',x);}catch(e){}d.setAttribute('data-lang',x);d.setAttribute('lang',x==='my'?'my':'en');};
+window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='en'?'my':'en');};})();
+</script>
+  <link rel="stylesheet" href="tailwind.css">
+<style>
+    body { font-family: 'Inter', 'Padauk', sans-serif; background-color: #0b0f17; color: #e2e8f0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .card { background: #131b2e; border: 1px solid #1e293b; border-radius: 0.75rem; }
+    html[data-lang="en"] .my { display: none !important; }
+    html[data-lang="my"] .en { display: none !important; }
+    .my { font-family: 'Padauk', 'Inter', sans-serif; line-height: 1.9; }
+    .prose h2 { color:#fcd34d; font-weight:700; font-size:1.25rem; margin:1.75rem 0 .6rem; }
+    .prose h3 { color:#e2e8f0; font-weight:600; font-size:1.05rem; margin:1.25rem 0 .4rem; }
+    .prose p { color:#cbd5e1; font-size:.95rem; line-height:1.75; margin:.7rem 0; }
+    .my.prose p, .prose .my p { line-height:2; }
+    .prose ul, .prose ol { color:#cbd5e1; font-size:.95rem; line-height:1.75; margin:.7rem 0 .7rem 1.25rem; }
+    .prose ul { list-style:disc; } .prose ol { list-style:decimal; }
+    .prose li { margin:.3rem 0; }
+    .prose table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.88rem; }
+    .prose th { text-align:left; color:#94a3b8; border-bottom:1px solid #334155; padding:.5rem .4rem; }
+    .prose td { color:#e2e8f0; border-bottom:1px solid #1e293b; padding:.5rem .4rem; }
+    .prose a { color:#38bdf8; text-decoration:underline; }
+    .note { border-left:4px solid #f59e0b; background:rgba(245,158,11,.08); padding:.75rem 1rem; border-radius:.5rem; margin:1rem 0; }
+    .note p { margin:.2rem 0; }
+
+    /* --- usd-gold-mmk page components (theme colours come from premium.css variables) --- */
+    .num { font-variant-numeric: tabular-nums; letter-spacing: -.02em; font-feature-settings: "tnum" on, "lnum" on; }
+    .gold { color: var(--gold-text); }
+    .muted { color: var(--mu); }
+    .range { width: 100%; accent-color: var(--ac); }
+    .metric { background: var(--sf-elevated); border: 1px solid var(--bd); border-radius: var(--radius-sub); padding: 14px 16px; }
+    .bar { height: 12px; border-radius: 999px; background: var(--bd); overflow: hidden; }
+    .bar > i { display: block; height: 100%; border-radius: 999px; }
+    .bar-blue { background: rgb(var(--blue)); } .bar-gold { background: var(--gold); }
+    .bar-red { background: rgb(var(--l)); } .bar-green { background: rgb(var(--g)); }
+    .prose .sm-note.c-neg { color: rgb(var(--l)); } .prose .sm-note.c-pos { color: rgb(var(--g)); }
+    .btn { background: var(--ac); color: var(--ac-ink); border: 1px solid var(--ac); font-weight: 700; border-radius: var(--radius-pill); padding: .55rem 1.1rem; cursor: pointer; }
+    .btn:hover { transform: translateY(-1px); opacity: .94; }
+    .btn-sm { font-size: .75rem; padding: .3rem .85rem; line-height: 1.5; font-weight: 600; }
+    .rng { background: var(--sf-elevated); color: var(--tx); border: 1px solid var(--bd); border-radius: var(--radius-pill); padding: .35rem .9rem; font-size: .78rem; font-weight: 600; cursor: pointer; }
+    .rng:hover { border-color: var(--bd-strong); }
+    .rng.on { background: var(--ac); color: var(--ac-ink); border-color: var(--ac); }
+    .hdrFx,.hdrG{font-weight:800;font-size:1.05em;padding:0 .2em;border-radius:.3em}
+    .hdrFx{color:var(--gold-text);background:rgba(245,158,11,.14)}
+    .hdrG{color:rgb(var(--blue));background:rgba(59,130,246,.14)}
+    .sim-stack > * + * { margin-top: .75rem; }
+    #resultPct { font-size: 2.5rem; font-weight: 800; line-height: 1.15; letter-spacing: -.03em; }
+    .prose .sm-note { font-size: .78rem; color: var(--mu); line-height: 1.6; margin: .4rem 0 0; }
+    .prose .sm-note.md { font-size: .88rem; }
+    .prose .metric p { margin: .3rem 0 0; }
+    .prose .metric table { margin: 0; }
+    .prose .metric table th, .prose .metric table td { padding: .5rem .4rem; }
+    html body .text-red-300 { color: rgb(var(--l)) !important; }
+</style>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7869394911229298" crossorigin="anonymous"></script>
+<script src="theme.js?v=3"></script>
+<link rel="stylesheet" href="premium.css?v=3">
+</head>
+<body class="min-h-screen p-3 sm:p-4 md:p-6">
+  <header class="max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+    <a href="index.html" class="text-xl sm:text-2xl font-bold tracking-tight text-white"><span class="en">Myanmar Gold Price <span class="text-slate-400 text-base">(မြန်မာ့ ရွှေဈေး)</span></span><span class="my">မြန်မာ့ ရွှေဈေး</span></a>
+    <div class="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
+      <nav class="flex flex-wrap items-center gap-3 sm:gap-4" aria-label="Main"><a href="index.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မစာမျက်နှာ</span></a><a href="guides.html" class="text-sm font-medium text-amber-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a><a href="about.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">About</span><span class="my">အကြောင်းအရာ</span></a><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a></nav>
+      <button onclick="toggleSiteLang()" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow whitespace-nowrap">🌐 <span class="en">မြန်မာ</span><span class="my">English</span></button>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto">
+    <article class="card p-6 sm:p-8 prose">
+<span class="eyebrow"><span class="en">Interactive lesson</span><span class="my">အပြန်အလှန်သင်ခန်းစာ</span></span>
+<h1 class="text-2xl sm:text-3xl font-bold text-white mt-3"><span class="en">Why world gold can fall while Myanmar gold rises</span><span class="my">ကမ္ဘာ့ရွှေဈေးကျနေချိန် မြန်မာ့ရွှေဈေး ဘာကြောင့် မကျနိုင်သလဲ</span></h1>
+<p><span class="en">Three forces matter: the US dollar, the international gold price, and the kyat exchange rate. Explore how they connect below.</span><span class="my">အဓိကသက်ရောက်မှုရှိသော အချက် ၃ ချက်မှာ အမေရိကန်ဒေါ်လာ၊ ကမ္ဘာ့ရွှေဈေးနှင့် ကျပ်ငွေလဲနှုန်းတို့ဖြစ်သည်။ အောက်တွင် အပြန်အလှန် စမ်းသပ်ကြည့်ပါ။</span></p>
+<div class="grid md:grid-cols-3 gap-3 mt-5">
+<div class="metric"><div class="text-xs muted">01 · DXY</div><div class="text-xl font-bold gold">US Dollar Index</div><p class="sm-note md"><span class="en">Measures the dollar against a basket of major currencies.</span><span class="my">အဓိကငွေကြေးများနှင့် နှိုင်းယှဉ်ထားသော ဒေါ်လာတန်ဖိုးကို တိုင်းတာသည်။</span></p></div>
+<div class="metric"><div class="text-xs muted">02 · XAU/USD</div><div class="text-xl font-bold gold">World gold price</div><p class="sm-note md"><span class="en">The international spot price quoted in US dollars per troy ounce.</span><span class="my">နိုင်ငံတကာရွှေတစ်အောင်စ၏ အမေရိကန်ဒေါ်လာဖြင့် ဖော်ပြသောဈေး။</span></p></div>
+<div class="metric"><div class="text-xs muted">03 · USD/MMK</div><div class="text-xl font-bold gold">Kyat exchange rate</div><p class="sm-note md"><span class="en">How many kyats are needed to obtain one US dollar (use the relevant market rate).</span><span class="my">အမေရိကန်ဒေါ်လာတစ်ဒေါ်လာရရန် ကျပ်မည်မျှလိုအပ်သည် (သက်ဆိုင်ရာဈေးကွက်နှုန်းကို အသုံးပြုပါ)။</span></p></div>
+</div>
+
+<h2><span class="en">1. Why DXY and gold often move in opposite directions</span><span class="my">၁။ DXY နှင့် ရွှေဈေး ဘာကြောင့် မကြာခဏ ဆန့်ကျင်ဘက်ရွေ့သလဲ</span></h2>
+<p><span class="en">Gold is quoted in USD. <strong>When the dollar strengthens, the same ounce can become more expensive for buyers using other currencies, which can reduce demand.</strong> A stronger dollar can also reflect higher US interest-rate expectations, raising the opportunity cost of holding non-yielding gold. These forces often pressure gold — but the relationship is not fixed.</span><span class="my">ရွှေကို USD ဖြင့် ဈေးသတ်မှတ်ထားသည်။ <strong>ဒေါ်လာအားကောင်းလာလျှင် အခြားငွေကြေးသုံးသူများအတွက် ရွှေဝယ်ယူစရိတ် ပိုမြင့်နိုင်ပြီး ရွှေဝယ်လိုအားကို လျော့စေနိုင်သည်။</strong> ထို့အပြင် အမေရိကန်အတိုးနှုန်းမြင့်မားမည်ဟု မျှော်လင့်ချက်က အတိုးမရသော ရွှေကို ကိုင်ထားရသည့် အခွင့်အလမ်းကုန်ကျစရိတ်ကို မြှင့်တင်နိုင်သည်။ သို့သော် ထို ဆက်နွယ်မှုသည် အမြဲတမ်း တစ်ပုံစံတည်းတော့ မဟုတ်ပါ။</span></p>
+<div class="grid sm:grid-cols-2 gap-4 mt-5">
+<div class="metric"><div class="text-sm font-bold"><span class="en">DXY ↑</span><span class="my">DXY ↑ တက်လာလျှင်</span></div><div class="bar mt-2"><i style="width:78%" class="bar-red"></i></div><p class="sm-note md c-neg"><span class="en">Often creates downward pressure on USD gold.</span><span class="my">ဒေါ်လာဖြင့်ဖော်ပြသော ရွှေဈေးကျဆင်းဖို့များနိုင်ပါသည်။</span></p></div>
+<div class="metric"><div class="text-sm font-bold"><span class="en">DXY ↓</span><span class="my">DXY ↓ ကျလျှင်</span></div><div class="bar mt-2"><i style="width:78%" class="bar-green"></i></div><p class="sm-note md c-pos"><span class="en">Often supports USD gold, all else equal.</span><span class="my">အခြားထည့်တွက်ရမယ့်အချက်များ မပြောင်းလဲပါက ဒေါ်လာဖြင့်ဖော်ပြသော ရွှေဈေးကို တက်နိုင်ပါသည်။</span></p></div>
+</div>
+<div class="metric mt-4">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="text-sm font-bold"><span class="en">US Dollar Index (DXY)</span><span class="my">အမေရိကန်ဒေါ်လာ အညွှန်းကိန်း (DXY)</span></div>
+<div class="flex gap-2" id="dxyRanges" role="group" aria-label="DXY range"><button type="button" class="rng" data-range="1m">1M</button><button type="button" class="rng on" data-range="3m">3M</button><button type="button" class="rng" data-range="6m">6M</button><button type="button" class="rng" data-range="1y">1Y</button></div>
+</div>
+<div class="flex items-baseline gap-3 mt-2"><b id="dxyLast" class="num text-xl gold">—</b><span id="dxyChg" class="num text-sm">—</span></div>
+<div style="height:200px;position:relative" class="mt-2"><canvas id="dxyChart" aria-label="DXY chart"></canvas><div id="dxyMsg" class="muted text-sm absolute inset-0 flex items-center justify-center text-center px-3">Loading…</div></div>
+<p class="sm-note"><span class="en">Daily close from Yahoo Finance. The vertical axis does not start at zero. DXY is context only and is not used in the Myanmar gold formula.</span><span class="my">Yahoo Finance မှ နေ့စဉ်ပိတ်ဈေး။ ဒေါင်လိုက်ဝင်ရိုးကို သုံညမှ မစတင်ပါ။ DXY သည် နောက်ခံအချက်အလက်သာဖြစ်ပြီး မြန်မာ့ရွှေဈေးတွက်ချက်ပုံသေနည်းတွင် မပါဝင်ပါ။</span></p>
+</div>
+<div class="note"><p>Important: DXY is a context indicator, not a direct input in the Myanmar gold conversion formula. Real gold prices also respond to real yields, central-bank demand, risk sentiment, positioning and supply/demand.</p></div>
+
+
+<h2><span class="en">2. Try the Myanmar gold price simulator</span><span class="my">၂။ မြန်မာ့ရွှေဈေး တွက်ချက်မှုကို အောက်တွင် ကိုယ်တိုင်စမ်းတွက်ကြည့်နိုင်ပါသည်</span></h2>
+<p><span class="en">Type a world gold price and a P2P USD price, or move the sliders below. Both start at today's live values. The calculator shows the implied kyat-thar price under the old and new gold standards.</span><span class="my">ကမ္ဘာ့ရွှေဈေးနှင့် P2P ဒေါ်လာဈေးကို ကိုယ်တိုင်ရိုက်ထည့်ပါ၊ သို့မဟုတ် အောက်ရှိ slider များကို ရွှေ့ကြည့်ပါ။ စတင်တန်ဖိုးနှစ်ခုစလုံးသည် ယခုလက်ရှိဈေးဖြစ်သည်။ စံနှုန်းဟောင်းနှင့် စံနှုန်းသစ် နှစ်မျိုးလုံးအတွက် ကျပ်သားဈေးကို တွက်ပြပါမည်။</span></p>
+<div class="grid sm:grid-cols-2 gap-3 mt-4">
+<div class="metric"><div class="text-xs muted"><span class="en">Current World Gold (OANDA XAU/USD)</span><span class="my">ယခုလက်ရှိကမ္ဘာ့ရွှေဈေး (OANDA XAU/USD)</span></div><div id="liveGold" class="num text-lg font-bold gold">Loading…</div></div>
+<div class="metric"><div class="text-xs muted"><span class="en">Current P2P USD Price (Bank)</span><span class="my">ယခုလက်ရှိ P2P ဒေါ်လာဈေး (Bank)</span></div><div id="liveFx" class="num text-lg font-bold gold">Loading…</div></div>
+</div>
+<div class="grid sm:grid-cols-2 gap-3 mt-4">
+<label class="text-sm"><span class="en">World Gold XAU/USD ($/oz)</span><span class="my">ကမ္ဘာ့ရွှေဈေး XAU/USD ($/oz)</span><input id="goldBase" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="Loading…" class="app-input w-full p-2 mt-1 text-white"></label>
+<label class="text-sm"><span class="en">P2P USD price (MMK)</span><span class="my">P2P ဒေါ်လာဈေး (ကျပ်)</span><input id="fxBase" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="Loading…" class="app-input w-full p-2 mt-1 text-white"></label>
+</div>
+<p class="sm-note"><span class="en">Defaults to the current live prices. Type your own values to test a scenario (English or Burmese digits, commas allowed).</span><span class="my">မူလတန်ဖိုးမှာ ယခုလက်ရှိဈေးဖြစ်ပါသည်။ စမ်းသပ်လိုပါက ကိုယ်တိုင်ရိုက်ထည့်နိုင်ပါသည်။ (မြန်မာ/အင်္ဂလိပ်ဂဏန်း အသုံးပြုနိုင်ပြီး ကော်မာထည့်နိုင်သည်)</span></p>
+<div class="metric mt-4">
+<div class="text-sm font-bold mb-3"><span class="en">Try it yourself: move the sliders (the prices and charts below update automatically)</span><span class="my">ကိုယ်တိုင်စမ်းကြည့်ပါ - slider များကို ရွှေ့ပါ (အောက်ရှိ ဈေးများနှင့် ဇယား/ဂရပ်များကို အလိုအလျောက် ပြောင်းပေးပါမည်)</span></div>
+<div class="grid md:grid-cols-2 gap-5">
+<div class="space-y-4">
+<div><div class="flex justify-between gap-3"><label class="font-semibold" for="goldPct"><span class="en">International gold (XAU/USD)</span><span class="my">ကမ္ဘာ့ရွှေဈေး (XAU/USD)</span></label><strong class="num" id="goldPctLabel">+0.0%</strong></div><input id="goldPct" class="range mt-2" type="range" min="-30" max="30" step=".5" value="0"><div class="flex justify-between text-xs muted"><span>−30%</span><span>0%</span><span>+30%</span></div></div>
+<div><div class="flex justify-between gap-3"><label class="font-semibold" for="fxPct"><span class="en">USD/MMK exchange rate (P2P)</span><span class="my">USD/MMK ငွေလဲနှုန်း (P2P)</span></label><strong class="num" id="fxPctLabel">+0.0%</strong></div><input id="fxPct" class="range mt-2" type="range" min="-30" max="50" step=".5" value="0"><div class="flex justify-between text-xs muted"><span>−30%</span><span>0%</span><span>+50%</span></div></div>
+</div>
+<div class="metric"><div class="text-xs muted mb-2"><span class="en">What happened?</span><span class="my">ဘာဖြစ်သွားသလဲ?</span></div>
+<div class="flex justify-between text-sm"><span><span class="en">World gold</span><span class="my">ကမ္ဘာ့ရွှေဈေး</span></span><b id="goldAfter" class="num">+0.0%</b></div><div class="bar my-1"><i id="goldBar" class="bar-blue" style="width:50%"></i></div>
+<div class="flex justify-between text-sm mt-3"><span>USD/MMK</span><b id="fxAfter" class="num">+0.0%</b></div><div class="bar my-1"><i id="fxBar" class="bar-gold" style="width:50%"></i></div>
+<div class="flex justify-between text-sm mt-3"><span><span class="en">Myanmar gold price</span><span class="my">မြန်မာ့ရွှေဈေး</span></span><b id="mmGoldAfter" class="num">+0.0%</b></div><div class="bar my-1"><i id="mmGoldBar" class="bar-green" style="width:50%"></i></div></div>
+</div></div>
+<p class="mt-3"><button class="btn btn-sm" id="reset" type="button"><span class="en">Reset to live prices</span><span class="my">လက်ရှိဈေးသို့ ပြန်ထားမည်</span></button></p>
+<div class="metric mt-4"><div class="text-xs muted"><span class="en">Combined implied Myanmar gold price change</span><span class="my">မြန်မာ့ရွှေဈေး စုပေါင်းပြောင်းလဲမှု</span></div><div id="resultPct" class="gold num">—</div><div id="resultText" class="text-sm mt-1"></div></div>
+<div class="metric mt-3">
+<div class="text-xs muted mb-2"><span class="en">Implied price · MMK / kyat-thar</span><span class="my">ကျပ်သားဈေး (ကျပ်)</span></div>
+<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead><tr><th class="py-1 pr-2"></th>
+<th class="py-1 pr-2"><span class="en">Current price</span><span class="my">ယခုဖြစ်နေသောဈေး</span></th>
+<th class="py-1 pr-2"><span class="en">If only the P2P USD price (<b class="hdrFx">—</b> MMK) changes</span><span class="my">P2P ဒေါ်လာဈေးသာ (<b class="hdrFx">—</b> ကျပ်) ဖြစ်ပါက</span></th>
+<th class="py-1"><span class="en">If world gold ($<b class="hdrG">—</b>) and P2P (<b class="hdrFx">—</b> MMK) both change</span><span class="my">ကမ္ဘာ့ရွှေဈေး ($<b class="hdrG">—</b>) နှင့် P2P ဒေါ်လာဈေး (<b class="hdrFx">—</b> ကျပ်) နှစ်ခုလုံး ပြောင်းလဲပါက</span></th></tr></thead><tbody class="divide-y divide-slate-700">
+<tr><td class="py-2 pr-2"><span class="en">Old standard</span><span class="my">စံနှုန်းဟောင်း</span><div class="text-xs muted">1.873</div></td><td class="num font-bold pr-2" id="curOld">—</td><td class="num font-bold pr-2" id="pOld">—</td><td class="num font-bold gold" id="allOld">—</td></tr>
+<tr><td class="py-2 pr-2"><span class="en">New standard</span><span class="my">စံနှုန်းသစ်</span><div class="text-xs muted">1.9047</div></td><td class="num font-bold pr-2" id="curNew">—</td><td class="num font-bold pr-2" id="pNew">—</td><td class="num font-bold gold" id="allNew">—</td></tr>
+</tbody></table></div></div>
+<div class="metric mt-3">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+<div class="text-xs muted"><span class="en">Why the price changed · MMK / kyat-thar</span><span class="my">ဈေးဘာကြောင့်ပြောင်းသွားသလဲ · ကျပ်သားတစ်ကျပ်သားလျှင် (ကျပ်)</span></div>
+<div class="flex gap-2" id="stdChoice" role="group" aria-label="Gold standard"><button type="button" class="rng on" data-std="new"><span class="en">New standard</span><span class="my">စံနှုန်းသစ်</span></button><button type="button" class="rng" data-std="old"><span class="en">Old standard</span><span class="my">စံနှုန်းဟောင်း</span></button></div>
+</div>
+<div class="grid sm:grid-cols-3 gap-3 mt-3">
+<div><div class="text-xs font-semibold mb-1"><span class="en">Myanmar gold: now vs scenario</span><span class="my">မြန်မာ့ရွှေ - ယခုဈေး နှင့် စမ်းသပ်ဈေး</span></div><div style="height:190px;position:relative"><canvas id="chartPrice" aria-label="Current and scenario price"></canvas></div><p class="sm-note num" id="capPrice"></p></div>
+<div><div class="text-xs font-semibold mb-1"><span class="en">World gold (XAU/USD, $/oz)</span><span class="my">ကမ္ဘာ့ရွှေဈေး (XAU/USD, $/oz)</span></div><div style="height:190px;position:relative"><canvas id="chartGold" aria-label="World gold effect"></canvas></div><p class="sm-note num" id="capGold"></p></div>
+<div><div class="text-xs font-semibold mb-1"><span class="en">P2P USD/MMK (Ks per $)</span><span class="my">P2P USD/MMK (ဒေါ်လာတစ်ဒေါ်လာလျှင် ကျပ်)</span></div><div style="height:190px;position:relative"><canvas id="chartFx" aria-label="P2P USD/MMK effect"></canvas></div><p class="sm-note num" id="capFx"></p></div>
+</div>
+<p class="sm-note"><span class="en">Green bars push the Myanmar gold price up and red bars pull it down. Each chart's vertical axis does not start at zero, so the changes are easier to see.</span><span class="my">အစိမ်းရောင်တိုင်သည် မြန်မာ့ရွှေဈေးကို မြင့်တက်စေပြီး အနီရောင်တိုင်သည် ကျဆင်းစေသည်။ ပြောင်းလဲမှုများကို ပိုမြင်သာစေရန် ဇယားတစ်ခုစီ၏ ဒေါင်လိုက်ဝင်ရိုးကို သုံညမှ မစတင်ပါ။</span></p>
+</div>
+<div class="note"><p><strong>Formula:</strong> Implied MMK / kyat-thar = XAU/USD × P2P USD/MMK ÷ ticals-per-troy-ounce</p><p class="sm-note">This follows the project's existing old/new standard convention (1.873 or 1.9047 ticals per troy ounce). Actual shop prices can differ due to local premiums, purity, taxes, restrictions, liquidity and the exchange rate available to the market.</p></div>
+<h2><span class="en">3. The key insight: two markets can move against each other</span><span class="my">၃။ အဓိကအချက် - ဈေးကွက်နှစ်ခုသည် ဆန့်ကျင်ဘက် ရွေ့လျားနိုင်သည်</span></h2>
+<p class="sm-note"><span class="en">Examples</span><span class="my">ဥပမာ</span></p>
+<div class="overflow-x-auto mt-2"><table class="w-full text-sm text-left"><thead><tr><th class="p-2"><span class="en">World gold</span><span class="my">ကမ္ဘာ့ရွှေဈေး</span></th><th class="p-2">USD/MMK</th><th class="p-2"><span class="en">Myanmar implied gold</span><span class="my">မြန်မာ့ရွှေဈေး</span></th><th class="p-2"><span class="en">Meaning</span><span class="my">ဘာဖြစ်နိုင်လဲ</span></th></tr></thead><tbody class="divide-y divide-slate-700"><tr><td class="p-2 text-red-300">−5%<span class="my"> ကျ</span></td><td class="p-2 text-emerald-300">+10%<span class="my"> တက်</span></td><td class="p-2 gold font-bold">+4.5%<span class="my"> တက်</span></td><td class="p-2"><span class="en">Kyat weakens more</span><span class="my">ကျပ်ပိုမိုအားပျော့</span></td></tr><tr><td class="p-2 text-red-300">−10%<span class="my"> ကျ</span></td><td class="p-2 text-emerald-300">+5%<span class="my"> တက်</span></td><td class="p-2 text-red-300">−5.5%<span class="my"> ကျ</span></td><td class="p-2"><span class="en">Gold falls overall</span><span class="my">ရွှေဈေးကျ</span></td></tr><tr><td class="p-2 text-emerald-300">+3%<span class="my"> တက်</span></td><td class="p-2 text-emerald-300">+7%<span class="my"> တက်</span></td><td class="p-2 gold font-bold">+10.2%<span class="my"> တက်</span></td><td class="p-2"><span class="en">Both lift local price</span><span class="my">နှစ်ခုလုံးတက်သဖြင့် မြန်မာ့ရွှေဈေး ပိုတက်</span></td></tr><tr><td class="p-2 text-red-300">−3%<span class="my"> ကျ</span></td><td class="p-2 text-red-300">−7%<span class="my"> ကျ</span></td><td class="p-2 text-red-300">−9.8%<span class="my"> ကျ</span></td><td class="p-2"><span class="en">Both pull local price down</span><span class="my">နှစ်ခုလုံးကျသဖြင့် မြန်မာ့ရွှေဈေး ပိုကျ</span></td></tr></tbody></table></div>
+<p>The combined move is multiplicative, not simply additive: (1 + gold change) × (1 + FX change) − 1. For example, 0.95 × 1.10 − 1 = +4.5%.</p>
+<h2><span class="en">4. Why the Myanmar market can diverge even more</span><span class="my">၄။ မြန်မာ့ဈေးကွက်တွင် ကွာဟမှု ပိုများနိုင်သည့် အကြောင်းရင်းများ</span></h2>
+<ol class="steps">
+<li><span class="en"><strong>P2P USDT/MMK is a local FX signal.</strong> When access to foreign currency is constrained, the P2P USDT/MMK rate may rise even if the official or bank rate does not. USDT is a proxy for USD in this calculation, not necessarily identical to an executable USD bank rate.</span><span class="my"><strong>P2P USDT/MMK သည် ပြည်တွင်းငွေလဲဈေးကွက်၏ တစိတ်တပိုင်းသာဖြစ်သည်။</strong> နိုင်ငံခြားငွေ ရရှိရန် ကန့်သတ်ချက်များရှိနေချိန်တွင် တရားဝင်နှုန်း သို့မဟုတ် ဗဟိုဘဏ် ဒေါ်လာနှုန်း မမြင့်သော်လည်း P2P USDT/MMK နှုန်းမှာ မြင့်တက်နိုင်သည်။ ဤတွက်ချက်မှုတွင် USDT ကို USD အစားထိုးအဖြစ်သာ သုံးထားသောကြောင့် ဘဏ်များတွင် တကယ်လဲယူနိုင်သော USD နှုန်း (ဗဟိုဘဏ်နှုန်း) နှင့် တူချင်မှ တူပါမည်။</span></li>
+<li><span class="en"><strong>Local supply, demand and liquidity.</strong> Import costs, market access, local buying demand, dealer inventory and liquidity can widen the gap between the calculated reference and actual shop quotes.</span><span class="my"><strong>ပြည်တွင်းရောင်းလိုအား၊ ဝယ်လိုအားနှင့် ငွေဖြစ်လွယ်ကူမှု။</strong> တင်သွင်းစရိတ်၊ ဈေးကွက်ဝင်ရောက်နိုင်မှု၊ ပြည်တွင်းဝယ်လိုအား၊ ဒိုင်များ၏ လက်ကျန်ရွှေနှင့် ငွေကြေးအလွယ်တကူ လဲလှယ်နိုင်မှုတို့ပေါ်မူတည်ပြီး တွက်ချက်ထားသော ကိုးကားဈေးနှင့် ရွှေဆိုင်များ၏ တကယ်ပေးသည့်ဈေးကြား ကွာဟမှု ပိုကျယ်လာနိုင်သည်။</span></li>
+<li><span class="en"><strong>Different prices are not interchangeable.</strong> A global spot quote, P2P advertisement median, calculated reference price and physical shop buy/sell quote each represent a different market and may update at different times.</span><span class="my"><strong>ဈေးအမျိုးအစားများကို အစားထိုး၍ မရပါ။</strong> ကမ္ဘာ့ spot ဈေး၊ P2P ကြော်ငြာများ၏ အလယ်တန်းတန်ဖိုး (median)၊ တွက်ချက်ထားသော ကိုးကားဈေးနှင့် ရွှေဆိုင်၏ ဝယ်/ရောင်းဈေးတို့သည် ဈေးကွက်ချင်း မတူသည့်အပြင် အချိန်မတူဘဲ အပြောင်းအလဲရှိနိုင်သည်။</span></li>
+</ol>
+
+<h2>What to watch together</h2>
+<div class="grid sm:grid-cols-2 gap-3 mt-3 text-sm">
+<div class="metric"><b class="gold">DXY</b><p>Dollar strength and broad macro pressure.</p></div><div class="metric"><b class="gold">XAU/USD</b><p>The actual international gold move.</p></div><div class="metric"><b class="gold">USDT/MMK P2P</b><p>Local currency replacement-cost signal; watch buy/sell sides separately.</p></div><div class="metric"><b class="gold">Myanmar shop premium</b><p>The difference between calculated reference and real local quotes.</p></div>
+</div>
+<div class="note"><p>Educational material only, not investment advice. The simulator uses the live OANDA XAU/USD price and P2P bank USD price only as starting defaults; the percentage moves are hypothetical and the results are not forecasts or shop quotes. DXY is not fetched.</p></div>
+
+<p><a href="guides.html"><span class="en">← All guides</span><span class="my">← လမ်းညွှန်အားလုံး</span></a> · <a href="how-myanmar-gold-price-is-calculated.html"><span class="en">How Myanmar gold is calculated</span><span class="my">မြန်မာ့ရွှေဈေး တွက်ပုံ</span></a> · <a href="p2p-usdt-mmk-rates-explained.html"><span class="en">USDT/MMK P2P guide</span><span class="my">USDT/MMK P2P လမ်းညွှန်</span></a> · <a href="index.html"><span class="en">Live prices &amp; calculators</span><span class="my">တိုက်ရိုက်ဈေးနှုန်းနှင့် ဂဏန်းတွက်စက်များ</span></a></p>
+    </article>
+  <section class="card p-6 sm:p-8 eeat" id="sources">
+<div class="author-row"><div class="avatar" aria-hidden="true">W</div><div>
+<p class="author-name"><span class="en">Written and maintained by the wemanage.space team</span><span class="my">wemanage.space အဖွဲ့မှ ရေးသားထိန်းသိမ်းထားသည်</span></p>
+<p class="author-meta"><span class="en">Last updated: October 31, 2026 · Independent, not affiliated with any exchange, bank or gold shop · <a href="about.html">About us</a> · <a href="contact.html">Report a correction</a></span><span class="my">နောက်ဆုံးပြင်ဆင်သည့်ရက်: ၂၀၂၆ ခုနှစ် အောက်တိုဘာ ၂၃ · exchange၊ ဘဏ် သို့မဟုတ် ရွှေဆိုင်များနှင့် မသက်ဆိုင်ဘဲ လွတ်လပ်သည် · <a href="about.html">ကျွန်ုပ်တို့အကြောင်း</a> · <a href="contact.html">ပြင်ဆင်ချက်ပို့ရန်</a></span></p></div></div>
+<div class="src-list"><h2 class="src-title"><span class="en">Sources &amp; further reading</span><span class="my">ကိုးကားချက်များနှင့် ဆက်လက်ဖတ်ရန်</span></h2>
+<ul><li><a href="https://www.gold.org" target="_blank" rel="noopener noreferrer">World Gold Council</a></li><li><a href="https://www.lbma.org.uk" target="_blank" rel="noopener noreferrer">LBMA (London Bullion Market Association)</a></li><li><a href="https://www.tradingview.com/symbols/XAUUSD/" target="_blank" rel="noopener noreferrer">TradingView (OANDA:XAUUSD)</a></li><li><a href="https://www.cbm.gov.mm" target="_blank" rel="noopener noreferrer">Central Bank of Myanmar</a></li></ul>
+<p class="src-note"><span class="en">External sites are listed as references; we do not control their content. This page is general information, not financial advice.</span><span class="my">ပြင်ပဝဘ်ဆိုက်များကို ကိုးကားချက်အဖြစ်သာ ဖော်ပြထားပြီး ၎င်းတို့၏ အကြောင်းအရာကို ကျွန်ုပ်တို့ မထိန်းချုပ်ပါ။ ဤစာမျက်နှာသည် အထွေထွေအချက်အလက်သာဖြစ်ပြီး ငွေကြေးအကြံပေးချက် မဟုတ်ပါ။</span></p></div>
+</section>
+</main>
+
+  <footer class="max-w-4xl mx-auto mt-10 pt-6 border-t border-slate-800 text-xs text-slate-400 space-y-2 text-center">
+    <div><a href="index.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မ</span></a> · <a href="guides.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a> · <a href="about.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">About</span><span class="my">အကြောင်းအရာ</span></a> · <a href="contact.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a> · <a href="privacy.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Privacy Policy</span><span class="my">ကိုယ်ရေးအချက်အလက် မူဝါဒ</span></a> · <a href="terms.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Terms & Disclaimer</span><span class="my">စည်းကမ်းချက်များ</span></a></div>
+    <p class="en">Prices and calculators are for general information only and are not financial advice. © 2026 wemanage.space</p>
+    <p class="my">ဈေးနှုန်းများနှင့် ဂဏန်းတွက်စက်များသည် အထွေထွေအချက်အလက်အတွက်သာ ဖြစ်ပြီး ငွေကြေးဆိုင်ရာ အကြံပေးချက် မဟုတ်ပါ။ © 2026 wemanage.space</p>
+  </footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+const $=id=>document.getElementById(id), fmt=n=>Math.round(n).toLocaleString('en-US'), pct=n=>(n>=0?'+':'')+n.toFixed(1)+'%';
+const API='https://mmk-gold-terminal.onrender.com';
+const OLD_DIV=1.873, NEW_DIV=1.9047, FALLBACK={gold:4000,fx:4500};
+const live={gold:null,fx:null};
+const touched={gold:false,fx:false};   // true once the visitor typed a price or moved a slider
+const T=(en,my)=>document.documentElement.getAttribute('data-lang')==='my'?my:en;
+const base=()=>({g:live.gold??FALLBACK.gold, f:live.fx??FALLBACK.fx});
+// Accepts English or Burmese digits and thousands separators, e.g. "4,800" or "၄၈၀၀".
+function parseNum(v){
+  const str=String(v).replace(/[၀-၉]/g,d=>String(d.charCodeAt(0)-0x1040)).replace(/[,\s]/g,'').replace(/[٫]/g,'.');
+  if(str==='') return NaN; const n=Number(str); return Number.isFinite(n)?n:NaN;
+}
+const setSliderLabel=(id,val)=>{ $(id).textContent=pct(val); };
+function render(src){
+  const b=base(), G=parseNum($('goldBase').value), F=parseNum($('fxBase').value);
+  const cells=['curOld','pOld','allOld','curNew','pNew','allNew'];
+  if(!(G>0&&F>0)){ cells.forEach(i=>$(i).textContent='—'); document.querySelectorAll('.hdrFx,.hdrG').forEach(e=>e.textContent='—'); $('resultPct').textContent='—'; $('resultText').textContent=T('Enter positive prices.','ဈေးနှုန်းများကို အပေါင်းကိန်းဖြင့် ရိုက်ထည့်ပါ။'); return; }
+  document.querySelectorAll('.hdrFx').forEach(e=>e.textContent=fmt(F));
+  document.querySelectorAll('.hdrG').forEach(e=>e.textContent=G.toLocaleString('en-US',{maximumFractionDigits:2}));
+  const gPct=(G/b.g-1)*100, fPct=(F/b.f-1)*100, total=((G*F)/(b.g*b.f)-1)*100;
+  if(src!=='goldPct') $('goldPct').value=Math.max(-30,Math.min(30,gPct));
+  if(src!=='fxPct') $('fxPct').value=Math.max(-30,Math.min(50,fPct));
+  setSliderLabel('goldPctLabel',gPct); setSliderLabel('fxPctLabel',fPct);
+  $('curOld').textContent=fmt(b.g*b.f/OLD_DIV); $('pOld').textContent=fmt(b.g*F/OLD_DIV); $('allOld').textContent=fmt(G*F/OLD_DIV);
+  $('curNew').textContent=fmt(b.g*b.f/NEW_DIV); $('pNew').textContent=fmt(b.g*F/NEW_DIV); $('allNew').textContent=fmt(G*F/NEW_DIV);
+  $('resultPct').textContent=pct(total); $('resultPct').style.color=total>=0?'var(--gold-text)':'rgb(var(--l))';
+  const flat=Math.abs(total)<0.005&&Math.abs(gPct)<0.005&&Math.abs(fPct)<0.005;
+  $('resultText').textContent=flat?T('Type a price or move a slider to test a scenario.','ဈေးတစ်ခုခု ရိုက်ထည့်ပါ၊ သို့မဟုတ် slider ကို ရွှေ့ကြည့်ပါ။')
+    :gPct<0&&total>0?T('Myanmar gold rises even though world gold falls.','ကမ္ဘာ့ရွှေဈေးကျသော်လည်း မြန်မာ့ရွှေဈေး တက်နေပါသည်။')
+    :gPct<0&&total<0?T('Both effects combine to pull Myanmar gold lower.','နှစ်ခုပေါင်းသက်ရောက်မှုကြောင့် မြန်မာ့ရွှေဈေး ကျဆင်းပါသည်။')
+    :total>0?T('The combined effect lifts the implied local price.','စုပေါင်းသက်ရောက်မှုကြောင့် မြန်မာ့ရွှေဈေး မြင့်တက်ပါသည်။')
+    :T('The combined effect lowers the implied local price.','စုပေါင်းသက်ရောက်မှုကြောင့် မြန်မာ့ရွှေဈေး ကျဆင်းပါသည်။');
+  $('goldAfter').textContent=pct(gPct); $('fxAfter').textContent=pct(fPct); $('mmGoldAfter').textContent=pct(total);
+  $('goldBar').style.width=Math.max(3,Math.min(100,50+gPct*1.5))+'%'; $('fxBar').style.width=Math.max(3,Math.min(100,50+fPct))+'%'; $('mmGoldBar').style.width=Math.max(3,Math.min(100,50+total))+'%';
+  renderSimChart(b,G,F);
+}
+// Three small charts: Myanmar gold now vs scenario, world gold effect, P2P USD/MMK effect.
+let std='new'; const charts={};
+const valueLabels={id:'valueLabels',afterDatasetsDraw(chart){
+  const f=chart.$fmt; if(!f) return; const ctx=chart.ctx, c=themeColors(), meta=chart.getDatasetMeta(0), vals=chart.data.datasets[0].data;
+  ctx.save(); ctx.font='700 11px Inter, Padauk, sans-serif'; ctx.fillStyle=c.text; ctx.textAlign='center'; ctx.textBaseline='bottom';
+  meta.data.forEach((bar,i)=>{ const t=f(vals[i]); const y=Math.max(bar.y-5,chart.chartArea.top+12); ctx.fillText(t,bar.x,y); });
+  ctx.restore(); }};
+function smallChart(id,labels,data,colors,axMin,axMax,tickFmt,tipFmt,labelFmt){
+  const c=themeColors(), ch=charts[id];
+  if(ch){ ch.data.labels=labels; ch.data.datasets[0].data=data; ch.data.datasets[0].backgroundColor=colors;
+    const o=ch.options; o.scales.x.ticks.color=c.text; o.scales.y.ticks.color=c.muted; o.scales.y.grid.color=c.grid; o.scales.y.min=axMin; o.scales.y.max=axMax;
+    o.scales.y.ticks.callback=tickFmt; o.plugins.tooltip.callbacks.label=tipFmt; ch.$fmt=labelFmt; ch.update(); return; }
+  charts[id]=new Chart($(id),{type:'bar',plugins:[valueLabels],data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:6,borderSkipped:false,barPercentage:.92,categoryPercentage:.8}]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:tipFmt}}},
+    scales:{x:{ticks:{color:c.text,font:{size:11}},grid:{display:false}},y:{min:axMin,max:axMax,ticks:{color:c.muted,font:{size:10},maxTicksLimit:5,callback:tickFmt},grid:{color:c.grid}}}}});
+  charts[id].$fmt=labelFmt;
+}
+function axisFor(a,b){ const lo=Math.min(a,b), hi=Math.max(a,b), pad=Math.max((hi-lo)*0.8,a*0.02); return [Math.max(0,lo-pad),hi+pad*1.1]; }
+function renderSimChart(b,G,F){
+  if(typeof Chart==='undefined'||!$('chartPrice')) return;
+  const c=themeColors(), D=std==='old'?OLD_DIV:NEW_DIV;
+  const v0=b.g*b.f/D, v1=G*b.f/D, v2=G*F/D, dG=v1-v0, dF=v2-v1, dT=v2-v0;
+  const sgn=n=>(n>=0?'+':'−')+fmt(Math.abs(n)), sp=n=>(n>=0?'+':'−')+Math.abs(n).toFixed(1)+'%';
+  const col=n=>n>=0?c.green:c.red, now=T('Now','ယခု'), scen=T('Scenario','စမ်းသပ်');
+  const labels=[now,scen];
+  // 1) Myanmar gold price: current vs scenario
+  let [lo,hi]=axisFor(v0,v2);
+  smallChart('chartPrice',labels,[v0,v2],[c.muted,col(dT)],lo,hi,v=>(v/1e6).toFixed(2)+'M',x=>fmt(x.parsed.y)+' Ks',v=>fmt(v));
+  $('capPrice').textContent=fmt(v0)+' → '+fmt(v2)+' ('+sgn(dT)+' Ks)';
+  // 2) World gold
+  [lo,hi]=axisFor(b.g,G);
+  smallChart('chartGold',labels,[b.g,G],[c.muted,col(dG)],lo,hi,v=>'$'+Math.round(v).toLocaleString('en-US'),x=>'$'+x.parsed.y.toLocaleString('en-US',{maximumFractionDigits:2}),v=>'$'+v.toLocaleString('en-US',{maximumFractionDigits:2}));
+  $('capGold').textContent=sp((G/b.g-1)*100)+' → '+T('price effect ','ဈေးသက်ရောက်မှု ')+sgn(dG)+' Ks';
+  // 3) P2P USD/MMK
+  [lo,hi]=axisFor(b.f,F);
+  smallChart('chartFx',labels,[b.f,F],[c.muted,col(dF)],lo,hi,v=>Math.round(v).toLocaleString('en-US'),x=>fmt(x.parsed.y)+' Ks',v=>fmt(v));
+  $('capFx').textContent=sp((F/b.f-1)*100)+' → '+T('price effect ','ဈေးသက်ရောက်မှု ')+sgn(dF)+' Ks';
+}
+document.querySelectorAll('#stdChoice [data-std]').forEach(btn=>btn.addEventListener('click',()=>{
+  std=btn.dataset.std; document.querySelectorAll('#stdChoice [data-std]').forEach(x=>x.classList.toggle('on',x===btn)); render();
+}));
+function applyLive(){
+  if(live.gold!=null){ $('liveGold').textContent='$'+live.gold.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' / oz'; if(!touched.gold) $('goldBase').value=live.gold.toFixed(2); }
+  if(live.fx!=null){ $('liveFx').textContent=fmt(live.fx)+' Ks'; if(!touched.fx) $('fxBase').value=String(Math.round(live.fx)); }
+  render();
+}
+async function loadLivePrices(){
+  // OANDA gold and the P2P bank price load independently so one failure does not block the other.
+  const [gr,pr]=await Promise.allSettled([
+    fetch(API+'/api/oanda-gold',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}),
+    fetch(API+'/api/p2p',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+  ]);
+  const pos=v=>Number.isFinite(Number(v))&&Number(v)>0?Number(v):null;
+  if(gr.status==='fulfilled') live.gold=pos(gr.value.close);
+  if(pr.status==='fulfilled'){ const d=pr.value; live.fx=pos(d?.bybit?.buy)??pos(d?.okx?.buy)??pos(d?.reference?.buy); }
+  if(live.gold==null){ $('liveGold').textContent=T('Unavailable','မရနိုင်ပါ'); if(!touched.gold&&!$('goldBase').value) $('goldBase').value=FALLBACK.gold.toFixed(2); }
+  if(live.fx==null){ $('liveFx').textContent=T('Unavailable','မရနိုင်ပါ'); if(!touched.fx&&!$('fxBase').value) $('fxBase').value=String(FALLBACK.fx); }
+  applyLive();
+}
+// Typing a price updates the sliders; moving a slider updates the price boxes.
+$('goldBase').addEventListener('input',()=>{touched.gold=true;render('goldBase')});
+$('fxBase').addEventListener('input',()=>{touched.fx=true;render('fxBase')});
+$('goldPct').addEventListener('input',()=>{touched.gold=true;$('goldBase').value=(base().g*(1+Number($('goldPct').value)/100)).toFixed(2);render('goldPct')});
+$('fxPct').addEventListener('input',()=>{touched.fx=true;$('fxBase').value=String(Math.round(base().f*(1+Number($('fxPct').value)/100)));render('fxPct')});
+$('reset').addEventListener('click',()=>{
+  touched.gold=false;touched.fx=false;
+  $('goldBase').value=Number(base().g).toFixed(2); $('fxBase').value=String(Math.round(base().f)); render();
+});
+// Re-render translated text and chart labels when the visitor switches language or theme.
+new MutationObserver(()=>{ if(live.gold==null&&$('liveGold').textContent!=='Loading…') $('liveGold').textContent=T('Unavailable','မရနိုင်ပါ'); if(live.fx==null&&$('liveFx').textContent!=='Loading…') $('liveFx').textContent=T('Unavailable','မရနိုင်ပါ'); render(); }).observe(document.documentElement,{attributes:true,attributeFilter:['data-lang','data-theme']});
+$('goldBase').value=FALLBACK.gold.toFixed(2); $('fxBase').value=String(FALLBACK.fx); render(); loadLivePrices();
+
+
+// Chart colours are read from the site's CSS variables so they follow light/dark mode (same approach as index.html).
+function themeColors(){
+  const cs=getComputedStyle(document.documentElement), v=n=>cs.getPropertyValue(n).trim();
+  return { text:v('--tx')||'#111111', muted:v('--mu')||'#6E6A63', grid:v('--bd')||'#E2DDD3',
+    gold:v('--gold-line-old')||'#B9820A', blue:'rgb('+(v('--blue')||'37,99,235')+')', red:'rgb('+(v('--l')||'190,18,60')+')', green:'rgb('+(v('--g')||'21,128,61')+')',
+    violet:(document.documentElement.getAttribute('data-theme')==='dark')?'#C4B5FD':'#7C3AED' };
+}
+function applyChartTheme(){
+  if(!dxyChart) return;
+  const c=themeColors(), d=dxyChart.data.datasets[0]; d.borderColor=c.blue; d.backgroundColor=c.blue;
+  const o=dxyChart.options; o.scales.x.ticks.color=c.muted; o.scales.y.ticks.color=c.muted; o.scales.y.grid.color=c.grid; dxyChart.update();
+}
+new MutationObserver(applyChartTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+// DXY mini chart (daily close). Tries this site's API first, then the Render API used by the simulator.
+let dxyChart=null, dxyRange='3m';
+async function fetchHistory(range){
+  const why=[];
+  for(const base of ['',API]){
+    const where=base?'Render API':'this site';
+    try{
+      const r=await fetch(base+'/api/market-history?range='+encodeURIComponent(range),{cache:'no-store'});
+      if(!r.ok){ why.push(where+': HTTP '+r.status); continue; }
+      const j=await r.json();
+      // An older deployed backend may not return DXY; keep trying the next source.
+      if(((j.raw&&j.raw.dxy)||(j.series&&j.series.dxy)||[]).length>1) return j;
+      why.push(where+': '+((j.errors&&j.errors.dxy)||'no DXY points returned'));
+    }catch(e){ why.push(where+': '+(e.message||'request failed')); }
+  }
+  throw new Error(why.join(' | '));
+}
+async function loadDxy(range=dxyRange){
+  dxyRange=range; const msg=$('dxyMsg');
+  document.querySelectorAll('#dxyRanges [data-range]').forEach(b=>b.classList.toggle('on',b.dataset.range===range));
+  msg.style.display='flex'; msg.textContent=T('Loading…','ဒေတာ ရယူနေသည်…');
+  try{
+    const payload=await fetchHistory(range), pts=(payload.raw&&payload.raw.dxy&&payload.raw.dxy.length>1)?payload.raw.dxy:((payload.series&&payload.series.dxy)||[]);
+    if(pts.length<2) throw new Error(payload.errors&&payload.errors.dxy||'empty');
+    if(typeof Chart==='undefined') throw new Error('chart');
+    const labels=pts.map(p=>new Date(p.time*1000).toISOString().slice(0,10)), vals=pts.map(p=>p.value);
+    const first=vals[0], last=vals[vals.length-1], chg=(last/first-1)*100, c=themeColors();
+    $('dxyLast').textContent=last.toFixed(2); $('dxyChg').textContent=pct(chg)+' · '+range.toUpperCase();
+    $('dxyChg').style.color=chg>=0?'rgb(var(--g))':'rgb(var(--l))';
+    if(dxyChart) dxyChart.destroy();
+    dxyChart=new Chart($('dxyChart'),{type:'line',data:{labels,datasets:[{data:vals,borderColor:c.blue,backgroundColor:c.blue,borderWidth:2,pointRadius:0,pointHoverRadius:4,tension:.2}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>'DXY '+x.parsed.y.toFixed(2)}}},
+        scales:{x:{ticks:{color:c.muted,maxTicksLimit:5,font:{size:10}},grid:{display:false}},y:{ticks:{color:c.muted,font:{size:10},maxTicksLimit:5,callback:v=>v.toFixed(1)},grid:{color:c.grid}}}}});
+    msg.style.display='none';
+  }catch(err){
+    if(dxyChart){dxyChart.destroy();dxyChart=null;}
+    $('dxyLast').textContent='—'; $('dxyChg').textContent='—';
+    msg.style.display='flex';
+    msg.textContent=T('DXY data is unavailable right now. Please try again later.','DXY ဒေတာကို ယခု မရနိုင်ပါ။ နောက်မှ ပြန်ကြိုးစားပါ။')+' ['+(err.message||'error')+']';
+  }
+}
+document.querySelectorAll('#dxyRanges [data-range]').forEach(b=>b.addEventListener('click',()=>loadDxy(b.dataset.range)));
+loadDxy();
+</script>
+</body></html>

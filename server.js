@@ -1,9 +1,54 @@
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Historical P2P archive. On Render, attach a persistent disk and set DATA_DIR=/var/data.
+// Without a persistent disk, the archive still works but is reset whenever the service restarts.
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
+const P2P_HISTORY_FILE = path.join(DATA_DIR, 'usdt-mmk-history.json');
+const P2P_HISTORY_INTERVAL = 15 * 60 * 1000;
+const P2P_HISTORY_MAX_POINTS = 5 * 365 * 24 * 4;
+let lastP2PHistoryAt = 0;
+let p2pHistoryWrite = Promise.resolve();
+
+async function readP2PHistory() {
+  try {
+    const raw = await fs.promises.readFile(P2P_HISTORY_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_) { return []; }
+}
+
+function archiveP2PSnapshot(snapshot) {
+  const buy = Number(snapshot?.reference?.buy);
+  const sell = Number(snapshot?.reference?.sell);
+  if (!(buy > 0 && sell > 0)) return;
+  const now = Date.now();
+  if (now - lastP2PHistoryAt < P2P_HISTORY_INTERVAL) return;
+  lastP2PHistoryAt = now;
+  const point = {
+    time: Math.floor(now / 1000),
+    buy, sell, midpoint: (buy + sell) / 2,
+    okxBuy: Number(snapshot?.okx?.buy) || null,
+    okxSell: Number(snapshot?.okx?.sell) || null,
+    bybitBuy: Number(snapshot?.bybit?.buy) || null,
+    bybitSell: Number(snapshot?.bybit?.sell) || null,
+    source: 'OKX + Bybit P2P'
+  };
+  p2pHistoryWrite = p2pHistoryWrite.then(async () => {
+    await fs.promises.mkdir(DATA_DIR, { recursive: true });
+    const history = await readP2PHistory();
+    const last = history[history.length - 1];
+    if (last && now - Number(last.time) * 1000 < P2P_HISTORY_INTERVAL) return;
+    history.push(point);
+    await fs.promises.writeFile(P2P_HISTORY_FILE, JSON.stringify(history.slice(-P2P_HISTORY_MAX_POINTS)), 'utf8');
+  }).catch(err => console.error('[p2p-history] archive write failed:', err.message));
+}
 
 // ---------- OANDA:XAUUSD (now also returns bid / ask when TradingView provides them) ----------
 async function tvScan(columns) {
@@ -349,6 +394,7 @@ app.get('/api/p2p', async (req, res) => {
           p2pCache = data;
           p2pUpdatedAt = Date.now();
           p2pLastErrors = data.errors;
+          archiveP2PSnapshot(data);
         })
         .catch(err => { p2pLastErrors = [err.message]; })
         .finally(() => { p2pInFlight = null; });
@@ -386,6 +432,117 @@ app.get('/api/p2p-status', (req, res) => {
 });
 
 
+// Historical comparison: Yahoo Finance daily DXY + spot gold, and locally archived P2P rates.
+// P2P history starts when this version is deployed; it cannot be truthfully backfilled from current quotes.
+const marketHistoryCache = new Map();
+const HISTORY_RANGES = { '1m': 32, '3m': 93, '6m': 186, '1y': 366, '2y': 731, '5y': 1826 };
+async function yahooDaily(symbol, range) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=1d&events=history`;
+  const response = await fetch(url, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MyanmarGoldPrice/1.0)' },
+    signal: AbortSignal.timeout(15000)
+  });
+  if (!response.ok) throw new Error(`${symbol} history HTTP ${response.status}`);
+  const json = await response.json();
+  const result = json?.chart?.result?.[0];
+  if (!result?.timestamp?.length) throw new Error(`${symbol} history is empty`);
+  const closes = result.indicators?.quote?.[0]?.close || [];
+  return result.timestamp.map((time, i) => ({ time, value: Number(closes[i]) }))
+    .filter(p => Number.isFinite(p.value) && p.value > 0);
+}
+
+app.get('/api/market-history', async (req, res) => {
+  // Make the first visit seed the P2P archive instead of waiting for someone to open the main dashboard.
+  if (!p2pCache || Date.now() - p2pUpdatedAt >= P2P_CACHE_TTL) {
+    if (!p2pInFlight) {
+      p2pInFlight = collectP2P().then(data => {
+        p2pCache = data;
+        p2pUpdatedAt = Date.now();
+        p2pLastErrors = data.errors || [];
+        archiveP2PSnapshot(data);
+      }).catch(err => { p2pLastErrors = [err.message]; })
+        .finally(() => { p2pInFlight = null; });
+    }
+    await p2pInFlight;
+    await p2pHistoryWrite;
+  }
+  const range = HISTORY_RANGES[req.query.range] ? req.query.range : '1y';
+  const cacheKey = range;
+  const cached = marketHistoryCache.get(cacheKey);
+  if (cached && Date.now() - cached.at < 10 * 60 * 1000) {
+    res.set('Cache-Control', 'public, max-age=300');
+    return res.json(cached.data);
+  }
+  try {
+    const yahooRange = range === '5y' ? '5y' : range === '2y' ? '2y' : range === '1y' ? '1y' : range === '6m' ? '6mo' : range === '3m' ? '3mo' : '1mo';
+    const [dxyResult, goldResult, p2pHistory] = await Promise.allSettled([
+      yahooDaily('DX-Y.NYB', yahooRange),
+      yahooDaily('XAUUSD=X', yahooRange),
+      readP2PHistory()
+    ]);
+    const dxy = dxyResult.status === 'fulfilled' ? dxyResult.value : [];
+    const gold = goldResult.status === 'fulfilled' ? goldResult.value : [];
+    const p2p = p2pHistory.status === 'fulfilled' ? p2pHistory.value : [];
+    const cutoff = Math.floor(Date.now() / 1000) - HISTORY_RANGES[range] * 86400;
+    const filteredP2P = p2p.filter(p => Number(p.time) >= cutoff && Number(p.midpoint) > 0);
+    const goldMap = new Map(gold.map(p => [p.time, p.value]));
+    const dxyMap = new Map(dxy.map(p => [p.time, p.value]));
+    const fxByDay = new Map();
+    // Daily close for P2P: last archived snapshot of each UTC date.
+    for (const p of filteredP2P) {
+      const day = new Date(Number(p.time) * 1000).toISOString().slice(0, 10);
+      fxByDay.set(day, Number(p.midpoint));
+    }
+    const dxyBase = dxy.find(p => p.time >= cutoff)?.value;
+    const goldBase = gold.find(p => p.time >= cutoff)?.value;
+    const fxEntries = [...fxByDay.entries()].sort((a,b) => a[0].localeCompare(b[0]));
+    const fxBase = fxEntries[0]?.[1];
+    const localGold = [];
+    if (goldBase > 0 && fxBase > 0) {
+      for (const [day, fx] of fxEntries) {
+        const t = Math.floor(Date.parse(day + 'T00:00:00Z') / 1000);
+        // Use the closest available gold close on or before the P2P date.
+        let goldPoint = null;
+        for (let i = gold.length - 1; i >= 0; i--) { if (gold[i].time <= t + 86400) { goldPoint = gold[i]; break; } }
+        if (goldPoint && fx > 0) localGold.push({ time: t, value: goldPoint.value * fx });
+      }
+    }
+    const normalize = (points, base) => base > 0 ? points.map(p => ({ time: p.time, value: Number((p.value / base * 100).toFixed(3)) })) : [];
+    const data = {
+      range,
+      updatedAt: new Date().toISOString(),
+      unit: 'Indexed to 100 at the first available point in the selected range',
+      series: {
+        dxy: normalize(dxy.filter(p => p.time >= cutoff), dxyBase),
+        xauUsd: normalize(gold.filter(p => p.time >= cutoff), goldBase),
+        usdtMmk: normalize(fxEntries.map(([day, value]) => ({ time: Math.floor(Date.parse(day + 'T00:00:00Z') / 1000), value })), fxBase),
+        impliedMyanmarGold: normalize(localGold, localGold[0]?.value)
+      },
+      raw: {
+        dxy: dxy.filter(p => p.time >= cutoff),
+        xauUsd: gold.filter(p => p.time >= cutoff),
+        usdtMmk: fxEntries.map(([day, value]) => ({ time: Math.floor(Date.parse(day + 'T00:00:00Z') / 1000), value }))
+      },
+      coverage: {
+        dxy: dxy.length,
+        xauUsd: gold.length,
+        usdtMmk: filteredP2P.length,
+        p2pHistoryStartsAt: p2p.length ? new Date(Number(p2p[0].time) * 1000).toISOString() : null,
+        p2pNote: p2p.length ? 'P2P history is archived by this website from deployment onward.' : 'No P2P archive yet. Historical P2P data begins after the first successful collection and is not backfilled.'
+      },
+      errors: {
+        dxy: dxyResult.status === 'rejected' ? dxyResult.reason.message : null,
+        xauUsd: goldResult.status === 'rejected' ? goldResult.reason.message : null
+      }
+    };
+    marketHistoryCache.set(cacheKey, { at: Date.now(), data });
+    res.set('Cache-Control', 'public, max-age=300');
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Canonical gold-price snapshot for the website and any external consumer (including ChatGPT).
 // Keep the formula here identical to index.html so every client can read the same calculation.
 app.get('/api/gold-reference', async (req, res) => {
@@ -409,6 +566,7 @@ app.get('/api/gold-reference', async (req, res) => {
           p2pCache = data;
           p2pUpdatedAt = Date.now();
           p2pLastErrors = data.errors || [];
+          archiveP2PSnapshot(data);
         }).catch(err => { p2pLastErrors = [err.message]; })
           .finally(() => { p2pInFlight = null; });
       }
