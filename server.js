@@ -4,8 +4,46 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.disable('x-powered-by');
+app.set('trust proxy', 1); // Render sits behind a proxy; needed for correct client IPs
+
+// Only these websites may call the API from a browser. Add more with ALLOWED_ORIGINS="https://a.com,https://b.com".
+// Requests without an Origin header (the Android app, curl, server-to-server) are not affected by CORS.
+const ALLOWED_ORIGINS = [
+  'https://wemanage.space',
+  'https://www.wemanage.space',
+  'https://mmk-gold-terminal.pages.dev',
+  ...(process.env.ALLOWED_ORIGINS || '').split(',').map(x => x.trim()).filter(Boolean),
+];
+app.use(cors({
+  origin: (origin, cb) => cb(null, !origin || ALLOWED_ORIGINS.includes(origin)),
+  methods: ['GET'],
+}));
+
+// Basic security headers (this server only returns JSON).
+app.use((req, res, next) => {
+  res.set({
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Referrer-Policy': 'no-referrer',
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  });
+  next();
+});
+
+// Simple per-IP rate limit (no extra package needed): 60 requests per minute per IP on /api.
+const RATE_LIMIT = 60, RATE_WINDOW = 60 * 1000;
+const hits = new Map();
+setInterval(() => { const t = Date.now(); for (const [ip, h] of hits) if (t - h.start > RATE_WINDOW) hits.delete(ip); }, RATE_WINDOW).unref();
+app.use('/api', (req, res, next) => {
+  const now = Date.now();
+  let h = hits.get(req.ip);
+  if (!h || now - h.start > RATE_WINDOW) { h = { start: now, count: 0 }; hits.set(req.ip, h); }
+  if (++h.count > RATE_LIMIT) return res.status(429).json({ error: 'Too many requests' });
+  next();
+});
+
+app.use(express.json({ limit: '10kb' }));
 
 // Historical P2P archive. On Render, attach a persistent disk and set DATA_DIR=/var/data.
 // Without a persistent disk, the archive still works but is reset whenever the service restarts.
@@ -51,7 +89,12 @@ function archiveP2PSnapshot(snapshot) {
 }
 
 // ---------- OANDA:XAUUSD (now also returns bid / ask when TradingView provides them) ----------
+const tvCache = new Map();           // short cache so visitors cannot make us hammer TradingView
+const TV_TTL = 5 * 1000;
 async function tvScan(columns) {
+  const key = columns.join(',');
+  const hit = tvCache.get(key);
+  if (hit && Date.now() - hit.at < TV_TTL) return hit.data;
   const response = await fetch("https://scanner.tradingview.com/cfd/scan", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -60,7 +103,9 @@ async function tvScan(columns) {
   });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const data = await response.json();
-  return data && data.data && data.data.length > 0 ? data.data[0].d : null;
+  const row = data && data.data && data.data.length > 0 ? data.data[0].d : null;
+  if (row) tvCache.set(key, { at: Date.now(), data: row });
+  return row;
 }
 
 app.get("/api/oanda-gold", async (req, res) => {
@@ -78,124 +123,10 @@ app.get("/api/oanda-gold", async (req, res) => {
       ask: hasBidAsk ? metrics[6] : null,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[api] error:', err.message);
+    res.status(500).json({ error: 'Internal error' });
   }
 });
-
-// ---------- Binance P2P (cached, stale-on-error, optional push) ----------
-const P2P_URL = 'https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search';
-const BANKS = ['KBZBank', 'CBBank', 'BANK', 'AYABank', 'YomaBank'];
-const WALLETS = ['KBZPay', 'WavePay', 'AYAPay'];
-const GROUPS = {
-  bankBuy: ['BUY', BANKS], bankSell: ['SELL', BANKS],
-  walletBuy: ['BUY', WALLETS], walletSell: ['SELL', WALLETS],
-};
-const TTL = 5 * 60 * 1000;          // hit Binance at most once per 5 min, however many visitors
-const RETRY_GAP = 60 * 1000;        // after a failure, wait 60s before trying again
-const PUSH_FRESH = 15 * 60 * 1000;  // trust data pushed from your own PC for 15 min
-
-let cache = null;       // { bankBuy:[], bankSell:[], walletBuy:[], walletSell:[], updatedAt, source }
-let lastErrors = [];
-let lastTry = 0;
-let inflight = null;
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-
-async function p2pRequest(tradeType, payTypes, extra = {}) {
-  const r = await fetch(P2P_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Origin': 'https://p2p.binance.com',
-      'Referer': 'https://p2p.binance.com/en',
-      'clienttype': 'web',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
-    },
-    body: JSON.stringify({ fiat: 'MMK', page: 1, rows: 50, tradeType, asset: 'USDT', payTypes, publisherType: null, ...extra }),
-    signal: AbortSignal.timeout(10000),
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);               // 403/451/429 = blocked or rate limited
-  return r.json();
-}
-
-async function fetchGroup(tradeType, payTypes) {
-  const j = await p2pRequest(tradeType, payTypes);
-  const prices = (j.data || []).map(i => parseFloat(i.adv.price)).filter(Boolean);
-  if (!prices.length) throw new Error(`no ads returned (Binance code=${j.code}, message=${j.message}, total=${j.total})`);
-  return prices;
-}
-
-// Open /api/p2p-debug: runs test requests to find out WHY MMK ads come back empty.
-app.get('/api/p2p-debug', async (req, res) => {
-  const FULL = { countries: [], proMerchantAds: false, shieldMerchantAds: false, filterType: 'all', periods: [], additionalKycVerifyFilter: 0 };
-  const tests = {
-    MMK_simple: { extra: {} },
-    MMK_full: { extra: FULL },
-    THB_simple: { extra: { fiat: 'THB' } },
-  };
-  const out = {};
-  try {
-    const g = await (await fetch('https://ipinfo.io/json', { signal: AbortSignal.timeout(5000) })).json();
-    out.server = { ip: g.ip, country: g.country, region: g.region, org: g.org };
-  } catch (e) { out.server = { error: e.message }; }
-  for (const [name, { extra }] of Object.entries(tests)) {
-    try {
-      const j = await p2pRequest('BUY', [], extra);
-      const methods = {};
-      for (const a of j.data || []) for (const m of (a.adv.tradeMethods || [])) methods[m.identifier] = m.tradeMethodName;
-      out[name] = { code: j.code, message: j.message, total: j.total, ads: (j.data || []).length, methods };
-    } catch (e) { out[name] = { error: e.message }; }
-    await sleep(300);
-  }
-  res.json(out);
-});
-
-// Sequential on purpose. Returns whatever groups succeeded + error messages.
-async function fetchAll() {
-  const data = {}, errors = [];
-  for (const [key, [type, pay]] of Object.entries(GROUPS)) {
-    try { data[key] = await fetchGroup(type, pay); }
-    catch (e) { errors.push(`${key}: ${e.message}`); }
-    await sleep(300);
-  }
-  return { data, errors };
-}
-
-function refreshP2P() {
-  if (inflight) return inflight;
-  lastTry = Date.now();
-  inflight = fetchAll().then(({ data, errors }) => {
-    lastErrors = errors;
-    if (Object.keys(data).length) {
-      cache = { ...(cache || {}), ...data, updatedAt: Date.now(), source: 'server' };
-    }
-  }).finally(() => { inflight = null; });
-  return inflight;
-}
-
-app.get('/api/binance-p2p', async (req, res) => {
-  const age = cache ? Date.now() - cache.updatedAt : Infinity;
-  const pushedFresh = cache && cache.source === 'push' && age < PUSH_FRESH;
-  if (!pushedFresh && age > TTL && Date.now() - lastTry > RETRY_GAP) await refreshP2P();
-  if (!cache) return res.status(503).json({ error: 'P2P unavailable', errors: lastErrors });
-  // Stale data is still served; the page shows how old it is. `errors` tells you WHY it's stale.
-  res.json({ ...cache, ageSec: Math.round((Date.now() - cache.updatedAt) / 1000), errors: lastErrors });
-});
-
-// Lets a PC/Pi with a Thai home IP feed prices in (see p2p-pusher.js). Set PUSH_TOKEN in Render env vars.
-app.post('/api/p2p-push', (req, res) => {
-  const token = process.env.PUSH_TOKEN;
-  if (!token || req.get('x-push-token') !== token) return res.status(401).json({ error: 'unauthorized' });
-  const clean = {};
-  for (const key of Object.keys(GROUPS)) {
-    const arr = Array.isArray(req.body[key]) ? req.body[key].map(Number).filter(n => n > 0) : [];
-    if (!arr.length) return res.status(400).json({ error: `missing ${key}` });
-    clean[key] = arr;
-  }
-  cache = { ...clean, updatedAt: Date.now(), source: 'push' };
-  res.json({ ok: true });
-});
-
 
 // ---------- OKX + Bybit P2P (server-side, cached for 15 minutes) ----------
 // The browser calls this Render endpoint, so exchange requests do not depend on
@@ -405,7 +336,7 @@ app.get('/api/p2p', async (req, res) => {
     return res.status(503).json({
       error: 'P2P prices unavailable',
       errors: p2pLastErrors,
-      hint: 'Check Render logs and /api/p2p-status.'
+      hint: 'Please try again in a minute.'
     });
   }
   res.set('Cache-Control', 'no-store');
@@ -415,22 +346,6 @@ app.get('/api/p2p', async (req, res) => {
     cacheTtlSec: Math.max(0, Math.ceil((P2P_CACHE_TTL - (Date.now() - p2pUpdatedAt)) / 1000))
   });
 });
-
-app.get('/api/p2p-status', (req, res) => {
-  res.json({
-    hasCache: Boolean(p2pCache),
-    updatedAt: p2pUpdatedAt || null,
-    ageSec: p2pUpdatedAt ? Math.round((Date.now() - p2pUpdatedAt) / 1000) : null,
-    cacheTtlSec: P2P_CACHE_TTL / 1000,
-    errors: p2pLastErrors,
-    data: p2pCache ? {
-      okx: p2pCache.okx,
-      bybit: p2pCache.bybit,
-      reference: p2pCache.reference
-    } : null
-  });
-});
-
 
 // Historical comparison: Yahoo Finance daily DXY + spot gold, and locally archived P2P rates.
 // P2P history starts when this version is deployed; it cannot be truthfully backfilled from current quotes.
@@ -466,7 +381,8 @@ app.get('/api/market-history', async (req, res) => {
     await p2pInFlight;
     await p2pHistoryWrite;
   }
-  const range = HISTORY_RANGES[req.query.range] ? req.query.range : '1y';
+  const reqRange = typeof req.query.range === 'string' ? req.query.range : '';
+  const range = Object.prototype.hasOwnProperty.call(HISTORY_RANGES, reqRange) ? reqRange : '1y';
   const cacheKey = range;
   const cached = marketHistoryCache.get(cacheKey);
   if (cached && Date.now() - cached.at < 10 * 60 * 1000) {
@@ -539,7 +455,8 @@ app.get('/api/market-history', async (req, res) => {
     res.set('Cache-Control', 'public, max-age=300');
     res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[api] error:', err.message);
+    res.status(500).json({ error: 'Internal error' });
   }
 });
 
@@ -630,12 +547,11 @@ app.get('/api/gold-reference', async (req, res) => {
       paxgError
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('[api] error:', err.message);
+    res.status(500).json({ error: 'Internal error' });
   }
 });
 
-
-module.exports = { fetchAll };
 
 if (require.main === module) {
   const PORT = process.env.PORT || 3001;
