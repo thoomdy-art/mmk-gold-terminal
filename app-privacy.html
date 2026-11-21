@@ -1,212 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-lang="en" class="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Policy – Myanmar Gold Price</title>
-<meta name="description" content="Privacy policy for the Myanmar Gold Price Android app and the website wemanage.space.">
+  <meta charset="UTF-8" />
+  <meta name="theme-color" content="#E5E1D8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App Privacy Policy – Myanmar Gold Price | မြန်မာ့ ရွှေဈေး</title>
+  <meta name="description" content="Privacy policy for the Myanmar Gold Price Android app (space.wemanage.mmkgold) and the website wemanage.space." />
+  <link rel="canonical" href="https://wemanage.space/app-privacy" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Myanmar Gold Price | မြန်မာ့ ရွှေဈေး" />
+  <meta property="og:title" content="App Privacy Policy – Myanmar Gold Price" />
+  <meta property="og:description" content="Privacy policy for the Myanmar Gold Price Android app and the website wemanage.space." />
+  <meta property="og:url" content="https://wemanage.space/app-privacy" />
+  <script>
+(function(){var l='en';try{l=localStorage.getItem('lang')||'en';}catch(e){}
+if(l!=='my')l='en';var d=document.documentElement;d.setAttribute('data-lang',l);d.setAttribute('lang',l==='my'?'my':'en');
+window.setLang=function(x){try{localStorage.setItem('lang',x);}catch(e){}d.setAttribute('data-lang',x);d.setAttribute('lang',x==='my'?'my':'en');};
+window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='en'?'my':'en');};})();
+</script>
+  <link rel="stylesheet" href="tailwind.css">
 <style>
-  :root {
-    --bg: #f6f7f9;
-    --surface: #ffffff;
-    --ink: #1b2230;
-    --muted: #5a6577;
-    --rule: #dde1e8;
-    --accent: #8a6100;
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #12151b;
-      --surface: #181c24;
-      --ink: #e6e8ec;
-      --muted: #9aa4b5;
-      --rule: #2a313d;
-      --accent: #e0b04a;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #12151b;
-    --surface: #181c24;
-    --ink: #e6e8ec;
-    --muted: #9aa4b5;
-    --rule: #2a313d;
-    --accent: #e0b04a;
-    color-scheme: dark;
-  }
-
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: Charter, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-    font-size: 1.0625rem;
-    line-height: 1.7;
-  }
-  .page {
-    max-width: 44rem;
-    margin: 0 auto;
-    padding: 3rem 1.25rem 4rem;
-  }
-  header { margin-bottom: 2.5rem; }
-  h1, h2, .meta, nav, footer {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Myanmar", sans-serif;
-  }
-  h1 {
-    font-size: clamp(1.9rem, 5vw, 2.6rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin: 0 0 0.6rem;
-  }
-  .meta { color: var(--muted); font-size: 0.9rem; margin: 0; }
-  .intro { margin-top: 1.5rem; }
-
-  nav {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 2.5rem;
-    font-size: 0.95rem;
-  }
-  nav p { margin: 0 0 0.5rem; font-weight: 600; }
-  nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    columns: 2 14rem;
-    column-gap: 2rem;
-  }
-  nav li { margin: 0.2rem 0; break-inside: avoid; }
-
-  h2 {
-    font-size: 1.25rem;
-    line-height: 1.3;
-    margin: 2.5rem 0 0.75rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
-    scroll-margin-top: 1rem;
-  }
-  p { margin: 0 0 1rem; }
-  ul.body { padding-left: 1.25rem; margin: 0 0 1rem; }
-  ul.body li { margin: 0.35rem 0; }
-
-  a { color: var(--accent); text-underline-offset: 0.15em; }
-  a:hover { text-decoration-thickness: 2px; }
-  a:focus-visible, button:focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
-    border-radius: 2px;
-  }
-  code {
-    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-    font-size: 0.9em;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 3px;
-    padding: 0.05em 0.35em;
-    overflow-wrap: anywhere;
-  }
-  strong { font-weight: 700; }
-
-  footer {
-    margin-top: 3rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
-    color: var(--muted);
-    font-size: 0.9rem;
-  }
-
-  @media print {
-    body { background: #fff; color: #000; font-size: 11pt; }
-    nav { display: none; }
-    a { color: #000; }
-  }
+    body { font-family: 'Inter', 'Padauk', sans-serif; background-color: #0b0f17; color: #e2e8f0; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .card { background: #131b2e; border: 1px solid #1e293b; border-radius: 0.75rem; }
+    html[data-lang="en"] .my { display: none !important; }
+    html[data-lang="my"] .en { display: none !important; }
+    .my { font-family: 'Padauk', 'Inter', sans-serif; line-height: 1.9; }
+    .prose h2 { color:#fcd34d; font-weight:700; font-size:1.25rem; margin:1.75rem 0 .6rem; }
+    .prose h3 { color:#e2e8f0; font-weight:600; font-size:1.05rem; margin:1.25rem 0 .4rem; }
+    .prose p { color:#cbd5e1; font-size:.95rem; line-height:1.75; margin:.7rem 0; }
+    .my.prose p, .prose .my p { line-height:2; }
+    .prose ul, .prose ol { color:#cbd5e1; font-size:.95rem; line-height:1.75; margin:.7rem 0 .7rem 1.25rem; }
+    .prose ul { list-style:disc; } .prose ol { list-style:decimal; }
+    .prose li { margin:.3rem 0; }
+    .prose table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.88rem; }
+    .prose th { text-align:left; color:#94a3b8; border-bottom:1px solid #334155; padding:.5rem .4rem; }
+    .prose td { color:#e2e8f0; border-bottom:1px solid #1e293b; padding:.5rem .4rem; }
+    .prose a { color:#38bdf8; text-decoration:underline; }
+    .note { border-left:4px solid #f59e0b; background:rgba(245,158,11,.08); padding:.75rem 1rem; border-radius:.5rem; margin:1rem 0; }
+    .note p { margin:.2rem 0; }
+    .policy h2 { scroll-margin-top: 6rem; padding-top: 1.1rem; border-top: 1px solid var(--bd, #1e293b); }
+    .policy h2:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+    .policy .meta { font-size: .85rem; opacity: .75; margin: .25rem 0 1rem; }
+    .policy code { font-family: 'JetBrains Mono', monospace; font-size: .85em; padding: .05em .4em; border-radius: .3rem; background: var(--sf-elevated, #1e293b); border: 1px solid var(--bd, #334155); overflow-wrap: anywhere; }
+    .policy .toc { margin: 1rem 0 .5rem; }
 </style>
+<script src="theme.js?v=3"></script>
+<link rel="stylesheet" href="premium.css?v=3">
 </head>
-<body>
-<main class="page">
-  <header>
-    <h1>Privacy Policy</h1>
-    <p class="meta">Last updated: November 21, 2026</p>
-    <p class="intro">This policy explains what information is collected when you use the Myanmar Gold Price Android app (package <code>space.wemanage.mmkgold</code>) and the website wemanage.space (“we”, “our”), and how it is used. The app and the site are operated by <strong>Thaung Htike Oo, Myanmar</strong>. By using the app or the site you agree to this policy.</p>
+<body class="min-h-screen p-3 sm:p-4 md:p-6">
+  <header class="max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+    <a href="index.html" class="text-xl sm:text-2xl font-bold tracking-tight text-white"><span class="en">Myanmar Gold Price <span class="text-slate-400 text-base">(မြန်မာ့ ရွှေဈေး)</span></span><span class="my">မြန်မာ့ ရွှေဈေး</span></a>
+    <div class="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
+      <nav class="flex flex-wrap items-center gap-3 sm:gap-4" aria-label="Main"><a href="index.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မစာမျက်နှာ</span></a><a href="guides.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a><a href="app.html" class="text-sm font-medium text-amber-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Get the App</span><span class="my">အက်ပ်ရယူရန်</span></a><a href="about.html" class="text-sm font-medium text-amber-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">About</span><span class="my">အကြောင်းအရာ</span></a><a href="contact.html" class="text-sm font-medium text-slate-300 hover:text-white transition underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a></nav>
+      <button onclick="toggleSiteLang()" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow whitespace-nowrap">🌐 <span class="en">မြန်မာ</span><span class="my">English</span></button>
+    </div>
   </header>
 
-  <nav aria-label="Contents">
-    <p>Contents</p>
-    <ul>
-      <li><a href="#not-collected">Information we do not collect</a></li>
-      <li><a href="#automatic">Information collected automatically</a></li>
-      <li><a href="#device">Data stored on your device</a></li>
-      <li><a href="#ads">Advertising (Google AdMob)</a></li>
-      <li><a href="#third-party">Third-party services</a></li>
-      <li><a href="#sharing">Sharing of data</a></li>
-      <li><a href="#transfers">International transfers</a></li>
-      <li><a href="#rights">Your rights</a></li>
-      <li><a href="#children">Children</a></li>
-      <li><a href="#security">Data security and retention</a></li>
-      <li><a href="#changes">Changes to this policy</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <section>
+  <main class="max-w-4xl mx-auto space-y-5">
+  <section class="card p-6 sm:p-8 prose policy">
+    <h1 class="text-2xl sm:text-3xl font-bold text-white">App Privacy Policy</h1>
+    <p class="meta">Last updated: November 21, 2026</p>
+    <p class="my">ဤမူဝါဒကို အင်္ဂလိပ်ဘာသာဖြင့်သာ ဖော်ပြထားပါသည်။ မေးခွန်းရှိပါက <a href="mailto:admin@wemanage.space">admin@wemanage.space</a> သို့ ဆက်သွယ်ပါ။</p>
+    <p>This policy explains what information is collected when you use the Myanmar Gold Price Android app (package <code>space.wemanage.mmkgold</code>) and the website wemanage.space (“we”, “our”), and how it is used. The app and the site are operated by <strong>Thaung Htike Oo, Myanmar</strong>. By using the app or the site you agree to this policy. Looking for the app? <a href="app.html">Get it on Google Play</a>.</p>
+    <nav class="toc" aria-label="Contents"><a href="#not-collected">Information we do not collect</a><a href="#automatic">Information collected automatically</a><a href="#device">Data stored on your device</a><a href="#ads">Advertising (Start.io)</a><a href="#third-party">Third-party services</a><a href="#sharing">Sharing of data</a><a href="#transfers">International transfers</a><a href="#rights">Your rights</a><a href="#children">Children</a><a href="#security">Data security and retention</a><a href="#changes">Changes to this policy</a><a href="#contact">Contact</a></nav>
     <h2 id="not-collected">Information we do not collect</h2>
     <p>The app has no accounts, sign-up forms or comment sections. We do not ask for your name, phone number, email address, contacts, photos, files, microphone, camera, precise location or financial details. The numbers you type into the converters and calculators are processed on your device and are not sent to our server.</p>
-
     <h2 id="automatic">Information collected automatically</h2>
     <p>To show gold prices, the app requests data from our server (hosted on Render) and from public price sources. Like any internet service, these servers can receive technical data such as your IP address, device or browser type and the time of the request. We use it to deliver the service, keep it secure and measure usage. We do not build user profiles.</p>
-
     <h2 id="device">Data stored on your device</h2>
     <p>The app and the site remember your language and light/dark choice on your device. This contains no personal data and is not sent to us.</p>
-
-    <h2 id="ads">Advertising (Google AdMob)</h2>
-    <p>The app shows ads provided by Google AdMob. To select, show and measure ads, the AdMob SDK in the app may automatically collect and share with Google and its advertising partners:</p>
-    <ul class="body">
+    <h2 id="ads">Advertising (Start.io)</h2>
+    <p>The app shows ads provided by Start.io. To select, show and measure ads, the Start.io SDK in the app may automatically collect and share with Start.io and its advertising partners:</p>
+    <ul>
       <li>your Android advertising ID,</li>
       <li>your IP address and approximate location derived from it,</li>
       <li>device and app information (model, operating system version, language, app version, network type),</li>
       <li>information about how you interact with ads, and diagnostic data such as crash and performance logs.</li>
     </ul>
-    <p>This data is used to show and measure ads, including personalised ads, and to prevent fraud and abuse. Google’s use of this data is described at <a href="https://policies.google.com/technologies/partner-sites" rel="noopener">How Google uses information from sites or apps that use its services</a> and in the <a href="https://policies.google.com/privacy" rel="noopener">Google Privacy Policy</a>.</p>
-    <p><strong>Your choices</strong></p>
-    <ul class="body">
+    <p>This data is used to show and measure ads, including personalised ads, and to prevent fraud and abuse. How Start.io handles data is described in the <a href="https://www.start.io/policy/privacy-policy" rel="noopener">Start.io Privacy Policy</a>.</p>
+    <h3>Your choices</h3>
+    <ul>
       <li>Reset or delete your advertising ID, or turn off ad personalisation, in your phone’s Settings (Privacy &gt; Ads, or Google &gt; Ads).</li>
-      <li>Manage personalised ads at <a href="https://adssettings.google.com" rel="noopener">adssettings.google.com</a>.</li>
       <li>Uninstalling the app removes the SDK from your device.</li>
     </ul>
-
     <h2 id="third-party">Third-party services</h2>
-    <p>To work, the app and the site request data from or load content provided by third parties, each with its own privacy policy: Google AdMob (ads), TradingView (embedded chart and OANDA price data, which may set its own cookies or identifiers), Binance, OKX and Bybit (public price data), Google Fonts (website only), jsDelivr and Tailwind CDN (website scripts), and our own backend hosted on Render. We do not control their practices.</p>
-
+    <p>To work, the app and the site request data from or load content provided by third parties, each with its own privacy policy: Start.io (ads), TradingView (embedded chart and OANDA price data, which may set its own cookies or identifiers), Binance, OKX and Bybit (public price data), Google Fonts (website only), jsDelivr and Tailwind CDN (website scripts), and our own backend hosted on Render. We do not control their practices.</p>
     <h2 id="sharing">Sharing of data</h2>
-    <p>We do not sell your personal information ourselves. Our advertising provider, Google AdMob, and its partners receive the advertising data described above in order to deliver ads; under some laws, such as the California Consumer Privacy Act, this may be considered “sharing” for advertising. Other than the service providers described in this policy, we do not share your information with anyone.</p>
-
+    <p>We do not sell your personal information ourselves. Our advertising provider, Start.io, and its partners receive the advertising data described above in order to deliver ads; under some laws, such as the California Consumer Privacy Act, this may be considered “sharing” for advertising. Other than the service providers described in this policy, we do not share your information with anyone.</p>
     <h2 id="transfers">International transfers</h2>
-    <p>Our service providers, including Google and Render, may process data in countries other than your own, including the United States. Where required, they rely on legal safeguards for these transfers.</p>
-
+    <p>Our service providers, including Start.io and Render, may process data in countries other than your own, including the United States. Where required, they rely on legal safeguards for these transfers.</p>
     <h2 id="rights">Your rights</h2>
-    <p>Depending on where you live (for example under the GDPR, UK GDPR, Thailand’s PDPA or California law), you may have the right to access, correct or delete personal data, to object to or restrict its processing, and to withdraw consent. We do not hold a user database, so most data about you is held by Google and the other providers above; you can use the controls in “Your choices” or contact them directly. For anything we hold, write to <a href="mailto:admin@wemanage.space">admin@wemanage.space</a> and we will respond within a reasonable time.</p>
-
+    <p>Depending on where you live (for example under the GDPR, UK GDPR, Thailand’s PDPA or California law), you may have the right to access, correct or delete personal data, to object to or restrict its processing, and to withdraw consent. We do not hold a user database, so most data about you is held by our advertising provider and the other providers above; you can use the controls in “Your choices” or contact them directly. For anything we hold, write to <a href="mailto:admin@wemanage.space">admin@wemanage.space</a> and we will respond within a reasonable time.</p>
     <h2 id="children">Children</h2>
     <p>The app and the site are intended for a general audience and are not directed to children under 13 (or under 16 where local law sets a higher age). We do not knowingly collect personal information from children and do not knowingly show them personalised ads.</p>
-
     <h2 id="security">Data security and retention</h2>
     <p>We take reasonable steps to protect the service, but no internet service is perfectly secure. We do not keep a user database. Technical logs on our hosting provider are kept only as long as needed for security and operation.</p>
-
     <h2 id="changes">Changes to this policy</h2>
     <p>We may update this policy from time to time. The date at the top shows the latest revision. Continued use after a change means you accept the updated policy.</p>
-
     <h2 id="contact">Contact</h2>
-    <p>Questions about this policy? Write to <a href="mailto:admin@wemanage.space">admin@wemanage.space</a> or visit our <a href="https://wemanage.space/contact.html">contact page</a>.</p>
+    <p>Questions about this policy? Write to <a href="mailto:admin@wemanage.space">admin@wemanage.space</a> or visit our <a href="contact.html">contact page</a>.</p>
   </section>
-
-  <footer>
-    Myanmar Gold Price · wemanage.space
-  </footer>
 </main>
+
+<footer class="max-w-4xl mx-auto mt-10 pt-6 border-t border-slate-800 text-xs text-slate-400 space-y-2 text-center">
+    <div><a href="index.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Home</span><span class="my">ပင်မ</span></a> · <a href="guides.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Guides</span><span class="my">လမ်းညွှန်များ</span></a> · <a href="app.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Get the App</span><span class="my">အက်ပ်ရယူရန်</span></a> · <a href="about.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">About</span><span class="my">အကြောင်းအရာ</span></a> · <a href="contact.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Contact</span><span class="my">ဆက်သွယ်ရန်</span></a> · <a href="privacy.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Privacy Policy</span><span class="my">ကိုယ်ရေးအချက်အလက် မူဝါဒ</span></a> · <a href="app-privacy.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">App Privacy</span><span class="my">အက်ပ် ကိုယ်ရေးအချက်အလက် မူဝါဒ</span></a> · <a href="terms.html" class="hover:text-white underline-offset-4 hover:underline"><span class="en">Terms & Disclaimer</span><span class="my">စည်းကမ်းချက်များ</span></a></div>
+    <p class="en">Prices and calculators are for general information only and are not financial advice. © 2026 wemanage.space</p>
+    <p class="my">ဈေးနှုန်းများနှင့် ဂဏန်းတွက်စက်များသည် အထွေထွေအချက်အလက်အတွက်သာ ဖြစ်ပြီး ငွေကြေးဆိုင်ရာ အကြံပေးချက် မဟုတ်ပါ။ © 2026 wemanage.space</p>
+  </footer>
 </body>
 </html>
