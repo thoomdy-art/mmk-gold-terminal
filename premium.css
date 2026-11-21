@@ -290,3 +290,27 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 .chart-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:1rem;
   color:var(--mu);font-size:.85rem;font-weight:600;pointer-events:none}
 .chart-empty.hidden{display:none}
+
+
+/* ---- Header "Google Play" button (every page) ---------------------------- */
+html body a.play-btn{
+  display:inline-flex;align-items:center;gap:.3rem;flex:0 0 auto;white-space:nowrap;
+  padding:.34rem .7rem;border-radius:var(--radius-pill);
+  background:var(--gold);color:#141413 !important;border:1px solid #D9A92F;
+  font-size:.72rem;font-weight:700;line-height:1.2;text-decoration:none !important;
+  box-shadow:0 4px 12px -4px rgba(245,196,81,.5);transition:transform .18s ease,filter .18s ease;
+}
+html body a.play-btn:hover{transform:translateY(-1px);filter:brightness(1.04)}
+html body a.play-btn:focus-visible{outline:3px solid var(--gold-text);outline-offset:2px}
+html body a.play-btn svg{display:block;flex:0 0 auto}
+html body a.play-btn *{color:#141413 !important}
+@media (max-width:380px){html body a.play-btn{padding:.34rem .65rem;font-size:.7rem}}
+
+/* Keep the header on one row on desktop: the nav links already have their own padding */
+@media (min-width:640px){
+  html body>header nav[aria-label="Main"]{gap:.1rem !important}
+  html body>header>div.flex{gap:.6rem !important}
+}
+@media (min-width:640px){
+  html body>header nav[aria-label="Main"] a{padding-left:.45rem;padding-right:.45rem}
+}
