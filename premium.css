@@ -314,3 +314,14 @@ html body a.play-btn *{color:#141413 !important}
 @media (min-width:640px){
   html body>header nav[aria-label="Main"] a{padding-left:.45rem;padding-right:.45rem}
 }
+
+/* ---- Responsive header controls (all pages) ------------------------------ */
+body>header>div:nth-child(2){min-width:0}
+@media (min-width:640px) and (max-width:1023px){
+  body>header{flex-wrap:wrap;row-gap:.5rem}
+  body>header>div:nth-child(2){flex:1 1 auto;justify-content:flex-end;gap:.5rem}
+}
+@media (min-width:1024px){
+  body>header>div:nth-child(2){flex-wrap:nowrap;gap:.75rem}
+  body>header>div:nth-child(2) nav{gap:.75rem}
+}

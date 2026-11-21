@@ -255,12 +255,16 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
   }
   body > header .logo-scale-group { width: 2.55rem !important; height: 2.55rem !important; border-radius: .75rem !important; }
   body > header .logo-scale-group svg { width: 1.7rem !important; height: 1.7rem !important; }
-  body > header > div:first-child { gap: .6rem !important; min-width: 0; flex: 1 1 auto; padding-right: 7.2rem; }
+  body > header { flex-wrap: wrap !important; row-gap: .5rem !important; }
+  body > header > div:first-child { gap: .6rem !important; min-width: 0; flex: 1 1 100%; padding-right: 0 !important; }
   body > header #mainTitle { font-size: 1rem !important; line-height: 1.18 !important; white-space: nowrap; letter-spacing: -.02em; }
   body > header #statusDot { width: .4rem !important; height: .4rem !important; }
   body > header #liveDateTime { font-size: 9px !important; line-height: 1.25 !important; }
-  body > header > div:nth-child(2) { position: absolute !important; right: .55rem !important; top: 50% !important; transform: translateY(-50%) !important; width: auto !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; gap: .35rem !important; }
+  /* Controls drop to their own row: Play button stretches, theme + language stay compact on the right. */
+  body > header > div:nth-child(2) { position: static !important; transform: none !important; flex: 1 1 100% !important; width: 100% !important; min-width: 0; display: flex !important; flex-wrap: nowrap !important; align-items: center !important; justify-content: flex-end !important; gap: .4rem !important; }
   body > header > div:nth-child(2) nav { display: none !important; }
+  body > header a.play-btn { flex: 1 1 auto !important; min-width: 0; justify-content: center !important; height: 2.15rem !important; padding: .3rem .7rem !important; font-size: .72rem !important; overflow: hidden; text-overflow: ellipsis; }
+  body > header a.play-btn span { overflow: hidden; text-overflow: ellipsis; }
   body > header button[onclick="toggleLanguage()"] {
     padding: .42rem .55rem !important; border-radius: .65rem !important;
     font-size: .68rem !important; line-height: 1.1 !important; gap: .25rem !important;
