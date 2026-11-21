@@ -90,6 +90,9 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
     .apk-meta code { word-break:break-all; font-size:.72rem; }
     html body a.alt-link { display:inline-block; margin-top:.9rem; font-size:.9rem; font-weight:600; }
     #apk { scroll-margin-top: 1rem; }
+    .ad-slot { text-align:center; margin: 0 auto; }
+    .ad-label { font-size:.65rem; letter-spacing:.08em; text-transform:uppercase; opacity:.55; margin-bottom:.35rem; }
+    .ad-box { min-height:50px; max-width:100%; overflow:hidden; display:flex; justify-content:center; }
 </style>
 <script src="theme.js?v=3"></script>
 <link rel="stylesheet" href="premium.css?v=4">
@@ -104,6 +107,64 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
   </header>
 
   <main class="max-w-4xl mx-auto space-y-5">
+
+    <!-- Direct APK download -->
+    <section id="apk" class="card p-6 sm:p-8 prose">
+      <div class="en">
+        <h2 style="margin-top:0">No Google Play? Install the APK directly</h2>
+        <p>If your phone does not have the Play Store, you can install the app from a file (APK). It is the same app. Download it only from this website.</p>
+        <div class="apk-box">
+          <a class="apk-btn" href="mmk-gold-price.apk" download="mmk-gold-price.apk" rel="noopener" data-store="apk">⬇ Download APK</a>
+          <div class="apk-meta">Android · about 16.6 MB<br>SHA-256: <code>73d16334da3dcd1c67ec80b6c5a992ba556ca72637612328166d400060e53bd3</code></div>
+        </div>
+        <h3>How to install</h3>
+        <ol class="steps">
+          <li>Tap <strong>Download APK</strong> above. Use Chrome or your phone's browser.</li>
+          <li>If a warning says the file may be harmful, tap <strong>Download anyway</strong> or <strong>OK</strong>.</li>
+          <li>When the download finishes, tap <strong>Open</strong>. Or open the <strong>Files</strong> or <strong>Downloads</strong> app and tap <strong>mmk-gold-price.apk</strong>.</li>
+          <li>If the phone says it cannot install apps from this source, tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, then press Back.</li>
+          <li>Tap <strong>Install</strong>. If Play Protect shows a warning, tap <strong>Install anyway</strong>.</li>
+          <li>Tap <strong>Open</strong>. Prices load straight away, with no sign-up.</li>
+        </ol>
+        <div class="note"><p>On Android 7 or older, go to <strong>Settings &rarr; Security</strong> and turn on <strong>Unknown sources</strong>. After installing, you can turn the permission off again. An APK does not update by itself: to get a newer version, download the APK here again.</p></div>
+      </div>
+      <div class="my">
+        <h2 style="margin-top:0">Google Play မရှိဘူးလား? APK ဖိုင်ဖြင့် တိုက်ရိုက်ထည့်သွင်းပါ</h2>
+        <p>သင့်ဖုန်းတွင် Play Store မရှိလျှင် ဖိုင် (APK) ဖြင့် အက်ပ်ကို ထည့်သွင်းနိုင်ပါသည်။ အက်ပ်အတူတူပင် ဖြစ်ပါသည်။ ဤဝက်ဘ်ဆိုက်မှသာ ဒေါင်းလုဒ်လုပ်ပါ။</p>
+        <div class="apk-box">
+          <a class="apk-btn" href="mmk-gold-price.apk" download="mmk-gold-price.apk" rel="noopener" data-store="apk">⬇ APK ဒေါင်းလုဒ်လုပ်ရန်</a>
+          <div class="apk-meta">Android · ၁၆.၆ MB ခန့်<br>SHA-256: <code>73d16334da3dcd1c67ec80b6c5a992ba556ca72637612328166d400060e53bd3</code></div>
+        </div>
+        <h3>ထည့်သွင်းပုံ အဆင့်ဆင့်</h3>
+        <ol class="steps">
+          <li>အထက်ပါ <strong>APK ဒေါင်းလုဒ်လုပ်ရန်</strong> ခလုတ်ကို နှိပ်ပါ။ Chrome သို့မဟုတ် ဖုန်း၏ browser ကို သုံးပါ။</li>
+          <li>“ဤဖိုင်သည် ဖုန်းကို ထိခိုက်နိုင်သည်” ဟူသော သတိပေးချက် ပေါ်လာပါက <strong>Download anyway</strong> သို့မဟုတ် <strong>OK</strong> ကို နှိပ်ပါ။</li>
+          <li>ဒေါင်းလုဒ်ပြီးလျှင် <strong>Open</strong> ကို နှိပ်ပါ။ သို့မဟုတ် ဖုန်းထဲရှိ <strong>Files</strong> / <strong>Downloads</strong> ကိုဖွင့်ပြီး <strong>mmk-gold-price.apk</strong> ကို နှိပ်ပါ။</li>
+          <li>“ဤနေရာမှ အက်ပ်များ ထည့်သွင်းခွင့်မရှိပါ” ဟု ပေါ်လာပါက <strong>Settings</strong> ကို နှိပ်ပြီး <strong>Allow from this source</strong> (ဤရင်းမြစ်မှ ခွင့်ပြုမည်) ကို ဖွင့်ပါ။ ပြီးလျှင် Back ပြန်နှိပ်ပါ။</li>
+          <li><strong>Install</strong> ကို နှိပ်ပါ။ Play Protect က သတိပေးလျှင် <strong>Install anyway</strong> ကို နှိပ်ပါ။</li>
+          <li><strong>Open</strong> ကို နှိပ်ပါ။ အကောင့်ဖွင့်စရာမလိုဘဲ ဈေးနှုန်းများ ချက်ချင်းပေါ်လာပါမည်။</li>
+        </ol>
+        <div class="note"><p>Android ၇ နှင့် အောက်ဖြစ်လျှင် <strong>Settings &rarr; Security</strong> ထဲတွင် <strong>Unknown sources</strong> ကို ဖွင့်ပါ။ ထည့်သွင်းပြီးနောက် ထိုခွင့်ပြုချက်ကို ပြန်ပိတ်ထားနိုင်ပါသည်။ APK သည် အလိုအလျောက် update မဖြစ်ပါ။ ဗားရှင်းအသစ်လိုလျှင် ဤနေရာမှ APK ကို ထပ်မံဒေါင်းလုဒ်လုပ်ပါ။</p></div>
+      </div>
+    </section>
+
+    <!-- Ad below APK section -->
+    <div class="ad-slot" aria-label="Advertisement">
+      <div class="ad-label"><span class="en">Advertisement</span><span class="my">ကြော်ငြာ</span></div>
+      <div class="ad-box">
+        <script>
+          atOptions = {
+            'key' : '663ba2b6e72cf8b6e0b39ca172b1ef05',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://bauval.org/22/663ba2b6e72cf8b6e0b39ca172b1ef05"></script>
+      </div>
+    </div>
+
 
     <!-- Hero + download -->
     <section class="card hero app-hero">
@@ -184,46 +245,6 @@ window.toggleSiteLang=function(){window.setLang(d.getAttribute('data-lang')==='e
           <li>အက်ပ်ကို ဖွင့်ပါ။ အကောင့်ဖွင့်စရာမလိုဘဲ ဈေးနှုန်းများ ချက်ချင်းပေါ်လာပါမည်။</li>
         </ol>
         <p>မထည့်သွင်းလိုပါက ဤဝက်ဘ်ဆိုက်တွင်လည်း ဈေးနှုန်းအတူတူ ကြည့်နိုင်ပါသည်။ <a href="index.html">တိုက်ရိုက်ဈေးစာမျက်နှာကို ဖွင့်ပါ</a>။</p>
-      </div>
-    </section>
-
-    <!-- Direct APK download -->
-    <section id="apk" class="card p-6 sm:p-8 prose">
-      <div class="en">
-        <h2 style="margin-top:0">No Google Play? Install the APK directly</h2>
-        <p>If your phone does not have the Play Store, you can install the app from a file (APK). It is the same app. Download it only from this website.</p>
-        <div class="apk-box">
-          <a class="apk-btn" href="mmk-gold-price.apk" download="mmk-gold-price.apk" rel="noopener" data-store="apk">⬇ Download APK</a>
-          <div class="apk-meta">Android · about 16.6 MB<br>SHA-256: <code>73d16334da3dcd1c67ec80b6c5a992ba556ca72637612328166d400060e53bd3</code></div>
-        </div>
-        <h3>How to install</h3>
-        <ol class="steps">
-          <li>Tap <strong>Download APK</strong> above. Use Chrome or your phone's browser.</li>
-          <li>If a warning says the file may be harmful, tap <strong>Download anyway</strong> or <strong>OK</strong>.</li>
-          <li>When the download finishes, tap <strong>Open</strong>. Or open the <strong>Files</strong> or <strong>Downloads</strong> app and tap <strong>mmk-gold-price.apk</strong>.</li>
-          <li>If the phone says it cannot install apps from this source, tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, then press Back.</li>
-          <li>Tap <strong>Install</strong>. If Play Protect shows a warning, tap <strong>Install anyway</strong>.</li>
-          <li>Tap <strong>Open</strong>. Prices load straight away, with no sign-up.</li>
-        </ol>
-        <div class="note"><p>On Android 7 or older, go to <strong>Settings &rarr; Security</strong> and turn on <strong>Unknown sources</strong>. After installing, you can turn the permission off again. An APK does not update by itself: to get a newer version, download the APK here again.</p></div>
-      </div>
-      <div class="my">
-        <h2 style="margin-top:0">Google Play မရှိဘူးလား? APK ဖိုင်ဖြင့် တိုက်ရိုက်ထည့်သွင်းပါ</h2>
-        <p>သင့်ဖုန်းတွင် Play Store မရှိလျှင် ဖိုင် (APK) ဖြင့် အက်ပ်ကို ထည့်သွင်းနိုင်ပါသည်။ အက်ပ်အတူတူပင် ဖြစ်ပါသည်။ ဤဝက်ဘ်ဆိုက်မှသာ ဒေါင်းလုဒ်လုပ်ပါ။</p>
-        <div class="apk-box">
-          <a class="apk-btn" href="mmk-gold-price.apk" download="mmk-gold-price.apk" rel="noopener" data-store="apk">⬇ APK ဒေါင်းလုဒ်လုပ်ရန်</a>
-          <div class="apk-meta">Android · ၁၆.၆ MB ခန့်<br>SHA-256: <code>73d16334da3dcd1c67ec80b6c5a992ba556ca72637612328166d400060e53bd3</code></div>
-        </div>
-        <h3>ထည့်သွင်းပုံ အဆင့်ဆင့်</h3>
-        <ol class="steps">
-          <li>အထက်ပါ <strong>APK ဒေါင်းလုဒ်လုပ်ရန်</strong> ခလုတ်ကို နှိပ်ပါ။ Chrome သို့မဟုတ် ဖုန်း၏ browser ကို သုံးပါ။</li>
-          <li>“ဤဖိုင်သည် ဖုန်းကို ထိခိုက်နိုင်သည်” ဟူသော သတိပေးချက် ပေါ်လာပါက <strong>Download anyway</strong> သို့မဟုတ် <strong>OK</strong> ကို နှိပ်ပါ။</li>
-          <li>ဒေါင်းလုဒ်ပြီးလျှင် <strong>Open</strong> ကို နှိပ်ပါ။ သို့မဟုတ် ဖုန်းထဲရှိ <strong>Files</strong> / <strong>Downloads</strong> ကိုဖွင့်ပြီး <strong>mmk-gold-price.apk</strong> ကို နှိပ်ပါ။</li>
-          <li>“ဤနေရာမှ အက်ပ်များ ထည့်သွင်းခွင့်မရှိပါ” ဟု ပေါ်လာပါက <strong>Settings</strong> ကို နှိပ်ပြီး <strong>Allow from this source</strong> (ဤရင်းမြစ်မှ ခွင့်ပြုမည်) ကို ဖွင့်ပါ။ ပြီးလျှင် Back ပြန်နှိပ်ပါ။</li>
-          <li><strong>Install</strong> ကို နှိပ်ပါ။ Play Protect က သတိပေးလျှင် <strong>Install anyway</strong> ကို နှိပ်ပါ။</li>
-          <li><strong>Open</strong> ကို နှိပ်ပါ။ အကောင့်ဖွင့်စရာမလိုဘဲ ဈေးနှုန်းများ ချက်ချင်းပေါ်လာပါမည်။</li>
-        </ol>
-        <div class="note"><p>Android ၇ နှင့် အောက်ဖြစ်လျှင် <strong>Settings &rarr; Security</strong> ထဲတွင် <strong>Unknown sources</strong> ကို ဖွင့်ပါ။ ထည့်သွင်းပြီးနောက် ထိုခွင့်ပြုချက်ကို ပြန်ပိတ်ထားနိုင်ပါသည်။ APK သည် အလိုအလျောက် update မဖြစ်ပါ။ ဗားရှင်းအသစ်လိုလျှင် ဤနေရာမှ APK ကို ထပ်မံဒေါင်းလုဒ်လုပ်ပါ။</p></div>
       </div>
     </section>
 
