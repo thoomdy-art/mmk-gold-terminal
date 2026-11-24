@@ -292,19 +292,24 @@ html body>header button.theme-toggle:focus-visible{outline:2px solid var(--gold)
 .chart-empty.hidden{display:none}
 
 
-/* ---- Header "Google Play" button (every page) ---------------------------- */
+/* ---- Header "Google Play" icon button (every page) ---------------------- */
 html body a.play-btn{
-  display:inline-flex;align-items:center;gap:.3rem;flex:0 0 auto;white-space:nowrap;
-  padding:.34rem .7rem;border-radius:var(--radius-pill);
-  background:var(--gold);color:#141413 !important;border:1px solid #D9A92F;
-  font-size:.72rem;font-weight:700;line-height:1.2;text-decoration:none !important;
-  box-shadow:0 4px 12px -4px rgba(245,196,81,.5);transition:transform .18s ease,filter .18s ease;
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  width:2.15rem;height:2.15rem;padding:0;border-radius:.65rem;
+  background:var(--sf-elevated);border:1px solid var(--bd-strong);
+  text-decoration:none !important;transition:transform .18s ease,box-shadow .18s ease;
 }
-html body a.play-btn:hover{transform:translateY(-1px);filter:brightness(1.04)}
+html body a.play-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px -4px rgba(0,0,0,.35)}
 html body a.play-btn:focus-visible{outline:3px solid var(--gold-text);outline-offset:2px}
 html body a.play-btn svg{display:block;flex:0 0 auto}
-html body a.play-btn *{color:#141413 !important}
-@media (max-width:380px){html body a.play-btn{padding:.34rem .65rem;font-size:.7rem}}
+.gp-vh{position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---- Footer "Get it on Google Play" badge (every page) ------------------- */
+.gp-badge-wrap{display:flex;justify-content:center;margin-bottom:.75rem}
+.gp-badge{display:inline-block;line-height:0;border-radius:.6rem;transition:transform .18s ease,filter .18s ease}
+.gp-badge:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.gp-badge:focus-visible{outline:3px solid var(--gold-text);outline-offset:3px}
+.gp-badge img{display:block;height:48px;width:auto}
 
 /* Keep the header on one row on desktop: the nav links already have their own padding */
 @media (min-width:640px){
