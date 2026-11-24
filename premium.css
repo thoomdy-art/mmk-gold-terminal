@@ -337,25 +337,55 @@ body>header>div:nth-child(2){min-width:0}
 body > header nav.hdr-nav{flex-wrap:nowrap !important;white-space:nowrap}
 html body a.guides-btn{
   display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
-  height:2.15rem;padding:0 .9rem;border-radius:.65rem;white-space:nowrap;
+  height:2.4rem;padding:0 1rem;border-radius:.65rem;white-space:nowrap;
   background:var(--sf-elevated);border:1px solid var(--bd-strong);
-  color:var(--gold-text) !important;font-size:.75rem;font-weight:700;text-decoration:none !important;
+  color:var(--gold-text) !important;font-size:.75rem;font-weight:800;line-height:1.2;text-decoration:none !important;
   transition:transform .18s ease,box-shadow .18s ease;
 }
 html body a.guides-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px -4px rgba(0,0,0,.35)}
 html body a.guides-btn:focus-visible{outline:3px solid var(--gold-text);outline-offset:2px}
 
 /* ---- Home promo banner: official vertical Google Play lockup ------------- */
-.gp-vertical{display:inline-block;line-height:0;border-radius:.75rem;transition:transform .18s ease,box-shadow .18s ease}
-.gp-vertical img{display:block;height:92px;width:auto;border-radius:.75rem;background:#fff;border:1px solid var(--bd-strong)}
+.gp-vertical{display:inline-block;line-height:0;border-radius:.5rem;transition:transform .18s ease,box-shadow .18s ease}
+.gp-vertical img{display:block;height:48px;width:auto;border-radius:.5rem;background:#fff;border:1px solid var(--bd-strong)}
 .gp-vertical:hover{transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(0,0,0,.4)}
 .gp-vertical:focus-visible{outline:3px solid var(--gold-text);outline-offset:3px}
 
-/* ---- Footer: badge sits in the same row as the footer text (desktop) ----- */
-@media (min-width:768px){
-  footer.gp-foot{display:flex;align-items:center;gap:1.75rem;text-align:left}
-  footer.gp-foot > *{margin-top:0 !important}
-  footer.gp-foot .gp-badge-wrap{margin-bottom:0;flex:0 0 auto}
-  footer.gp-foot .gp-foot-text{flex:1 1 auto;min-width:0}
-}
+/* ---- Footer: badge sits on the same line as the footer links (desktop) -- */
 .gp-foot-text > * + *{margin-top:.5rem}
+@media (min-width:768px){
+  footer.gp-foot{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:1.5rem;row-gap:.6rem;text-align:left}
+  footer.gp-foot > *{margin-top:0 !important}
+  footer.gp-foot .gp-badge-wrap{grid-column:1;grid-row:1;margin:0}
+  footer.gp-foot .gp-foot-text{display:contents}
+  footer.gp-foot .gp-foot-text > *{margin-top:0 !important}
+  footer.gp-foot .gp-foot-text > div:first-child{grid-column:2;grid-row:1}
+  footer.gp-foot .gp-foot-text > p{grid-column:1 / -1}
+}
+
+/* ---- Header controls: one consistent size/font ---------------------------- */
+html body a.guides-btn .my{line-height:1.2}
+@media (min-width:640px){
+  body > header a.play-btn{width:2.4rem;height:2.4rem}
+  body > header button[onclick="toggleLanguage()"]{height:2.4rem;padding-top:0;padding-bottom:0}
+}
+@media (max-width:639px){
+  html body a.guides-btn{height:2.15rem;padding:0 .8rem;font-size:.68rem}
+}
+
+/* ---- Responsive fixes ----------------------------------------------------- */
+/* Home: header links only on wide screens, so tablet keeps title + buttons on one row */
+body > header nav.hdr-nav{display:none !important}
+@media (min-width:1024px){body > header nav.hdr-nav{display:flex !important}}
+/* Home: wallet card tag never pushes the page wider */
+.gp-min0{min-width:0}
+#walletSourceTag{flex:0 0 auto;white-space:nowrap;margin-left:.5rem}
+/* Home: chart tabs fit very small phones */
+@media (max-width:380px){
+  #chartTabBar button{padding-left:.6rem !important;padding-right:.6rem !important;font-size:.7rem !important}
+}
+/* Article pages: header links stay compact on phones */
+@media (max-width:639px){
+  body > header nav[aria-label="Main"]{width:100%;justify-content:space-between;gap:.35rem .6rem !important}
+  body > header nav[aria-label="Main"] a{font-size:.8rem}
+}
