@@ -330,3 +330,32 @@ body>header>div:nth-child(2){min-width:0}
   body>header>div:nth-child(2){flex-wrap:nowrap;gap:.75rem}
   body>header>div:nth-child(2) nav{gap:.75rem}
 }
+
+
+/* ---- Home header: single-line title + Guides button ---------------------- */
+#mainTitle{white-space:nowrap}
+body > header nav.hdr-nav{flex-wrap:nowrap !important;white-space:nowrap}
+html body a.guides-btn{
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  height:2.15rem;padding:0 .9rem;border-radius:.65rem;white-space:nowrap;
+  background:var(--sf-elevated);border:1px solid var(--bd-strong);
+  color:var(--gold-text) !important;font-size:.75rem;font-weight:700;text-decoration:none !important;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+html body a.guides-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px -4px rgba(0,0,0,.35)}
+html body a.guides-btn:focus-visible{outline:3px solid var(--gold-text);outline-offset:2px}
+
+/* ---- Home promo banner: official vertical Google Play lockup ------------- */
+.gp-vertical{display:inline-block;line-height:0;border-radius:.75rem;transition:transform .18s ease,box-shadow .18s ease}
+.gp-vertical img{display:block;height:92px;width:auto;border-radius:.75rem;background:#fff;border:1px solid var(--bd-strong)}
+.gp-vertical:hover{transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(0,0,0,.4)}
+.gp-vertical:focus-visible{outline:3px solid var(--gold-text);outline-offset:3px}
+
+/* ---- Footer: badge sits in the same row as the footer text (desktop) ----- */
+@media (min-width:768px){
+  footer.gp-foot{display:flex;align-items:center;gap:1.75rem;text-align:left}
+  footer.gp-foot > *{margin-top:0 !important}
+  footer.gp-foot .gp-badge-wrap{margin-bottom:0;flex:0 0 auto}
+  footer.gp-foot .gp-foot-text{flex:1 1 auto;min-width:0}
+}
+.gp-foot-text > * + *{margin-top:.5rem}
