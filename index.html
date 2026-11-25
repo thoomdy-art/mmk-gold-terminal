@@ -555,10 +555,6 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
                 <option value="MMK">🇲🇲 Kyats (MMK)</option>
                 <option value="USD">🇺🇸 USD</option>
               </select>
-              <select id="chartRateTier" onchange="updateMmkGoldChart()" class="app-input px-2.5 py-1.5 text-slate-200">
-                <option value="bank" selected id="optChartBank">Bank</option>
-                <option value="wallet">Wallet</option>
-              </select>
             </div>
           </div>
 
@@ -572,6 +568,7 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
             <canvas id="mmkGoldChart"></canvas>
             <div id="chartEmpty" class="chart-empty hidden">Loading daily gold prices…</div>
           </div>
+          <p id="chartRateNote" class="hidden" style="margin:.55rem 0 0;font-size:.7rem;line-height:1.5;color:var(--mu)"></p>
 
           <div id="oandaTvContainer" class="chart-box w-full hidden rounded-xl overflow-hidden border border-slate-800">
             <div style="display:flex;flex-direction:column;height:100%;width:100%">
@@ -957,7 +954,10 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
         CNY: 7.12, 
         AED: 3.67 
       },
-      dailyGoldUsdCandles: []
+      dailyGoldUsdCandles: [],
+      rateHistory: {},          // { "YYYY-MM-DD": saved bank rate } from /api/rate-history
+      rateHistoryOk: false,
+      spotByDay: {}             // { "YYYY-MM-DD": spot gold close } from /api/gold-daily
     };
 
     let mmkChartInstance = null;
@@ -1057,7 +1057,6 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
       document.getElementById('thBankAsk').textContent = currentLang === 'my' ? 'ဘဏ် Ask' : 'Bank Ask';
       document.getElementById('bankCardTitle').textContent = currentLang === 'my' ? 'KBZ ဘဏ် • CB • AYA • Yoma' : 'KBZ Bank • CB • AYA • Yoma';
       document.getElementById('optCalcBank').textContent = currentLang === 'my' ? 'ဘဏ် (Max)' : 'Bank (Max)';
-      document.getElementById('optChartBank').textContent = currentLang === 'my' ? 'ဘဏ်' : 'Bank';
 
       convertGoldWeight('oz');
       calculateKpyToMmk();
@@ -1334,6 +1333,7 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
               pointHoverBackgroundColor: () => dbVar('--sf-elevated'),
               pointHoverBorderColor: () => dbVar('--gold-line-old'),
               fill: true,
+              spanGaps: true,
               tension: 0.4
             },
             {
@@ -1349,6 +1349,7 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
               pointHoverBorderColor: () => dbVar('--gold-line-new'),
               pointHoverBorderWidth: 3,
               fill: false,
+              spanGaps: true,
               tension: 0.4
             },
             {
@@ -1365,6 +1366,7 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
               pointHoverBorderColor: () => dbVar('--paxg-line'),
               pointHoverBorderWidth: 3,
               fill: false,
+              spanGaps: true,
               tension: 0.4
             }
           ]
@@ -1429,28 +1431,46 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
     }
 
     function updateMmkGoldChart() {
-      const tier = document.getElementById('chartRateTier').value;
       const currency = document.getElementById('chartCurrencySelect').value;
-      const mmkRate = tier === 'bank' ? state.bankBuy : state.walletBuy;
+      const all = state.dailyGoldUsdCandles;
+      const n = all.length;
+      const todayKey = new Date().toISOString().slice(0, 10);
 
-      if (state.dailyGoldUsdCandles.length > 0) {
-        state.dailyGoldUsdCandles[state.dailyGoldUsdCandles.length - 1].close = state.oandaUsd;
-      }
+      // Today's point is the live OANDA price.
+      if (n > 0 && state.oandaUsd > 0) all[n - 1].close = state.oandaUsd;
 
-      const labels = state.dailyGoldUsdCandles.map(c => c.date);
-      let oldStdSeries, newStdSeries, paxgSeries;
-      // PAXG digital gold: Binance PAXG price (live mid on the last day) converted exactly like the Old Standard line
-      const nC = state.dailyGoldUsdCandles.length;
+      // Old / New Standard lines use spot gold per day. Weekends and holidays carry Friday's close.
+      // If spot history could not be loaded, fall back to the PAXG close so the chart never breaks.
+      let carry = null;
+      const spot = all.map((c, i) => {
+        if (i === n - 1) return c.close;
+        const s = state.spotByDay[c.day];
+        if (s > 0) { carry = s; return s; }
+        return carry;
+      }).map((s, i) => (s > 0 ? s : (all[i].paxg > 0 ? all[i].paxg : all[i].close)));
+
+      // PAXG digital gold: Binance PAXG close (live mid-price on the last day)
       const livePaxg = (state.paxgAt && state.paxgBid > 0 && state.paxgAsk > 0) ? (state.paxgBid + state.paxgAsk) / 2 : null;
-      const paxgUsd = state.dailyGoldUsdCandles.map((c, i) => (i === nC - 1 && livePaxg) ? livePaxg : (c.paxg > 0 ? c.paxg : c.close));
+      const paxgUsd = all.map((c, i) => (i === n - 1 && livePaxg) ? livePaxg : (c.paxg > 0 ? c.paxg : c.close));
 
+      // Kyat rate per day: every past day uses the bank rate saved on that day; today uses the live rate.
+      // Days with no saved rate stay empty (nothing is guessed), so the Kyat chart starts at the first saved day.
+      const liveRate = state.p2pUpdatedAt ? state.bankBuy : (state.rateHistory[todayKey] || null);
+      const rate = all.map((c, i) => (i === n - 1 ? liveRate : (state.rateHistory[c.day] || null)));
+
+      let start = 0;
+      if (currency === 'MMK') { start = rate.findIndex(r => r > 0); if (start < 0) start = n; }
+
+      const labels = all.slice(start).map(c => c.date);
+      let oldStdSeries, newStdSeries, paxgSeries;
       if (currency === 'MMK') {
-        oldStdSeries = state.dailyGoldUsdCandles.map(c => Math.round((c.close * mmkRate) / 1.873));
-        newStdSeries = state.dailyGoldUsdCandles.map(c => Math.round((c.close * mmkRate) / 1.9047));
-        paxgSeries = paxgUsd.map(v => Math.round((v * mmkRate) / 1.873));
+        const conv = (v, r, std) => (v > 0 && r > 0 ? Math.round((v * r) / std) : null);
+        oldStdSeries = spot.map((s, i) => conv(s, rate[i], 1.873)).slice(start);
+        newStdSeries = spot.map((s, i) => conv(s, rate[i], 1.9047)).slice(start);
+        paxgSeries = paxgUsd.map((v, i) => conv(v, rate[i], 1.873)).slice(start);
       } else {
-        oldStdSeries = state.dailyGoldUsdCandles.map(c => +(c.close / 1.873).toFixed(2));
-        newStdSeries = state.dailyGoldUsdCandles.map(c => +(c.close / 1.9047).toFixed(2));
+        oldStdSeries = spot.map(s => +(s / 1.873).toFixed(2));
+        newStdSeries = spot.map(s => +(s / 1.9047).toFixed(2));
         paxgSeries = paxgUsd.map(v => +(v / 1.873).toFixed(2));
       }
 
@@ -1462,17 +1482,35 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
         mmkChartInstance.update();
       }
 
+      const my = currentLang === 'my';
       const emptyEl = document.getElementById('chartEmpty');
       if (emptyEl) {
         const noLib = !mmkChartInstance;                    // Chart.js failed to load
-        const noData = state.dailyGoldUsdCandles.length === 0;
-        emptyEl.classList.toggle('hidden', !noLib && !noData);
+        const noData = n === 0;
+        const noRate = !noData && currency === 'MMK' && start >= n;
+        emptyEl.classList.toggle('hidden', !noLib && !noData && !noRate);
         emptyEl.textContent = noLib
-          ? (currentLang === 'my' ? 'ဂရပ်ကို ဖွင့်၍မရပါ။ စာမျက်နှာကို ပြန်လည်ဖွင့်ပါ။' : 'Chart could not load. Please refresh the page.')
-          : (currentLang === 'my' ? 'နေ့စဉ်ရွှေဈေး ဒေတာ ရယူနေသည်…' : 'Loading daily gold prices…');
+          ? (my ? 'ဂရပ်ကို ဖွင့်၍မရပါ။ စာမျက်နှာကို ပြန်လည်ဖွင့်ပါ။' : 'Chart could not load. Please reload the page.')
+          : noRate ? (my ? 'ကျပ်ဈေး ရယူနေသည်…' : 'Loading kyat rates…')
+          : (my ? 'နေ့စဉ်ရွှေဈေး ဒေတာ ရယူနေသည်…' : 'Loading daily gold prices…');
       }
 
-
+      // Small note: Kyat values use each day's saved rate.
+      const noteEl = document.getElementById('chartRateNote');
+      if (noteEl) {
+        const chartShown = !document.getElementById('mmkChartContainer').classList.contains('hidden');
+        const show = chartShown && currency === 'MMK' && state.rateHistoryOk;
+        noteEl.classList.toggle('hidden', !show);
+        if (show) {
+          const first = Object.keys(state.rateHistory).sort()[0];
+          const since = first ? new Date(first + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }) : '';
+          noteEl.textContent = my
+            ? (since ? 'ကျပ်ဈေးကို နေ့စဉ်သိမ်းထားသော ဘဏ်ဈေးဖြင့် တွက်ထားသည် (' + since + ' မှစ၍)။ ရက်များ တဖြည်းဖြည်း တိုးလာပါမည်။'
+                     : 'ကျပ်ဈေးကို နေ့စဉ်သိမ်းထားသော ဘဏ်ဈေးဖြင့် တွက်ထားသည်။ သိမ်းဆည်းမှု စတင်ခါစဖြစ်၍ ရက်များ တဖြည်းဖြည်း တိုးလာပါမည်။')
+            : (since ? 'Kyat values use each day\u2019s saved bank rate (since ' + since + '). More days appear as the history grows.'
+                     : 'Kyat values use each day\u2019s saved bank rate. Saving has just started, so more days will appear as the history grows.');
+        }
+      }
     }
 
     function switchChartTab(tab) {
@@ -1493,6 +1531,7 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
         btnOanda.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition flex-shrink-0';
         btnMmk.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex-shrink-0';
       }
+      updateMmkGoldChart();
     }
 
 
@@ -1706,13 +1745,13 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
     // --- Daily candles for the chart: independent of the other fetches, tries 2 Binance hosts,
     //     and remembers the last good data so the chart still draws if the network is blocked. ---
     const CANDLE_URLS = [
-      'https://api.binance.com/api/v3/klines?symbol=PAXGUSDT&interval=1d&limit=15',
-      'https://data-api.binance.vision/api/v3/klines?symbol=PAXGUSDT&interval=1d&limit=15'
+      'https://api.binance.com/api/v3/klines?symbol=PAXGUSDT&interval=1d&limit=30',
+      'https://data-api.binance.vision/api/v3/klines?symbol=PAXGUSDT&interval=1d&limit=30'
     ];
     function loadCachedCandles() {
       try {
         const c = JSON.parse(localStorage.getItem('goldCandles') || 'null');
-        if (Array.isArray(c) && c.length && !state.dailyGoldUsdCandles.length) state.dailyGoldUsdCandles = c;
+        if (Array.isArray(c) && c.length && c[0].day && !state.dailyGoldUsdCandles.length) state.dailyGoldUsdCandles = c;
       } catch (e) {}
     }
     async function loadGoldCandles() {
@@ -1723,7 +1762,8 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
           const k = await r.json();
           if (!Array.isArray(k) || !k.length) continue;
           state.dailyGoldUsdCandles = k.map(x => ({
-            date: new Date(x[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            date: new Date(x[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
+            day: new Date(x[0]).toISOString().slice(0, 10),   // UTC day, matches the saved daily rates
             close: parseFloat(x[4]),
             paxg: parseFloat(x[4])           // untouched PAXG close (close gets the live OANDA price on the last day)
           })).filter(c => Number.isFinite(c.close));
@@ -1733,6 +1773,46 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
         } catch (e) { /* try next host */ }
       }
       state.candlesErr = true;
+      return false;
+    }
+
+    // --- Saved daily USDT/MMK bank rates (one per day, kept by /api/rate-history) ---
+    async function loadRateHistory() {
+      try {
+        const r = await fetch('/api/rate-history', { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        if (!d || !d.configured) { state.rateHistoryOk = false; return false; }
+        const map = {};
+        (d.days || []).forEach(p => { if (p.date && p.bank > 0) map[p.date] = p.bank; });
+        state.rateHistory = map; state.rateHistoryOk = true;
+        try { localStorage.setItem('rateHistory', JSON.stringify(map)); } catch (e) {}
+        return true;
+      } catch (e) {
+        try {
+          const c = JSON.parse(localStorage.getItem('rateHistory') || 'null');
+          if (c && !Object.keys(state.rateHistory).length) { state.rateHistory = c; state.rateHistoryOk = true; }
+        } catch (e2) {}
+        return false;
+      }
+    }
+
+    // --- Daily spot-gold closes for the Old / New Standard lines (falls back to PAXG if unavailable) ---
+    async function loadSpotGold() {
+      try {
+        const r = await fetch('/api/gold-daily');
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        if (d && d.days && Object.keys(d.days).length) {
+          state.spotByDay = d.days;
+          try { localStorage.setItem('spotGoldDays', JSON.stringify(d.days)); } catch (e) {}
+          return true;
+        }
+      } catch (e) {}
+      try {
+        const c = JSON.parse(localStorage.getItem('spotGoldDays') || 'null');
+        if (c && !Object.keys(state.spotByDay).length) state.spotByDay = c;
+      } catch (e2) {}
       return false;
     }
 
@@ -1748,6 +1828,8 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
       if (saved === 'my') safe(toggleLanguage);
 
       safe(() => loadGoldCandles().then(() => updateMmkGoldChart()).catch(() => {}));
+      safe(() => loadRateHistory().then(() => updateMmkGoldChart()));
+      safe(() => loadSpotGold().then(() => updateMmkGoldChart()));
       safe(refreshAllData);
       safe(refreshP2PData);
 
@@ -1755,6 +1837,8 @@ main h2, main h3, section h2, section h3 { line-height: 1.3; }
       setInterval(updateDateTime, 1000);
       setInterval(refreshAllData, 60000);
       setInterval(() => loadGoldCandles().then(() => updateMmkGoldChart()), 10 * 60 * 1000);
+      setInterval(() => loadRateHistory().then(() => updateMmkGoldChart()), 30 * 60 * 1000);
+      setInterval(() => loadSpotGold().then(() => updateMmkGoldChart()), 60 * 60 * 1000);
       setInterval(setP2PTags, 60000);
       renderLiveBadges();
       setInterval(renderLiveBadges, 1000);   // keeps the "LIVE · 12s" ages ticking and flips to STALE on time
