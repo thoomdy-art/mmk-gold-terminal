@@ -387,5 +387,25 @@ body > header nav.hdr-nav{display:none !important}
 /* Article pages: header links stay compact on phones */
 @media (max-width:639px){
   body > header nav[aria-label="Main"]{width:100%;justify-content:space-between;gap:.35rem .6rem !important}
-  body > header nav[aria-label="Main"] a{font-size:.8rem}
 }
+
+/* ---- Home header: date lines up with the title text (dot width + gap) ---- */
+#liveDateTime{padding-left:1.25rem}
+
+/* ---- One type scale for header, titles and article text (all pages) ------ */
+html body > header > a.text-xl{font-size:1.125rem;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+@media (min-width:640px){html body > header > a.text-xl{font-size:1.5rem}}
+html body > header nav a{font-size:.8125rem !important;font-weight:600 !important}
+body > header button[onclick="toggleSiteLang()"]{
+  display:inline-flex;align-items:center;justify-content:center;gap:.3rem;
+  height:2.4rem;padding:0 .9rem !important;border-radius:.65rem !important;
+  font-size:.75rem !important;font-weight:800 !important;line-height:1.2 !important}
+@media (max-width:639px){
+  body > header button[onclick="toggleSiteLang()"]{height:2.15rem;font-size:.68rem !important}
+  body > header button.theme-toggle{width:2.15rem;height:2.15rem}
+  /* Google Play lives in the page footer / app banner on phones */
+  body > header a.play-btn{display:none !important}
+}
+html body main h1{font-size:1.5rem !important;line-height:1.3 !important;font-weight:700 !important}
+@media (min-width:640px){html body main h1{font-size:1.875rem !important;line-height:1.25 !important}}
+.gp-article p,.gp-article li{font-size:.95rem !important;line-height:1.75 !important}
