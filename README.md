@@ -23,4 +23,8 @@ The Kyat chart uses the bank rate saved on each day, not today's rate for every 
 * `functions/api/gold-daily.js` returns daily spot-gold (XAU/USD) closes from Yahoo Finance, so the Old/New Standard lines use spot gold and the PAXG line uses PAXG closes. If Yahoo is unreachable the chart falls back to PAXG closes.
 * History starts the day the KV storage is connected; earlier days are never guessed and stay empty.
 
-One-time setup: Cloudflare dashboard -> Workers & Pages -> KV -> create a namespace (for example `mmk-rates`). Then open the Pages project -> Settings -> Bindings -> add a KV namespace binding with the variable name `RATES` pointing at that namespace -> redeploy. Check it by opening `/api/rate-history` on the site: it should show `"configured":true` and, after the first visit, today's day under  `days`.
+One-time setup: Cloudflare dashboard -> Workers & Pages -> KV -> create a namespace (for example `mmk-rates`). Then open the Pages project -> Settings -> Bindings -> add a KV namespace binding with the variable name `RATES` pointing at that namespace -> redeploy. Check it by opening `/api/rate-history` on the site: it should show `"configured":true` and, after the first visit, today's day under `days`.
+
+### Daily scheduled saver (optional safety net)
+
+`worker/daily-rate-saver.js` is a separate Cloudflare Worker (it is NOT part of the Pages deployment; paste it into a Worker in the Cloudflare dashboard). A cron trigger runs it every day at 11:30 UTC (6:00 PM Myanmar time) and saves that day's bank rate to the same KV namespace (binding `RATES`), so a day with no visitors still gets a rate. It retries up to 3 times if the price server is asleep. Open the Worker's address to see when it last ran.
